@@ -7,11 +7,13 @@
 **Fecha de la sesión presencial:** viernes 24 de abril de 2026 · 10:00 a.m.
 **Modalidad:** Journal Club · tres subgrupos paralelos
 
+🌐 **Sitio web de la actividad:** <https://jboglop.github.io/Epidemiologia-en-CP/>
+
 ---
 
 ## 📍 Sobre esta actividad
 
-Esta asignación forma parte de la **Unidad 3, Tema 1** del curso, y se ancla en la pregunta vertebral del semestre:
+Esta asignación forma parte de la **Unidad 3, Tema 1** del curso y se ancla en la pregunta vertebral del semestre:
 
 > *¿Qué dice —y qué calla— el panorama epidemiológico sobre las personas que necesitan cuidados paliativos?*
 
@@ -21,7 +23,25 @@ Trabajamos tres diseños epidemiológicos descriptivos aplicados a cuidados pali
 2. **Estudio transversal de prevalencia**
 3. **Estudio ecológico**
 
-Los tres comparten una característica fundamental: **ninguno establece causalidad**, pero los tres se utilizan cotidianamente en la literatura, con frecuencia de manera sobreinterpretada. Identificar esos excesos interpretativos es la competencia nuclear de la sesión, y un insumo directo para tus futuras tesis y publicaciones.
+Los tres comparten una característica fundamental: **ninguno establece causalidad**, pero los tres se utilizan cotidianamente en la literatura, con frecuencia de manera sobreinterpretada. Identificar esos excesos interpretativos es la competencia nuclear de la sesión, y un insumo directo para las tesis y publicaciones de los estudiantes.
+
+---
+
+## 📂 Contenido de este repositorio
+
+🌐 **Accede al paquete del estudiante directamente en línea:**
+### 👉 <https://jboglop.github.io/Epidemiologia-en-CP/>
+
+| Archivo | Descripción |
+|---|---|
+| [`Paquete_Estudiante_Sesion_6.html`](./Paquete_Estudiante_Sesion_6.html) | Documento principal de la sesión: cronograma, asignación de grupos, artículos del Journal Club, guía CASP unificada, indicación del compromiso escrito y rúbrica. **Publicado en GitHub Pages:** [abrir en el navegador](https://jboglop.github.io/Epidemiologia-en-CP/). |
+| [`05-_diseño_investigacion.pdf`](./05-_diseño_investigacion.pdf) | Lectura conceptual común · Capítulo sobre diseños de investigación. |
+| [`06_DESSCRIPTIVOS.pdf`](./06_DESSCRIPTIVOS.pdf) | Lectura conceptual común · Capítulo sobre estudios descriptivos. |
+| `README.md` | Este documento. |
+
+> **Cómo usar el repositorio:**
+> - **Opción rápida (recomendada):** abre el paquete del estudiante en línea en <https://jboglop.github.io/Epidemiologia-en-CP/>. No requiere descarga ni instalación.
+> - **Opción offline:** descarga los archivos del repositorio al inicio de la semana. El `.html` se abre en cualquier navegador y contiene todos los enlaces a los artículos asignados. Los dos PDFs son la lectura conceptual común para todos los subgrupos.
 
 ---
 
@@ -41,7 +61,7 @@ Al finalizar la actividad, cada estudiante será capaz de:
 | Fecha | Hito | Qué hacer |
 |---|---|---|
 | **Sáb 18 abr** | Publicación del paquete + sorteo | Verificas tu grupo y artículo asignado en el foro de Moodle. |
-| **18 al 22 abr** | Lectura conceptual + lectura crítica | Lees el documento propuesto en Moodle como base conceptual y aplicas la guía CASP a tu artículo asignado. |
+| **18 al 22 abr** | Lectura conceptual + lectura crítica | Lees los dos PDFs de este repositorio como base conceptual y aplicas la guía CASP a tu artículo asignado. |
 | **Mié 22 abr · 11:59 pm** | Entrega del compromiso escrito | Texto individual de 200–250 palabras siguiendo la indicación de la actividad. **40% de la nota.** |
 | **Vie 24 abr · 10:00 a.m.** | Sesión presencial de Journal Club | 120 minutos · tres bloques paralelos. |
 
@@ -49,25 +69,32 @@ Al finalizar la actividad, cada estudiante será capaz de:
 
 ## 👥 Asignación de grupos
 
-| Grupo | Integrantes | Correos |
-|---|---|---|
-| **Grupo 1** | Malkys Reales · Ana Milena Vega Herazo · Pedro Manrique Martinez · Ruben Dario Rodriguez Buenahora | mreales584@uan.edu.co · avega305@uan.edu.co · pmanrique664@uan.edu.co · rrodriguez679@uan.edu.co |
-| **Grupo 2** | Juan Sebastián Martínez Collazos · Brianda Vanessa Renis Zurita · Nohora Montero Garcia | jmartinez577@uan.edu.co · brenis365@uan.edu.co · nmontero551@uan.edu.co |
-| **Grupo 3** | Henry Mauricio Rodriguez Valencia · Allan Josué Maradiaga Moncada · Carlos Arturo Ramirez Rojas | hrodriguez639@uan.edu.co · amaradiaga59@uan.edu.co · cramirez842@uan.edu.co |
+| Grupo | Integrantes |
+|---|---|
+| **Grupo 1** | Malkys Reales · Ana Milena Vega Herazo · Pedro Manrique Martinez · Ruben Dario Rodriguez Buenahora |
+| **Grupo 2** | Juan Sebastián Martínez Collazos · Brianda Vanessa Renis Zurita · Nohora Montero Garcia |
+| **Grupo 3** | Henry Mauricio Rodriguez Valencia · Allan Josué Maradiaga Moncada · Carlos Arturo Ramirez Rojas |
 
-Cada grupo tiene asignado **uno de los tres artículos** como lectura profunda. Se recomienda revisar al menos los resúmenes de los otros dos para participar críticamente en los bloques correspondientes.
+Los correos institucionales y la asignación de artículo por grupo están en el foro de Moodle (no en este repositorio público). Cada grupo tiene asignado **uno de los tres artículos** como lectura profunda. Se recomienda revisar al menos los resúmenes de los otros dos para participar críticamente en los bloques correspondientes.
 
 ---
 
-## 📚 Materiales del paquete
+## 📚 Lecturas de la sesión
 
-El paquete de la sesión (disponible en Moodle) incluye:
+### Lectura conceptual común (para todos los grupos)
 
-- `Paquete_Estudiante_Sesion_6.html` — documento principal con cronograma, artículos asignados, guía CASP unificada de 8 preguntas, indicación de la actividad y rúbrica.
-- `Presentacion_Sesion_6.html` — presentación para la sesión presencial.
-- **Guía CASP unificada** — 8 preguntas adaptadas a los tres diseños descriptivos.
-- **Lectura conceptual común** — documento propuesto en Moodle.
-- **Artículos open access** — los tres disponibles sin barrera de suscripción.
+Los dos PDFs disponibles en este repositorio:
+
+- **`05-_diseño_investigacion.pdf`** — marco general de diseños de investigación.
+- **`06_DESSCRIPTIVOS.pdf`** — estudios descriptivos con foco en cuidados paliativos.
+
+### Lectura crítica por grupo
+
+Cada subgrupo analiza **un artículo open access** (enlaces dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/)) usando la guía CASP unificada de ocho preguntas:
+
+- **Grupo A · Reporte / serie de casos**
+- **Grupo B · Transversal de prevalencia**
+- **Grupo C · Ecológico**
 
 ---
 
@@ -76,8 +103,8 @@ El paquete de la sesión (disponible en Moodle) incluye:
 Antes del miércoles 22 de abril a las 11:59 pm, asegúrate de haber completado:
 
 - [ ] Verificar tu asignación de grupo y de artículo en el foro de Moodle.
-- [ ] Descargar el artículo asignado.
-- [ ] Leer el documento conceptual común propuesto en Moodle.
+- [ ] Abrir el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/> (o descargar los archivos del repositorio).
+- [ ] Leer los dos PDFs de lectura conceptual común.
 - [ ] Leer tu artículo asignado **al menos dos veces**, respondiendo por escrito las ocho preguntas de la guía CASP.
 - [ ] Coordinar con tu subgrupo cómo van a presentar los cinco minutos de apertura del bloque.
 - [ ] Redactar el compromiso escrito (200–250 palabras) y subirlo a Moodle.
@@ -140,6 +167,14 @@ Texto individual de **200 a 250 palabras** que articule tres cuestiones:
 
 ---
 
+## 🔗 Enlaces clave
+
+- 🌐 **Sitio web del paquete:** <https://jboglop.github.io/Epidemiologia-en-CP/>
+- 📁 **Repositorio fuente:** <https://github.com/JBOGLOP/Epidemiologia-en-CP>
+- 🎓 **Aula Moodle:** foro de la sesión 6 (asignación de artículo, correos y entrega del compromiso escrito).
+
+---
+
 ## 📬 Contacto
 
 **Docente:** Jorge Wilhelm Bogoya López
@@ -151,4 +186,4 @@ Para asuntos individuales: correo institucional del docente.
 
 ---
 
-*Documento vivo. Versionado semanalmente. Última actualización: 18 de abril de 2026.*
+*Documento vivo. Versionado en GitHub. Última actualización: 18 de abril de 2026.*
