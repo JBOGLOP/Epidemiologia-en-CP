@@ -60,22 +60,22 @@ Al finalizar la actividad, cada estudiante será capaz de:
 
 | Fecha | Hito | Qué hacer |
 |---|---|---|
-| **Sáb 18 abr** | Publicación del paquete + sorteo | Verificas tu grupo y artículo asignado en el foro de Moodle. |
+| **Sáb 18 abr** | Publicación del paquete | Identificas tu grupo y tu artículo asignado (ver tabla abajo). |
 | **18 al 22 abr** | Lectura conceptual + lectura crítica | Lees los dos PDFs de este repositorio como base conceptual y aplicas la guía CASP a tu artículo asignado. |
 | **Mié 22 abr · 11:59 pm** | Entrega del compromiso escrito | Texto individual de 200–250 palabras siguiendo la indicación de la actividad. **40% de la nota.** |
 | **Vie 24 abr · 10:00 a.m.** | Sesión presencial de Journal Club | 120 minutos · tres bloques paralelos. |
 
 ---
 
-## 👥 Asignación de grupos
+## 👥 Asignación oficial de grupos y artículos
 
-| Grupo | Integrantes |
-|---|---|
-| **Grupo 1** | Malkys Reales · Ana Milena Vega Herazo · Pedro Manrique Martinez · Ruben Dario Rodriguez Buenahora |
-| **Grupo 2** | Juan Sebastián Martínez Collazos · Brianda Vanessa Renis Zurita · Nohora Montero Garcia |
-| **Grupo 3** | Henry Mauricio Rodriguez Valencia · Allan Josué Maradiaga Moncada · Carlos Arturo Ramirez Rojas |
+| Grupo | Integrantes | Artículo asignado | Diseño |
+|---|---|---|---|
+| **Grupo 1** | Malkys Reales · Ana Milena Vega Herazo · Pedro Manrique Martinez · Ruben Dario Rodriguez Buenahora | Pastrana & De Lima (2022) · *Palliative care in Latin America: Are we making any progress?* | 🔴 **Estudio ecológico** |
+| **Grupo 2** | Juan Sebastián Martínez Collazos · Brianda Vanessa Renis Zurita · Nohora Montero Garcia | Arenas Ochoa et al. (2021) · *Prevalence and characteristics of patients with heart failure needing palliative care* | 🟡 **Transversal de prevalencia** |
+| **Grupo 3** | Henry Mauricio Rodriguez Valencia · Allan Josué Maradiaga Moncada · Carlos Arturo Ramirez Rojas | Castiblanco-Delgado et al. (2022) · *Intravenous lidocaine in cancer-related neuropathic pain: Case series* | 🟢 **Reporte/Serie de casos** |
 
-Los correos institucionales y la asignación de artículo por grupo están en el foro de Moodle (no en este repositorio público). Cada grupo tiene asignado **uno de los tres artículos** como lectura profunda. Se recomienda revisar al menos los resúmenes de los otros dos para participar críticamente en los bloques correspondientes.
+> **Criterio de asignación:** el artículo de mayor carga analítica (el ecológico, con 17 países, índice ALCP y correlación de Spearman) se asigna al grupo con más integrantes para distribuir mejor la lectura colectiva. Los correos institucionales están en el foro de Moodle (no en este repositorio público).
 
 ---
 
@@ -90,11 +90,7 @@ Los dos PDFs disponibles en este repositorio:
 
 ### Lectura crítica por grupo
 
-Cada subgrupo analiza **un artículo open access** (enlaces dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/)) usando la guía CASP unificada de ocho preguntas:
-
-- **Grupo A · Reporte / serie de casos**
-- **Grupo B · Transversal de prevalencia**
-- **Grupo C · Ecológico**
+Cada subgrupo analiza su artículo asignado (enlaces completos dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/)) usando la guía CASP unificada de ocho preguntas.
 
 ---
 
@@ -102,7 +98,7 @@ Cada subgrupo analiza **un artículo open access** (enlaces dentro del [paquete 
 
 Antes del miércoles 22 de abril a las 11:59 pm, asegúrate de haber completado:
 
-- [ ] Verificar tu asignación de grupo y de artículo en el foro de Moodle.
+- [ ] Identificar tu artículo asignado en la tabla de arriba.
 - [ ] Abrir el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/> (o descargar los archivos del repositorio).
 - [ ] Leer los dos PDFs de lectura conceptual común.
 - [ ] Leer tu artículo asignado **al menos dos veces**, respondiendo por escrito las ocho preguntas de la guía CASP.
@@ -171,7 +167,7 @@ Texto individual de **200 a 250 palabras** que articule tres cuestiones:
 
 - 🌐 **Sitio web del paquete:** <https://jboglop.github.io/Epidemiologia-en-CP/>
 - 📁 **Repositorio fuente:** <https://github.com/JBOGLOP/Epidemiologia-en-CP>
-- 🎓 **Aula Moodle:** foro de la sesión 6 (asignación de artículo, correos y entrega del compromiso escrito).
+- 🎓 **Aula Moodle:** foro de la sesión 6 (correos de los grupos y entrega del compromiso escrito).
 
 ---
 
