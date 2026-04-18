@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paquete del estudiante · Sesión 6 · Epidemiología descriptiva en cuidados paliativos</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ========================================================
+   PALETA Y VARIABLES DEL CURSO
+   ======================================================== */
+:root {
+  --terracota: #B85C3C;
+  --terracota-oscuro: #8C3D22;
+  --arena: #F4EDE0;
+  --arena-clara: #FAF6EE;
+  --arena-oscura: #E8DEC9;
+  --salvia: #6B8E6B;
+  --salvia-oscuro: #4A6B4A;
+  --salvia-suave: #A3B8A3;
+  --ambar: #D4A03F;
+  --tinta: #2C2824;
+  --tinta-suave: #5A5550;
+  --papel: #FDFBF7;
+  --marfil: #FFFEFA;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --serif-body: 'Crimson Pro', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--serif-body);
+  color: var(--tinta);
+  background: var(--papel);
+  line-height: 1.6;
+  font-size: 17px;
+}
+
+/* Impresión: que los cuadros no se partan y que se vea limpio en A4 */
+@media print {
+  body { background: white; }
+  .nav-sticky { display: none; }
+  .cuadro-cita, .cuadro-alerta, .cuadro-definicion,
+  .cuadro-pregunta, .articulo-card { page-break-inside: avoid; }
+  section { page-break-inside: avoid; }
+  h1, h2, h3 { page-break-after: avoid; }
+}
+
+/* ========================================================
+   LAYOUT GENERAL
+   ======================================================== */
+.documento {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+
+/* ========================================================
+   TIPOGRAFÍA
+   ======================================================== */
+h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 2.4rem;
+  line-height: 1.12;
+  color: var(--terracota);
+  margin: 2.5rem 0 1.2rem;
+  letter-spacing: -0.015em;
+}
+
+h1.titulo-principal {
+  font-size: 3rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.7rem;
+  color: var(--salvia-oscuro);
+  margin: 2.2rem 0 0.8rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--arena-oscura);
+}
+
+h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--tinta);
+  margin: 1.5rem 0 0.6rem;
+}
+
+h4 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.08rem;
+  color: var(--terracota-oscuro);
+  margin: 1rem 0 0.5rem;
+}
+
+p { margin-bottom: 0.95rem; }
+
+strong { color: var(--terracota-oscuro); font-weight: 600; }
+em { font-style: italic; color: var(--tinta-suave); }
+
+a {
+  color: var(--terracota);
+  text-decoration: none;
+  border-bottom: 1px solid var(--terracota-oscuro);
+  transition: all 0.2s;
+  word-break: break-word;
+}
+a:hover {
+  background: var(--arena);
+  color: var(--terracota-oscuro);
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================================
+   PORTADA DEL DOCUMENTO
+   ======================================================== */
+.portada-documento {
+  background: linear-gradient(135deg, var(--papel) 0%, var(--arena-clara) 100%);
+  padding: 3rem;
+  border-radius: 8px;
+  border: 1px solid var(--arena-oscura);
+  border-left: 6px solid var(--terracota);
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.portada-documento .marca {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  margin-bottom: 1.5rem;
+}
+
+.portada-documento .subtitulo {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--tinta-suave);
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+}
+
+.portada-documento .meta-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--arena-oscura);
+}
+.portada-documento .meta-info .dato {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.portada-documento .meta-info .dato-label {
+  color: var(--salvia);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.portada-documento .meta-info .dato-valor {
+  color: var(--tinta);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* ========================================================
+   NAVEGACIÓN STICKY
+   ======================================================== */
+.nav-sticky {
+  position: sticky;
+  top: 0;
+  background: rgba(253, 251, 247, 0.96);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--arena-oscura);
+  margin: 0 -2rem 2rem -2rem;
+  padding: 0.8rem 2rem;
+  z-index: 10;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.nav-sticky ol {
+  list-style: none;
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  counter-reset: sec;
+}
+
+.nav-sticky ol li {
+  counter-increment: sec;
+}
+
+.nav-sticky ol li a {
+  color: var(--tinta-suave);
+  border-bottom: none;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+.nav-sticky ol li a::before {
+  content: counter(sec) ". ";
+  color: var(--terracota);
+  font-weight: 600;
+}
+.nav-sticky ol li a:hover {
+  color: var(--terracota);
+  border-bottom-color: var(--terracota);
+  background: transparent;
+}
+
+/* ========================================================
+   ELEMENTOS PEDAGÓGICOS
+   ======================================================== */
+
+.cuadro-cita {
+  background: var(--arena);
+  border-left: 4px solid var(--terracota);
+  padding: 1.3rem 1.6rem;
+  margin: 1.2rem 0;
+  border-radius: 0 4px 4px 0;
+  font-family: var(--serif-body);
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+.cuadro-cita .etiqueta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--terracota);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.cuadro-alerta {
+  background: linear-gradient(to right, #FBF1E0 0%, var(--arena-clara) 100%);
+  border-left: 4px solid var(--ambar);
+  padding: 1.1rem 1.4rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.cuadro-alerta .titulo {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--terracota-oscuro);
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+}
+.cuadro-alerta .titulo::before {
+  content: "⚠  ";
+  color: var(--ambar);
+}
+
+.cuadro-definicion {
+  background: var(--marfil);
+  border: 1px solid var(--salvia-suave);
+  border-top: 3px solid var(--salvia);
+  padding: 1.1rem 1.3rem;
+  margin: 0.9rem 0;
+  border-radius: 0 0 4px 4px;
+}
+.cuadro-definicion .termino {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.cuadro-pregunta {
+  background: var(--marfil);
+  border: 1px solid var(--arena-oscura);
+  border-left: 3px solid var(--salvia);
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.cuadro-pregunta .numero {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--salvia);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.cuadro-pregunta .pregunta-texto {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  line-height: 1.45;
+  color: var(--tinta);
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+}
+.cuadro-pregunta .nota {
+  font-size: 0.96rem;
+  color: var(--tinta-suave);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ========================================================
+   TARJETAS DE ARTÍCULO
+   ======================================================== */
+.articulo-card {
+  background: var(--marfil);
+  border: 1px solid var(--arena-oscura);
+  border-radius: 6px;
+  padding: 1.6rem 1.8rem;
+  margin: 1.2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.articulo-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--salvia);
+}
+.articulo-card.diseno-caso::before { background: var(--ambar); }
+.articulo-card.diseno-transversal::before { background: var(--terracota); }
+.articulo-card.diseno-ecologico::before { background: var(--salvia); }
+
+.articulo-card .etiqueta-diseno {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  background: var(--arena-clara);
+  border-radius: 3px;
+}
+.articulo-card.diseno-caso .etiqueta-diseno { color: var(--ambar); background: #FBF1E0; }
+.articulo-card.diseno-transversal .etiqueta-diseno { color: var(--terracota); background: var(--arena); }
+.articulo-card.diseno-ecologico .etiqueta-diseno { color: var(--salvia-oscuro); background: #EBF0EB; }
+
+.articulo-card h3 {
+  margin-top: 0.6rem;
+  font-size: 1.3rem;
+  line-height: 1.25;
+  color: var(--tinta);
+}
+
+.articulo-card .cita-apa {
+  font-family: var(--serif-body);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--tinta-suave);
+  margin: 0.8rem 0;
+  padding: 0.8rem 1rem;
+  background: var(--arena-clara);
+  border-radius: 3px;
+  font-style: italic;
+}
+
+.articulo-card .info-acceso {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.articulo-card .badge-open-access {
+  background: var(--salvia);
+  color: white;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.articulo-card .enlaces {
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.articulo-card .enlace-boton {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--terracota);
+  color: white;
+  border-radius: 3px;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-bottom: none;
+  transition: all 0.2s;
+}
+.articulo-card .enlace-boton:hover {
+  background: var(--terracota-oscuro);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.articulo-card .enlace-secundario {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--tinta);
+  border: 1px solid var(--arena-oscura);
+  border-radius: 3px;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  transition: all 0.2s;
+  border-bottom: 1px solid var(--arena-oscura);
+}
+.articulo-card .enlace-secundario:hover {
+  background: var(--arena);
+  color: var(--tinta);
+}
+
+.articulo-card .resumen-breve {
+  margin-top: 0.8rem;
+  font-size: 0.98rem;
+}
+
+/* ========================================================
+   LISTAS REFINADAS
+   ======================================================== */
+ul.lista-refinada, ol.lista-refinada {
+  margin: 0.6rem 0 0.8rem 1.2rem;
+}
+ul.lista-refinada li, ol.lista-refinada li {
+  margin-bottom: 0.4rem;
+  line-height: 1.5;
+}
+ul.lista-refinada li::marker { color: var(--salvia); }
+
+/* Checklist para preparación */
+.checklist {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+}
+.checklist li {
+  padding: 0.6rem 0 0.6rem 1.8rem;
+  border-bottom: 1px solid var(--arena-clara);
+  position: relative;
+  line-height: 1.5;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  font-size: 1.2rem;
+  color: var(--salvia);
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li strong { color: var(--terracota-oscuro); }
+
+/* ========================================================
+   CUADRO DE PROMPT (distintivo)
+   ======================================================== */
+.cuadro-prompt {
+  background: var(--marfil);
+  border: 2px solid var(--terracota);
+  padding: 1.8rem 2rem;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  position: relative;
+}
+.cuadro-prompt::before {
+  content: "PROMPT OFICIAL";
+  position: absolute;
+  top: -0.6rem;
+  left: 1.5rem;
+  background: var(--terracota);
+  color: white;
+  padding: 0.2rem 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  border-radius: 3px;
+}
+.cuadro-prompt ol {
+  margin-top: 0.7rem;
+  margin-left: 1.2rem;
+}
+.cuadro-prompt ol li {
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+.cuadro-prompt ol li::marker {
+  color: var(--terracota);
+  font-weight: 700;
+}
+.cuadro-prompt .metadata {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--arena-oscura);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.cuadro-prompt .metadata strong { color: var(--terracota); }
+
+/* ========================================================
+   LÍNEA DE TIEMPO DE PREPARACIÓN
+   ======================================================== */
+.linea-tiempo {
+  margin: 1.5rem 0;
+  position: relative;
+  padding-left: 2rem;
+}
+.linea-tiempo::before {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  top: 0.3rem;
+  bottom: 0.3rem;
+  width: 2px;
+  background: var(--arena-oscura);
+}
+.linea-tiempo .hito {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
+}
+.linea-tiempo .hito::before {
+  content: "";
+  position: absolute;
+  left: -1.85rem;
+  top: 0.35rem;
+  width: 14px;
+  height: 14px;
+  background: var(--papel);
+  border: 2px solid var(--terracota);
+  border-radius: 50%;
+}
+.linea-tiempo .hito.critico::before {
+  background: var(--terracota);
+}
+.linea-tiempo .hito .fecha {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--terracota);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+.linea-tiempo .hito h4 {
+  margin: 0.1rem 0 0.3rem;
+  font-size: 1.08rem;
+}
+.linea-tiempo .hito p {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--tinta-suave);
+  line-height: 1.5;
+}
+.linea-tiempo .hito .tabla-grupos {
+  width: 100%;
+  margin: 0.9rem 0 0.6rem;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  background: var(--arena-clara);
+  border: 1px solid var(--arena-oscura);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.linea-tiempo .hito .tabla-grupos thead th {
+  background: var(--salvia);
+  color: #ffffff;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.55rem 0.8rem;
+}
+.linea-tiempo .hito .tabla-grupos tbody td {
+  padding: 0.7rem 0.8rem;
+  vertical-align: top;
+  border-top: 1px solid var(--arena-oscura);
+  line-height: 1.5;
+  color: var(--tinta);
+}
+.linea-tiempo .hito .tabla-grupos tbody tr:first-child td {
+  border-top: none;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:first-child {
+  white-space: nowrap;
+  background: var(--arena);
+  color: var(--terracota-oscuro);
+  width: 18%;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:last-child {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--salvia-oscuro);
+}
+
+/* ========================================================
+   FOOTER
+   ======================================================== */
+.footer-doc {
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--arena-oscura);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--tinta-suave);
+  text-align: center;
+}
+
+@media (max-width: 680px) {
+  .documento { padding: 1.5rem 1rem 3rem; }
+  .portada-documento { padding: 1.8rem; }
+  .portada-documento .meta-info { grid-template-columns: 1fr; gap: 0.8rem; }
+  h1.titulo-principal { font-size: 2rem; }
+  .nav-sticky ol { gap: 0.7rem; font-size: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="documento">
+
+<!-- ================================================================
+     PORTADA
+     ================================================================ -->
+<div class="portada-documento">
+  <div class="marca">Universidad Antonio Nariño · Maestría en Cuidados Paliativos · Epidemiología del Cuidado Paliativo</div>
+
+  <span class="eyebrow">Sesión 6 · 24 de abril de 2026 · Paquete del estudiante</span>
+
+  <h1 class="titulo-principal">Epidemiología descriptiva en cuidados paliativos</h1>
+
+  <p class="subtitulo">
+    Todo lo que necesitas para preparar la sesión: guía CASP, indicación del compromiso escrito, tres artículos asignados y lecturas complementarias.
+  </p>
+
+  <div class="meta-info">
+    <div class="dato">
+      <span class="dato-label">Metodología</span>
+      <span class="dato-valor">Journal Club · Grupos paralelos</span>
+    </div>
+    <div class="dato">
+      <span class="dato-label">Entrega previa</span>
+      <span class="dato-valor">22 de abril, 11:59 pm</span>
+    </div>
+    <div class="dato">
+      <span class="dato-label">Sesión presencial</span>
+      <span class="dato-valor">24 de abril, 10:00 a.m.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     NAVEGACIÓN STICKY
+     ================================================================ -->
+<nav class="nav-sticky">
+  <ol>
+    <li><a href="#bienvenida">Bienvenida</a></li>
+    <li><a href="#que-vas-a-aprender">Qué vas a aprender</a></li>
+    <li><a href="#preparacion">Preparación</a></li>
+    <li><a href="#articulos">Artículos</a></li>
+    <li><a href="#casp">Guía CASP</a></li>
+    <li><a href="#compromiso">Compromiso escrito</a></li>
+    <li><a href="#durante">Durante la sesión</a></li>
+    <li><a href="#evaluacion">Evaluación</a></li>
+    <li><a href="#lecturas">Lecturas opcionales</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================
+     1. BIENVENIDA
+     ================================================================ -->
+<section id="bienvenida">
+  <h2>1. Bienvenida a la Sesión 6</h2>
+
+  <p>
+    Hasta ahora, en las Sesiones 1 a 5, has aprendido a leer indicadores epidemiológicos, a calcular medidas de frecuencia, asociación e impacto, y a detectar variables de confusión. En esta sesión damos un salto: vamos a pasar de <em>consumidores</em> de datos epidemiológicos a <em>críticos</em> de la arquitectura que los produce.
+  </p>
+
+  <p>
+    Los tres diseños que abordaremos (reporte y serie de casos, transversal de prevalencia, y estudio ecológico) comparten una característica fundamental: <strong>ninguno establece causalidad</strong>, pero los tres se utilizan cotidianamente en la literatura de cuidados paliativos, con frecuencia de manera sobreinterpretada. Identificar esos excesos interpretativos es la competencia nuclear de la sesión, y un insumo directo para tus futuras tesis y publicaciones.
+  </p>
+
+  <div class="cuadro-cita">
+    <span class="etiqueta">Pregunta vertebradora del curso</span>
+    ¿Qué dice —y qué calla— el panorama epidemiológico sobre las personas que necesitan cuidados paliativos? Hoy vamos a ver que cada uno de los tres diseños descriptivos <em>dice</em> y <em>calla</em> cosas distintas sobre María Luisa y Don Aurelio.
+  </div>
+</section>
+
+<!-- ================================================================
+     2. RESULTADOS DE APRENDIZAJE
+     ================================================================ -->
+<section id="que-vas-a-aprender">
+  <h2>2. Lo que vas a aprender en esta sesión</h2>
+
+  <p>Al finalizar la sesión, estarás en capacidad de:</p>
+
+  <ul class="lista-refinada">
+    <li><strong>Distinguir con precisión</strong> los tres diseños epidemiológicos descriptivos, identificando su unidad de análisis, sus medidas apropiadas y las preguntas que cada uno puede o no puede responder.</li>
+    <li><strong>Identificar los sesgos específicos</strong> que amenazan la validez interna de cada diseño: ausencia de control en la serie de casos, sesgo de prevalencia (Neyman) en el transversal, y falacia ecológica en el ecológico.</li>
+    <li><strong>Aplicar la guía CASP unificada</strong> de ocho preguntas para la lectura crítica de un artículo real de cuidados paliativos latinoamericano.</li>
+    <li><strong>Articular un juicio razonado</strong> sobre las limitaciones de cada diseño para informar política pública sobre poblaciones vulnerabilizadas: pacientes rurales, indígenas, adultos mayores sin acceso a opioides.</li>
+  </ul>
+</section>
+
+<!-- ================================================================
+     3. CRONOGRAMA DE PREPARACIÓN
+     ================================================================ -->
+<section id="preparacion">
+  <h2>3. Cronograma de preparación</h2>
+
+  <p>
+    La sesión funciona como Journal Club, lo que significa que depende enteramente de que llegues habiendo leído. Aquí tienes el cronograma de preparación desde que recibes este paquete hasta la sesión presencial.
+  </p>
+
+  <div class="linea-tiempo">
+    <div class="hito">
+      <span class="fecha">Sábado 18 de abril</span>
+      <h4>Recibes este paquete y el sorteo de artículos</h4>
+      <p>Se publica en Moodle este documento con todos los enlaces. El sorteo para el paquete de estudiantes queda con la siguiente asignación:</p>
+      <table class="tabla-grupos">
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Integrantes</th>
+            <th>Correos electrónicos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Grupo 1</strong></td>
+            <td>
+              1. Malkys Reales<br>
+              2. Ana Milena Vega Herazo<br>
+              3. Pedro Manrique Martinez<br>
+              4. Ruben Dario Rodriguez Buenahora
+            </td>
+            <td>
+              mreales584@uan.edu.co<br>
+              avega305@uan.edu.co<br>
+              pmanrique664@uan.edu.co<br>
+              rrodriguez679@uan.edu.co
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Grupo 2</strong></td>
+            <td>
+              1. Juan Sebastián Martínez Collazos<br>
+              2. Brianda Vanessa Renis Zurita<br>
+              3. Nohora Montero Garcia
+            </td>
+            <td>
+              jmartinez577@uan.edu.co<br>
+              brenis365@uan.edu.co<br>
+              nmontero551@uan.edu.co
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Grupo 3</strong></td>
+            <td>
+              1. Henry Mauricio Rodriguez Valencia<br>
+              2. Allan Josué Maradiaga Moncada<br>
+              3. Carlos Arturo Ramirez Rojas
+            </td>
+            <td>
+              hrodriguez639@uan.edu.co<br>
+              amaradiaga59@uan.edu.co<br>
+              cramirez842@uan.edu.co
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Verifica tu asignación de grupo y de artículo en el foro del curso.</p>
+    </div>
+
+    <div class="hito">
+      <span class="fecha">Del 18 al 22 de abril</span>
+      <h4>Lectura conceptual común + lectura crítica del artículo</h4>
+      <p>Todos leen el documento propuesto en Moodle como lectura conceptual común. Cada uno lee además su artículo asignado usando la guía CASP.</p>
+    </div>
+
+    <div class="hito critico">
+      <span class="fecha">Miércoles 22 de abril · 11:59 pm</span>
+      <h4>Entrega del compromiso escrito en Moodle</h4>
+      <p>Texto individual de 200 a 250 palabras siguiendo la indicación de la actividad (sección 6 de este paquete). Representa el 40% de la nota de la sesión.</p>
+    </div>
+
+    <div class="hito critico">
+      <span class="fecha">Viernes 24 de abril · 10:00 a.m.</span>
+      <h4>Sesión presencial de Journal Club</h4>
+      <p>120 minutos divididos en tres bloques de discusión paralelos. Tu subgrupo presenta el artículo asignado y participa críticamente en los otros dos bloques.</p>
+    </div>
+  </div>
+
+  <h3>Checklist de preparación</h3>
+
+  <ul class="checklist">
+    <li><strong>Verificar tu asignación</strong> de subgrupo y artículo en el foro de Moodle.</li>
+    <li><strong>Descargar el artículo asignado</strong> (enlaces en la sección 4 de este documento).</li>
+    <li><strong>Leer el capítulo de estudios descriptivos</strong> del curso y el capítulo 13 de diseños de investigación (lectura conceptual común).</li>
+    <li><strong>Leer tu artículo asignado</strong> al menos dos veces, respondiendo por escrito las ocho preguntas de la guía CASP.</li>
+    <li><strong>Coordinar con tu subgrupo</strong> cómo van a presentar los cinco minutos de apertura del bloque.</li>
+    <li><strong>Redactar el compromiso escrito</strong> siguiendo la estructura de tres párrafos articulados.</li>
+    <li><strong>Subir el PDF o Word</strong> a Moodle antes de las 11:59 pm del 22 de abril.</li>
+  </ul>
+</section>
+
+<!-- ================================================================
+     4. LOS TRES ARTÍCULOS DEL JOURNAL CLUB
+     ================================================================ -->
+<section id="articulos">
+  <h2>4. Los tres artículos del Journal Club</h2>
+
+  <p>
+    Estos son los tres artículos reales publicados que discutiremos. Los tres son <strong>open access verificados</strong>: puedes descargar el texto completo sin barreras de suscripción. Cada subgrupo leerá uno de los tres en profundidad, pero se recomienda revisar al menos los resúmenes de los otros dos para participar críticamente en los bloques correspondientes.
+  </p>
+
+  <!-- ARTÍCULO 1 -->
+  <article class="articulo-card diseno-caso">
+    <span class="etiqueta-diseno">Artículo 1 · Reporte/Serie de casos</span>
+    <h3>Intravenous lidocaine in cancer-related neuropathic pain: Case series</h3>
+
+    <div class="cita-apa">
+      Castiblanco-Delgado, D. S., Seija-Butnaru, D., &amp; Molina-Arteta, B. M. (2022). Intravenous lidocaine in cancer-related neuropathic pain: Case series. <em>Colombian Journal of Anesthesiology</em>, 50(2), e1004.
+    </div>
+
+    <div class="info-acceso">
+      <span class="badge-open-access">Open Access</span>
+      <span>DOI: 10.5554/22562087.e1004</span>
+      <span>Idioma: inglés/español</span>
+      <span>Revista: Colombian J Anesthesiology (Q3)</span>
+    </div>
+
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Serie de 9 pacientes oncológicos del Instituto Nacional de Cancerología de Bogotá tratados con infusión de lidocaína intravenosa para crisis de dolor neuropático refractario a opioides. El 89% mejoró tras el bolo inicial; a las 24 horas, la reducción promedio del dolor fue del 46%.
+    </div>
+
+    <div class="enlaces">
+      <a class="enlace-boton" href="https://doi.org/10.5554/22562087.e1004" target="_blank">Acceder por DOI</a>
+      <a class="enlace-secundario" href="http://www.scielo.org.co/scielo.php?script=sci_arttext&amp;pid=S0120-33472022000200500" target="_blank">Texto completo en SciELO</a>
+      <a class="enlace-secundario" href="http://www.scielo.org.co/pdf/rca/v50n2/2256-2087-rca-50-02-e500.pdf" target="_blank">PDF directo</a>
+    </div>
+  </article>
+
+  <!-- ARTÍCULO 2 -->
+  <article class="articulo-card diseno-transversal">
+    <span class="etiqueta-diseno">Artículo 2 · Transversal de prevalencia</span>
+    <h3>Prevalence and characteristics of patients with heart failure needing palliative care</h3>
+
+    <div class="cita-apa">
+      Arenas Ochoa, L. F., González-Jaramillo, V., Saldarriaga, C., Lemos, M., Krikorian, A., Vargas, J. J., Gómez-Batiste, X., Gonzalez-Jaramillo, N., &amp; Eychmüller, S. (2021). Prevalence and characteristics of patients with heart failure needing palliative care. <em>BMC Palliative Care</em>, 20(1), 184.
+    </div>
+
+    <div class="info-acceso">
+      <span class="badge-open-access">Open Access</span>
+      <span>DOI: 10.1186/s12904-021-00850-y</span>
+      <span>Idioma: inglés (resumen en español)</span>
+      <span>Revista: BMC Palliative Care (Q1)</span>
+    </div>
+
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Estudio transversal en 178 pacientes ambulatorios con insuficiencia cardíaca en dos clínicas de tercer nivel en Medellín. Usa el instrumento NECPAL CCOMS-ICO para identificar necesidad paliativa. Hallazgo principal: prevalencia global del 44%, con fuerte gradiente por clase funcional NYHA y edad.
+    </div>
+
+    <div class="enlaces">
+      <a class="enlace-boton" href="https://doi.org/10.1186/s12904-021-00850-y" target="_blank">Acceder por DOI</a>
+      <a class="enlace-secundario" href="https://bmcpalliatcare.biomedcentral.com/articles/10.1186/s12904-021-00850-y" target="_blank">Texto completo en BMC</a>
+      <a class="enlace-secundario" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8638101/" target="_blank">Versión PMC</a>
+    </div>
+  </article>
+
+  <!-- ARTÍCULO 3 -->
+  <article class="articulo-card diseno-ecologico">
+    <span class="etiqueta-diseno">Artículo 3 · Estudio ecológico</span>
+    <h3>Palliative care in Latin America: Are we making any progress? Assessing development over time using macro indicators</h3>
+
+    <div class="cita-apa">
+      Pastrana, T., &amp; De Lima, L. (2022). Palliative care in Latin America: Are we making any progress? Assessing development over time using macro indicators. <em>Journal of Pain and Symptom Management</em>, 63(1), 33-41.
+    </div>
+
+    <div class="info-acceso">
+      <span class="badge-open-access">Acceso libre en PMC</span>
+      <span>DOI: 10.1016/j.jpainsymman.2021.07.020</span>
+      <span>Idioma: inglés</span>
+      <span>Revista: J Pain Symptom Manage (Q1)</span>
+    </div>
+
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Estudio ecológico multigrupo longitudinal (2012 vs. 2020) sobre el desarrollo del cuidado paliativo en 17 países de Latinoamérica, incluida Colombia. Usa el ALCP Index-II con cinco indicadores: plan nacional, formación médica, equivalencia de morfina, servicios por millón y especialistas acreditados. Hallazgo clave: correlación de Spearman de 0.72 entre consumo de morfina per cápita y densidad de servicios.
+    </div>
+
+    <div class="enlaces">
+      <a class="enlace-boton" href="https://doi.org/10.1016/j.jpainsymman.2021.07.020" target="_blank">Acceder por DOI</a>
+      <a class="enlace-secundario" href="https://pubmed.ncbi.nlm.nih.gov/34391843/" target="_blank">Ver en PubMed</a>
+      <a class="enlace-secundario" href="https://www.sciencedirect.com/science/article/pii/S0885392421004747" target="_blank">ScienceDirect</a>
+    </div>
+  </article>
+</section>
+
+<!-- ================================================================
+     5. GUÍA CASP UNIFICADA
+     ================================================================ -->
+<section id="casp">
+  <h2>5. Guía CASP unificada de ocho preguntas</h2>
+
+  <p>
+    CASP (Critical Appraisal Skills Programme) es un conjunto de listas de verificación para lectura crítica de literatura científica. Existen versiones oficiales por tipo de diseño, pero para esta sesión usaremos una <strong>guía unificada de ocho preguntas</strong> adaptada a los tres diseños descriptivos en cuidados paliativos. La unificación es pedagógica: permite que los tres subgrupos comparen sus análisis con el mismo instrumento.
+  </p>
+
+  <p>
+    Responde las ocho preguntas por escrito sobre tu artículo asignado <em>antes</em> de redactar el compromiso escrito. Estas respuestas no se entregan como documento separado; son la base de tu compromiso escrito y de la presentación en el Journal Club. Puedes llevar la guía a la sesión (impresa o digital) como apoyo para estructurar tu presentación.
+  </p>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 1 · Pregunta de investigación y relevancia</span>
+    <p class="pregunta-texto">¿Cuál es la pregunta de investigación del estudio y por qué esa pregunta importa para los cuidados paliativos en Colombia o Latinoamérica?</p>
+    <p class="nota">Esta pregunta abre el análisis anclándolo en la filosofía del curso. Identifica la pregunta declarada por los autores y articula por qué responderla es relevante para el contexto regional.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 2 · Diseño y unidad de análisis</span>
+    <p class="pregunta-texto">¿Cómo se declara el diseño del estudio en el artículo, cuál es la unidad de análisis (individuo, grupo, población), y el diseño declarado coincide con lo que realmente hicieron los autores?</p>
+    <p class="nota">El giro final es crítico: verifica coherencia entre lo que el artículo <em>dice ser</em> y lo que en realidad <em>es</em>. No es infrecuente que un artículo se presente como transversal y contenga elementos de cohorte, o que declare ser serie de casos con un control informal implícito.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 3 · Desenlace principal y medición</span>
+    <p class="pregunta-texto">¿Cuál es el desenlace o variable principal del estudio, cómo se operacionalizó, con qué instrumento se midió, y ese instrumento está validado en población colombiana o latinoamericana?</p>
+    <p class="nota">La última parte es crucial: muchos estudios usan escalas importadas (NECPAL, KCCQ, SF-12, ESAS) que pueden o no estar validadas en nuestra población. La ausencia de validación local no invalida el estudio, pero debe ser declarada como limitación.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 4 · Selección muestral e inclusión/exclusión</span>
+    <p class="pregunta-texto">¿Cómo se seleccionó la muestra o la población del estudio, qué criterios de inclusión y exclusión se aplicaron, y qué tipo de paciente o qué grupo queda sistemáticamente fuera del estudio?</p>
+    <p class="nota">El final de la pregunta es el gancho vertebrador: invita a ver el estudio no solo por lo que <em>incluye</em> sino por lo que <em>silencia</em>. Los pacientes rurales, indígenas, con deterioro cognitivo, o demasiado graves para asistir a consulta quedan frecuentemente fuera de los estudios paliativos sin que esto se discuta como limitación.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 5 · Resultados principales y medidas</span>
+    <p class="pregunta-texto">¿Cuáles son los tres hallazgos principales del estudio, con qué medidas se reportan (prevalencia, razón, correlación, entre otras), y esas medidas son las apropiadas para el diseño declarado?</p>
+    <p class="nota">La segunda parte obliga a verificar coherencia: un transversal no debería reportar incidencia; un ecológico no debería reportar razones de riesgo individuales; una serie de casos no debería reportar medidas inferenciales con intervalos de confianza como si fuera un estudio poblacional.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 6 · Sesgos específicos del diseño</span>
+    <p class="pregunta-texto">¿Qué sesgos específicos amenazan la validez interna de este estudio según su diseño, y cómo los autores intentaron mitigarlos?</p>
+    <p class="nota">Pistas según el diseño: sesgo de selección (común a varios), sesgo de prevalencia o Neyman (transversales), sesgo de información (todos los observacionales), falacia ecológica (ecológicos), ausencia de control (casos y series). Un buen análisis identifica los dos o tres sesgos <strong>más peligrosos</strong> para ese estudio, no una lista exhaustiva.</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 7 · Validez externa y extrapolación</span>
+    <p class="pregunta-texto">¿A qué poblaciones se pueden extrapolar los resultados de este estudio, y a cuáles no se pueden extrapolar aunque parezca tentador hacerlo?</p>
+    <p class="nota">La segunda parte es donde aparece típicamente la falacia ecológica en el tercer artículo (no se puede inferir de 17 países latinoamericanos a un paciente individual) y el problema de validez externa en el segundo (no se puede extrapolar de dos clínicas urbanas de Medellín a consulta rural de Mitú).</p>
+  </div>
+
+  <div class="cuadro-pregunta">
+    <span class="numero">Pregunta 8 · Traducción a política pública con rostro humano</span>
+    <p class="pregunta-texto">¿Qué tendría que hacerse para que este estudio informara una política pública que mejore la vida de una persona como María Luisa o Don Aurelio, y qué queda fuera del alcance del estudio por más bien hecho que esté?</p>
+    <p class="nota">Esta pregunta cierra el análisis articulando el rigor metodológico con el compromiso ético del curso. Reconoce el valor del estudio sin sobreestimarlo y obliga a pensar qué estudios adicionales (cualitativos o cuantitativos) serían necesarios para complementar.</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     6. COMPROMISO ESCRITO PREVIO
+     ================================================================ -->
+<section id="compromiso">
+  <h2>6. Compromiso escrito previo (40% de la nota)</h2>
+
+  <p>
+    Cada estudiante redacta, de manera individual, un texto de <strong>200 a 250 palabras</strong> que se sube a Moodle antes de las <strong>11:59 pm del 22 de abril</strong>. Este compromiso es el insumo principal de tu evaluación individual de lectura y funciona también como diagnóstico formativo para el docente: leerlo le permite ajustar la conducción de la sesión en función de lo que el grupo comprendió.
+  </p>
+
+  <div class="cuadro-prompt">
+    <p>
+      Después de leer el artículo asignado con la guía CASP de ocho preguntas, redacta un texto de 200 a 250 palabras que responda tres cuestiones articuladas:
+    </p>
+
+    <ol>
+      <li>
+        <strong>Primero,</strong> identifica en una frase precisa la pregunta de investigación del artículo y menciona el sesgo principal que amenaza su validez.
+      </li>
+      <li>
+        <strong>Segundo,</strong> describe en una o dos frases qué adaptarías, qué sería imposible replicar y qué no tiene sentido replicar si tuvieras que reproducir este estudio en tu región de Colombia.
+      </li>
+      <li>
+        <strong>Tercero,</strong> escribe una frase que responda la pregunta número ocho de la guía CASP: qué tendría que hacerse para que este estudio mejore la vida de una persona como María Luisa o Don Aurelio.
+      </li>
+    </ol>
+
+    <div class="metadata">
+      <span><strong>Extensión:</strong> 200–250 palabras</span>
+      <span><strong>Formato:</strong> PDF o Word</span>
+      <span><strong>Referencias:</strong> APA 7 inline, sin bibliografía</span>
+      <span><strong>Fecha límite:</strong> 22 de abril, 11:59 pm</span>
+    </div>
+  </div>
+
+  <h3>Cómo se califica tu compromiso</h3>
+
+  <p>La rúbrica tiene tres criterios con igual peso (33% cada uno):</p>
+
+  <ul class="lista-refinada">
+    <li><strong>Precisión de la pregunta de investigación y sesgo principal.</strong> Identificas la pregunta con frase precisa y nombras correctamente el sesgo más relevante para el diseño, con justificación breve.</li>
+    <li><strong>Replicabilidad contextual colombiana.</strong> Distingues claramente entre qué adaptarías, qué sería imposible y qué no tiene sentido replicar, con ejemplos concretos de tu región.</li>
+    <li><strong>Vertebración con rostro humano.</strong> Articulas con precisión qué tendría que hacerse para que el estudio mejore la vida de María Luisa o Don Aurelio, con propuesta concreta.</li>
+  </ul>
+</section>
+
+<!-- ================================================================
+     7. DURANTE LA SESIÓN PRESENCIAL
+     ================================================================ -->
+<section id="durante">
+  <h2>7. Durante la sesión presencial</h2>
+
+  <p>
+    La sesión presencial de 120 minutos se organiza alrededor de tres bloques de Journal Club paralelos, uno por cada artículo. Tu subgrupo presenta el artículo asignado durante un bloque, y participa como crítico en los otros dos.
+  </p>
+
+  <h3>Estructura de cada bloque de Journal Club</h3>
+
+  <ul class="lista-refinada">
+    <li><strong>Cinco minutos · Presentación.</strong> Tu subgrupo presenta el análisis del artículo usando la guía CASP de ocho preguntas. No leen las respuestas; presentan como si quisieran convencer a colegas de otro hospital de que entendieron el artículo.</li>
+    <li><strong>De ocho a diez minutos · Preguntas cruzadas.</strong> Cada uno de los otros dos subgrupos formula al menos dos preguntas críticas al subgrupo presentador: una sobre el método y otra sobre la aplicabilidad al contexto colombiano.</li>
+    <li><strong>Cinco minutos · Síntesis.</strong> El subgrupo presentador escribe en el tablero <strong>una frase única</strong> (máximo 25 palabras) que resuma qué puede y qué no puede concluir el estudio. Esa frase queda visible durante el resto de la sesión.</li>
+  </ul>
+
+  <div class="cuadro-alerta">
+    <div class="titulo">Sobre la presentación inicial de cinco minutos</div>
+    <p style="margin: 0;">La presentación no debe ser una lectura de las ocho respuestas CASP. Debe ser una <strong>síntesis narrativa</strong> que incluya: la pregunta de investigación, el diseño y por qué se eligió, los dos o tres hallazgos centrales, y los dos sesgos más peligrosos que identificaron. Piensa en ello como un resumen que harías a un colega de otro servicio en una reunión de diez minutos.</p>
+  </div>
+
+  <h3>Cierre y síntesis comparativa</h3>
+
+  <p>
+    Los últimos 20 minutos de la sesión están dedicados a construir colectivamente una tabla comparativa de los tres diseños (unidad de análisis, tipo de pregunta, sesgo principal, utilidad en política pública) y a responder tres preguntas socráticas de cierre: qué diseño elegirían para medir inequidad en su región, qué silencian los tres diseños sobre María Luisa y Don Aurelio, y cuál es el más peligroso políticamente.
+  </p>
+</section>
+
+<!-- ================================================================
+     8. EVALUACIÓN
+     ================================================================ -->
+<section id="evaluacion">
+  <h2>8. Cómo se evalúa la sesión</h2>
+
+  <p>La nota de la sesión se compone de tres elementos articulados:</p>
+
+  <div class="cuadro-definicion">
+    <div class="termino">40% · Compromiso escrito previo</div>
+    <p style="margin: 0;">Tu texto individual de 200–250 palabras, calificado con los tres criterios de la rúbrica A (precisión, replicabilidad contextual, vertebración humana).</p>
+  </div>
+
+  <div class="cuadro-definicion">
+    <div class="termino">30% · Presentación del subgrupo</div>
+    <p style="margin: 0;">La presentación colectiva de cinco minutos en el bloque de tu artículo, calificada con la rúbrica B (claridad de la pregunta, identificación de diseño, profundidad de sesgos, articulación con inequidad).</p>
+  </div>
+
+  <div class="cuadro-definicion">
+    <div class="termino">30% · Participación individual</div>
+    <p style="margin: 0;">Tu participación en los otros dos bloques de Journal Club y en la síntesis final, calificada con la rúbrica C (sustantiva, presente, ausente).</p>
+  </div>
+
+  <p style="margin-top: 1rem;">
+    Esta distribución protege al estudiante tímido que escribió un ensayo excelente y presentó bien pero habló poco en los otros bloques, y al mismo tiempo no permite que un estudiante extrovertido que no leyó se esconda detrás del volumen verbal.
+  </p>
+</section>
+
+<!-- ================================================================
+     9. LECTURAS OPCIONALES COMPLEMENTARIAS
+     ================================================================ -->
+<section id="lecturas">
+  <h2>9. Lecturas opcionales complementarias</h2>
+
+  <p>
+    Si después de preparar tu artículo asignado quieres profundizar en alguno de los tres diseños, los siguientes artículos amplían el panorama con casos complementarios también del contexto latinoamericano. No son obligatorios, pero enriquecerán tu participación en los bloques que no te corresponde presentar.
+  </p>
+
+  <h3>Alternativas para Reporte/Serie de casos</h3>
+
+  <article class="articulo-card diseno-caso">
+    <span class="etiqueta-diseno">Opcional · Reporte de caso neonatal</span>
+    <h3>Peaceful end of life in an unviable newborn: A case report</h3>
+    <div class="cita-apa">
+      Saldaña Agudelo, Y. A., Guiza Romero, G. A., &amp; Vesga Gualdrón, L. M. (2020). Peaceful end of life in an unviable newborn: A case report. <em>Indian Journal of Palliative Care</em>, 26(3), 388-391.
+    </div>
+    <div class="info-acceso">
+      <span class="badge-open-access">Open Access</span>
+      <span>DOI: 10.4103/IJPC.IJPC_215_19</span>
+    </div>
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Reporte de caso único de un neonato colombiano de 23 semanas y 600 g, narrado con la Peaceful End of Life Theory. Visibiliza la inequidad en cuidados paliativos neonatales. Limitación evidente: n=1, fuertemente narrativo, sin mediciones objetivas.
+    </div>
+    <div class="enlaces">
+      <a class="enlace-secundario" href="https://doi.org/10.4103/IJPC.IJPC_215_19" target="_blank">Acceder por DOI</a>
+      <a class="enlace-secundario" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7725181/" target="_blank">PMC</a>
+    </div>
+  </article>
+
+  <h3>Alternativas para Transversal de prevalencia</h3>
+
+  <article class="articulo-card diseno-transversal">
+    <span class="etiqueta-diseno">Opcional · Transversal geográfico colombiano</span>
+    <h3>Accessibility to palliative care services in Colombia: An analysis of geographic disparities</h3>
+    <div class="cita-apa">
+      Sánchez-Cárdenas, M. A., Garralda, E., Moreno-Alonso, D., Benítez-Sastoque, E. R., Van den Block, L., &amp; Centeno, C. (2024). Accessibility to palliative care services in Colombia: An analysis of geographic disparities. <em>BMC Public Health</em>, 24, 1659.
+    </div>
+    <div class="info-acceso">
+      <span class="badge-open-access">Open Access</span>
+      <span>DOI: 10.1186/s12889-024-19132-2</span>
+    </div>
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Transversal poblacional basado en REPS y DANE 2020. Densidad de 1.8 servicios primarios y 0.4 especializados por 100.000 habitantes; cobertura promedio 41% (Bogotá 79% vs. Amazonía 18%); seis departamentos sin servicios. Puede leerse también como ecológico subnacional.
+    </div>
+    <div class="enlaces">
+      <a class="enlace-secundario" href="https://doi.org/10.1186/s12889-024-19132-2" target="_blank">Acceder por DOI</a>
+      <a class="enlace-secundario" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11193229/" target="_blank">PMC</a>
+    </div>
+  </article>
+
+  <article class="articulo-card diseno-transversal">
+    <span class="etiqueta-diseno">Opcional · Transversal en Alzheimer precoz</span>
+    <h3>Palliative care needs in patients with early-onset Alzheimer's disease: A cross-sectional report</h3>
+    <div class="cita-apa">
+      Tabares-Villamizar, M. A., Gallo-Henao, P., Londoño, L., et al. (2025). Palliative care needs in patients with early-onset Alzheimer's disease: A cross-sectional report. <em>American Journal of Hospice and Palliative Medicine</em>, publicación anticipada en línea.
+    </div>
+    <div class="info-acceso">
+      <span>DOI: 10.1177/10499091251393485</span>
+      <span>Acceso: suscripción (SAGE)</span>
+    </div>
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Transversal reciente en población PSEN1-E280A de Antioquia (n=36), con regresión de Poisson para razones de prevalencia. Muestra pequeña pero metodológicamente rigurosa. Acceso por suscripción.
+    </div>
+    <div class="enlaces">
+      <a class="enlace-secundario" href="https://doi.org/10.1177/10499091251393485" target="_blank">Acceder por DOI</a>
+    </div>
+  </article>
+
+  <h3>Alternativa para Estudio ecológico</h3>
+
+  <article class="articulo-card diseno-ecologico">
+    <span class="etiqueta-diseno">Opcional · Ecológico subnacional colombiano</span>
+    <h3>The development of palliative care in Colombia: An analysis of geographical inequalities through the application of international indicators</h3>
+    <div class="cita-apa">
+      Sánchez-Cárdenas, M. A., et al. (2021). The development of palliative care in Colombia: An analysis of geographical inequalities through the application of international indicators. <em>Journal of Pain and Symptom Management</em>, 62(2), 293-302.
+    </div>
+    <div class="info-acceso">
+      <span>DOI: 10.1016/j.jpainsymman.2020.12.010</span>
+      <span>Acceso: suscripción (Elsevier)</span>
+    </div>
+    <div class="resumen-breve">
+      <strong>De qué trata:</strong> Estudio ecológico a nivel departamental en Colombia con indicadores EAPC/Clark: 41% de muertes requieren cuidado paliativo, 0.5 servicios especializados por 100.000 habitantes, cuatro regiones sin actividad. Complementa muy bien al Pastrana &amp; De Lima agregando lente subnacional.
+    </div>
+    <div class="enlaces">
+      <a class="enlace-secundario" href="https://doi.org/10.1016/j.jpainsymman.2020.12.010" target="_blank">Acceder por DOI</a>
+    </div>
+  </article>
+
+  <h3>Referencias metodológicas del curso</h3>
+
+  <p style="font-size: 0.98rem;">
+    Woodward, M. (2014). <em>Epidemiology: Study design and data analysis</em> (3rd ed.). CRC Press.
+  </p>
+  <p style="font-size: 0.98rem;">
+    Rothman, K. J., Greenland, S., &amp; Lash, T. L. (2008). <em>Modern epidemiology</em> (3rd ed.). Lippincott Williams &amp; Wilkins.
+  </p>
+  <p style="font-size: 0.98rem;">
+    Robinson, W. S. (1950). Ecological correlations and the behavior of individuals. <em>American Sociological Review</em>, 15(3), 351-357. <a href="https://doi.org/10.2307/2087176" target="_blank">doi.org/10.2307/2087176</a>
+  </p>
+</section>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="footer-doc">
+  <p>Maestría en Cuidados Paliativos · Universidad Antonio Nariño · Epidemiología del Cuidado Paliativo (37542002)</p>
+  <p style="margin-top: 0.4rem;">Docente: Prof. Jorge Wilhelm Bogoya López · Sesión 6 · 24 de abril de 2026</p>
+</footer>
+
+</div>
+
+</body>
+</html>
