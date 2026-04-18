@@ -375,6 +375,21 @@ a:hover {
 .articulo-card.diseno-transversal .etiqueta-diseno { color: var(--terracota); background: var(--arena); }
 .articulo-card.diseno-ecologico .etiqueta-diseno { color: var(--salvia-oscuro); background: #EBF0EB; }
 
+.articulo-card .etiqueta-grupo {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: var(--terracota-oscuro);
+  font-weight: 600;
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  margin-left: 0.5rem;
+  margin-bottom: 0.6rem;
+  border-radius: 3px;
+}
+
 .articulo-card h3 {
   margin-top: 0.6rem;
   font-size: 1.3rem;
@@ -606,7 +621,7 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   width: 100%;
   margin: 0.9rem 0 0.6rem;
   border-collapse: collapse;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   background: var(--arena-clara);
   border: 1px solid var(--arena-oscura);
   border-radius: 4px;
@@ -616,7 +631,7 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   background: var(--salvia);
   color: #ffffff;
   font-family: var(--mono);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
@@ -633,16 +648,38 @@ ul.lista-refinada li::marker { color: var(--salvia); }
 .linea-tiempo .hito .tabla-grupos tbody tr:first-child td {
   border-top: none;
 }
-.linea-tiempo .hito .tabla-grupos tbody td:first-child {
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(1) {
   white-space: nowrap;
   background: var(--arena);
   color: var(--terracota-oscuro);
-  width: 18%;
+  width: 12%;
+  font-weight: 600;
 }
-.linea-tiempo .hito .tabla-grupos tbody td:last-child {
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(2) {
+  width: 26%;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(3) {
   font-family: var(--mono);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--salvia-oscuro);
+  width: 28%;
+  word-break: break-all;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(4) {
+  width: 34%;
+  color: var(--tinta);
+  border-left: 3px solid var(--terracota);
+  background: #ffffff;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(4) strong {
+  display: block;
+  color: var(--terracota-oscuro);
+  font-size: 0.88rem;
+  margin-bottom: 0.25rem;
+}
+.linea-tiempo .hito .tabla-grupos tbody td:nth-child(4) em {
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
 }
 
 /* ========================================================
@@ -768,13 +805,14 @@ ul.lista-refinada li::marker { color: var(--salvia); }
     <div class="hito">
       <span class="fecha">Sábado 18 de abril</span>
       <h4>Recibes este paquete y el sorteo de artículos</h4>
-      <p>Se publica en Moodle este documento con todos los enlaces. El sorteo para el paquete de estudiantes queda con la siguiente asignación:</p>
+      <p>Se publica en Moodle este documento con todos los enlaces. La asignación definitiva de grupos y artículos para el Journal Club queda como sigue:</p>
       <table class="tabla-grupos">
         <thead>
           <tr>
             <th>Grupo</th>
             <th>Integrantes</th>
             <th>Correos electrónicos</th>
+            <th>Artículo asignado</th>
           </tr>
         </thead>
         <tbody>
@@ -792,6 +830,10 @@ ul.lista-refinada li::marker { color: var(--salvia); }
               pmanrique664@uan.edu.co<br>
               rrodriguez679@uan.edu.co
             </td>
+            <td>
+              <strong>Artículo 3 · Estudio ecológico</strong><br>
+              Pastrana &amp; De Lima (2022) · <em>Palliative care in Latin America: Are we making any progress?</em>
+            </td>
           </tr>
           <tr>
             <td><strong>Grupo 2</strong></td>
@@ -804,6 +846,10 @@ ul.lista-refinada li::marker { color: var(--salvia); }
               jmartinez577@uan.edu.co<br>
               brenis365@uan.edu.co<br>
               nmontero551@uan.edu.co
+            </td>
+            <td>
+              <strong>Artículo 2 · Transversal de prevalencia</strong><br>
+              Arenas Ochoa et al. (2021) · <em>Prevalence and characteristics of patients with heart failure needing palliative care</em>
             </td>
           </tr>
           <tr>
@@ -818,10 +864,14 @@ ul.lista-refinada li::marker { color: var(--salvia); }
               amaradiaga59@uan.edu.co<br>
               cramirez842@uan.edu.co
             </td>
+            <td>
+              <strong>Artículo 1 · Reporte/Serie de casos</strong><br>
+              Castiblanco-Delgado et al. (2022) · <em>Intravenous lidocaine in cancer-related neuropathic pain: Case series</em>
+            </td>
           </tr>
         </tbody>
       </table>
-      <p>Verifica tu asignación de grupo y de artículo en el foro del curso.</p>
+      <p>La asignación responde a un criterio pedagógico: el artículo ecológico —el de mayor carga analítica (17 países, índice ALCP, correlación de Spearman, falacia ecológica)— se entrega al grupo con más integrantes para distribuir la lectura colectiva. Los artículos y enlaces completos están en la sección 4 de este documento.</p>
     </div>
 
     <div class="hito">
@@ -846,9 +896,9 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   <h3>Checklist de preparación</h3>
 
   <ul class="checklist">
-    <li><strong>Verificar tu asignación</strong> de subgrupo y artículo en el foro de Moodle.</li>
+    <li><strong>Identificar tu artículo asignado</strong> en la tabla de grupos (arriba, hito del sábado 18 de abril).</li>
     <li><strong>Descargar el artículo asignado</strong> (enlaces en la sección 4 de este documento).</li>
-    <li><strong>Leer el capítulo de estudios descriptivos</strong> del curso y el capítulo 13 de diseños de investigación (lectura conceptual común).</li>
+    <li><strong>Leer la lectura conceptual común</strong> propuesta en Moodle.</li>
     <li><strong>Leer tu artículo asignado</strong> al menos dos veces, respondiendo por escrito las ocho preguntas de la guía CASP.</li>
     <li><strong>Coordinar con tu subgrupo</strong> cómo van a presentar los cinco minutos de apertura del bloque.</li>
     <li><strong>Redactar el compromiso escrito</strong> siguiendo la estructura de tres párrafos articulados.</li>
@@ -869,6 +919,7 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   <!-- ARTÍCULO 1 -->
   <article class="articulo-card diseno-caso">
     <span class="etiqueta-diseno">Artículo 1 · Reporte/Serie de casos</span>
+    <span class="etiqueta-grupo">Asignado al Grupo 3</span>
     <h3>Intravenous lidocaine in cancer-related neuropathic pain: Case series</h3>
 
     <div class="cita-apa">
@@ -896,6 +947,7 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   <!-- ARTÍCULO 2 -->
   <article class="articulo-card diseno-transversal">
     <span class="etiqueta-diseno">Artículo 2 · Transversal de prevalencia</span>
+    <span class="etiqueta-grupo">Asignado al Grupo 2</span>
     <h3>Prevalence and characteristics of patients with heart failure needing palliative care</h3>
 
     <div class="cita-apa">
@@ -923,6 +975,7 @@ ul.lista-refinada li::marker { color: var(--salvia); }
   <!-- ARTÍCULO 3 -->
   <article class="articulo-card diseno-ecologico">
     <span class="etiqueta-diseno">Artículo 3 · Estudio ecológico</span>
+    <span class="etiqueta-grupo">Asignado al Grupo 1</span>
     <h3>Palliative care in Latin America: Are we making any progress? Assessing development over time using macro indicators</h3>
 
     <div class="cita-apa">
