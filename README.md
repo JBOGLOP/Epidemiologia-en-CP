@@ -29,19 +29,21 @@ Los tres comparten una característica fundamental: **ninguno establece causalid
 
 ## 📂 Contenido de este repositorio
 
-🌐 **Accede al paquete del estudiante directamente en línea:**
+🌐 **Accede a los materiales directamente en línea:**
 ### 👉 <https://jboglop.github.io/Epidemiologia-en-CP/>
 
 | Archivo | Descripción |
 |---|---|
-| [`Paquete_Estudiante_Sesion_6.html`](./Paquete_Estudiante_Sesion_6.html) | Documento principal de la sesión: cronograma, asignación de grupos, artículos del Journal Club, guía CASP unificada, indicación del compromiso escrito y rúbrica. **Publicado en GitHub Pages:** [abrir en el navegador](https://jboglop.github.io/Epidemiologia-en-CP/). |
+| [`Paquete_Estudiante_Sesion_6.html`](./Paquete_Estudiante_Sesion_6.html) | Documento principal de la sesión: cronograma, asignación de grupos, artículos del Journal Club, guía CASP unificada, indicación del compromiso escrito y rúbrica. **Ver en línea:** [abrir paquete](https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html). |
+| [`Presentacion_Sesion_6.html`](./Presentacion_Sesion_6.html) | 🆕 **Presentación de la sesión presencial del viernes 24 de abril** · material que acompaña los tres bloques del Journal Club. **Ver en línea:** [abrir presentación](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html). |
 | [`05-_diseño_investigacion.pdf`](./05-_diseño_investigacion.pdf) | Lectura conceptual común · Capítulo sobre diseños de investigación. |
 | [`06_DESSCRIPTIVOS.pdf`](./06_DESSCRIPTIVOS.pdf) | Lectura conceptual común · Capítulo sobre estudios descriptivos. |
 | `README.md` | Este documento. |
 
 > **Cómo usar el repositorio:**
-> - **Opción rápida (recomendada):** abre el paquete del estudiante en línea en <https://jboglop.github.io/Epidemiologia-en-CP/>. No requiere descarga ni instalación.
-> - **Opción offline:** descarga los archivos del repositorio al inicio de la semana. El `.html` se abre en cualquier navegador y contiene todos los enlaces a los artículos asignados. Los dos PDFs son la lectura conceptual común para todos los subgrupos.
+> - **Antes de la sesión:** abre el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html> y lee los dos PDFs de base conceptual.
+> - **Durante la sesión del viernes 24 de abril:** la presentación [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html) guía el desarrollo de los tres bloques del Journal Club.
+> - **Opción offline:** descarga los archivos al inicio de la semana. Los `.html` se abren en cualquier navegador sin conexión; los PDFs son la lectura conceptual común para todos los subgrupos.
 
 ---
 
@@ -63,7 +65,7 @@ Al finalizar la actividad, cada estudiante será capaz de:
 | **Sáb 18 abr** | Publicación del paquete | Identificas tu grupo y tu artículo asignado (ver tabla abajo). |
 | **18 al 22 abr** | Lectura conceptual + lectura crítica | Lees los dos PDFs de este repositorio como base conceptual y aplicas la guía CASP a tu artículo asignado. |
 | **Mié 22 abr · 11:59 pm** | Entrega del compromiso escrito | Texto individual de 200–250 palabras siguiendo la indicación de la actividad. **40% de la nota.** |
-| **Vie 24 abr · 10:00 a.m.** | Sesión presencial de Journal Club | 120 minutos · tres bloques paralelos. |
+| **Vie 24 abr · 10:00 a.m.** | 🎤 **Sesión presencial de Journal Club** | 120 minutos · tres bloques paralelos guiados por [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html). |
 
 ---
 
@@ -90,7 +92,7 @@ Los dos PDFs disponibles en este repositorio:
 
 ### Lectura crítica por grupo
 
-Cada subgrupo analiza su artículo asignado (enlaces completos dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/)) usando la guía CASP unificada de ocho preguntas.
+Cada subgrupo analiza su artículo asignado (enlaces completos dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html)) usando la guía CASP unificada de ocho preguntas.
 
 ---
 
@@ -99,11 +101,15 @@ Cada subgrupo analiza su artículo asignado (enlaces completos dentro del [paque
 Antes del miércoles 22 de abril a las 11:59 pm, asegúrate de haber completado:
 
 - [ ] Identificar tu artículo asignado en la tabla de arriba.
-- [ ] Abrir el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/> (o descargar los archivos del repositorio).
+- [ ] Abrir el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html> (o descargar los archivos del repositorio).
 - [ ] Leer los dos PDFs de lectura conceptual común.
 - [ ] Leer tu artículo asignado **al menos dos veces**, respondiendo por escrito las ocho preguntas de la guía CASP.
 - [ ] Coordinar con tu subgrupo cómo van a presentar los cinco minutos de apertura del bloque.
 - [ ] Redactar el compromiso escrito (200–250 palabras) y subirlo a Moodle.
+
+Para el viernes 24 de abril:
+
+- [ ] Revisar la [presentación de la sesión](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html) para anticipar la estructura de los bloques.
 
 ---
 
@@ -127,7 +133,9 @@ Texto individual de **200 a 250 palabras** que articule tres cuestiones:
 
 ## 🎤 Sesión presencial · Journal Club
 
-120 minutos divididos en **tres bloques paralelos**, uno por artículo. Cada bloque sigue la estructura:
+**Viernes 24 de abril · 10:00 a.m. · 120 minutos · guiada por [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html)**
+
+Tres bloques paralelos, uno por artículo. Cada bloque sigue la estructura:
 
 | Tiempo | Momento | Qué ocurre |
 |---|---|---|
@@ -165,7 +173,8 @@ Texto individual de **200 a 250 palabras** que articule tres cuestiones:
 
 ## 🔗 Enlaces clave
 
-- 🌐 **Sitio web del paquete:** <https://jboglop.github.io/Epidemiologia-en-CP/>
+- 🌐 **Sitio web del paquete:** <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html>
+- 🎤 **Presentación de la sesión presencial:** <https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html>
 - 📁 **Repositorio fuente:** <https://github.com/JBOGLOP/Epidemiologia-en-CP>
 - 🎓 **Aula Moodle:** foro de la sesión 6 (correos de los grupos y entrega del compromiso escrito).
 
@@ -182,4 +191,4 @@ Para asuntos individuales: correo institucional del docente.
 
 ---
 
-*Documento vivo. Versionado en GitHub. Última actualización: 18 de abril de 2026.*
+*Documento vivo. Versionado en GitHub. Última actualización: 24 de abril de 2026.*
