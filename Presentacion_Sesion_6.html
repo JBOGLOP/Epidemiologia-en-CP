@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 6 — Epidemiología descriptiva en cuidados paliativos</title>
+
+<!-- Fuentes serif editorial + sans de apoyo + monospace para datos -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Chart.js para visualizaciones cuantitativas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+<style>
+/* ========================================================
+   PALETA INSTITUCIONAL DEL CURSO
+   Terracota · Arena · Salvia · Ámbar (tonos cálidos)
+   ======================================================== */
+:root {
+  --terracota: #B85C3C;
+  --terracota-oscuro: #8C3D22;
+  --terracota-suave: #D4846A;
+  --arena: #F4EDE0;
+  --arena-clara: #FAF6EE;
+  --arena-oscura: #E8DEC9;
+  --salvia: #6B8E6B;
+  --salvia-oscuro: #4A6B4A;
+  --salvia-suave: #A3B8A3;
+  --ambar: #D4A03F;
+  --ambar-suave: #E8C878;
+  --tinta: #2C2824;
+  --tinta-suave: #5A5550;
+  --papel: #FDFBF7;
+  --marfil: #FFFEFA;
+
+  --serif: 'Fraunces', 'Crimson Pro', Georgia, serif;
+  --serif-body: 'Crimson Pro', Georgia, serif;
+  --mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  font-family: var(--serif-body);
+  color: var(--tinta);
+  background: var(--papel);
+  overflow: hidden;
+}
+
+/* ========================================================
+   CONTENEDOR PRINCIPAL Y SISTEMA DE DIAPOSITIVAS
+   ======================================================== */
+.presentacion {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.diapositiva {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 3.5rem 4.5rem 5rem 4.5rem;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+  overflow-y: auto;
+}
+
+.diapositiva.activa {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.diapositiva.salida {
+  transform: translateX(-40px);
+}
+
+/* ========================================================
+   TIPOGRAFÍA JERÁRQUICA
+   ======================================================== */
+h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 3.2rem;
+  line-height: 1.08;
+  color: var(--terracota);
+  letter-spacing: -0.02em;
+  margin-bottom: 1.4rem;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.1rem;
+  line-height: 1.2;
+  color: var(--salvia-oscuro);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: var(--tinta);
+  margin-bottom: 0.7rem;
+}
+
+p {
+  font-size: 1.18rem;
+  line-height: 1.55;
+  color: var(--tinta);
+  margin-bottom: 0.9rem;
+}
+
+p.lead {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--tinta-suave);
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+strong, b { color: var(--terracota-oscuro); font-weight: 600; }
+em, i { font-style: italic; color: var(--tinta-suave); }
+
+/* ========================================================
+   NAVEGACIÓN DE DIAPOSITIVAS
+   ======================================================== */
+.nav-barra {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 3.5rem;
+  background: var(--marfil);
+  border-top: 1px solid var(--arena-oscura);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  z-index: 100;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.nav-info {
+  color: var(--tinta-suave);
+  letter-spacing: 0.04em;
+}
+
+.nav-info .actual {
+  color: var(--terracota);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.nav-botones {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--arena-oscura);
+  color: var(--tinta);
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+.nav-btn:hover:not(:disabled) {
+  background: var(--terracota);
+  border-color: var(--terracota);
+  color: white;
+  transform: translateY(-1px);
+}
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.nav-progreso {
+  position: absolute;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--terracota);
+  transition: width 0.4s ease;
+}
+
+/* Indicador de segmento del cronograma */
+.segmento-badge {
+  position: fixed;
+  top: 1.2rem;
+  right: 1.5rem;
+  background: var(--arena);
+  border: 1px solid var(--arena-oscura);
+  border-left: 3px solid var(--terracota);
+  padding: 0.45rem 0.9rem;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--tinta-suave);
+  z-index: 90;
+  letter-spacing: 0.05em;
+}
+.segmento-badge .tiempo {
+  color: var(--terracota);
+  font-weight: 600;
+}
+
+/* ========================================================
+   DIAPOSITIVA DE PORTADA
+   ======================================================== */
+.portada {
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, var(--papel) 0%, var(--arena-clara) 100%);
+  position: relative;
+}
+.portada::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 45%;
+  height: 100%;
+  background: radial-gradient(ellipse at top right, var(--arena) 0%, transparent 70%);
+  pointer-events: none;
+}
+.portada-contenido { position: relative; z-index: 2; max-width: 850px; }
+.portada .marca-institucional {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--salvia);
+  text-transform: uppercase;
+  margin-bottom: 3rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.portada .marca-institucional::before {
+  content: "";
+  width: 2.5rem;
+  height: 1px;
+  background: var(--salvia);
+}
+.portada h1 {
+  font-size: 4.8rem;
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+.portada .subtitulo {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--tinta-suave);
+  line-height: 1.4;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+}
+.portada .meta-sesion {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--arena-oscura);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.portada .meta-sesion .dato-label {
+  display: block;
+  color: var(--salvia);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  margin-bottom: 0.3rem;
+}
+.portada .meta-sesion .dato-valor {
+  color: var(--tinta);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* ========================================================
+   ELEMENTOS PEDAGÓGICOS RECURRENTES
+   ======================================================== */
+
+/* Cuadro de cita / pregunta clave */
+.cuadro-cita {
+  background: var(--arena);
+  border-left: 4px solid var(--terracota);
+  padding: 1.5rem 1.8rem;
+  margin: 1.2rem 0;
+  border-radius: 0 4px 4px 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--tinta);
+  position: relative;
+}
+.cuadro-cita .etiqueta-cita {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--terracota);
+  margin-bottom: 0.5rem;
+  display: block;
+  font-weight: 600;
+}
+
+/* Cuadro de definición técnica */
+.cuadro-definicion {
+  background: var(--marfil);
+  border: 1px solid var(--salvia-suave);
+  border-top: 3px solid var(--salvia);
+  padding: 1.4rem 1.6rem;
+  margin: 1rem 0;
+  border-radius: 0 0 4px 4px;
+}
+.cuadro-definicion .termino {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--salvia);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.cuadro-definicion .texto {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--tinta);
+}
+
+/* Alerta de trampa conceptual */
+.cuadro-alerta {
+  background: linear-gradient(to right, #FBF1E0 0%, var(--arena-clara) 100%);
+  border-left: 4px solid var(--ambar);
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+.cuadro-alerta .titulo-alerta {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--terracota-oscuro);
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+}
+.cuadro-alerta .titulo-alerta::before {
+  content: "⚠ ";
+  color: var(--ambar);
+  margin-right: 0.3rem;
+}
+
+/* Cuadro de ejemplo histórico */
+.cuadro-ejemplo {
+  background: var(--arena-clara);
+  padding: 1.3rem 1.6rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  border: 1px solid var(--arena-oscura);
+}
+.cuadro-ejemplo .etiqueta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--terracota);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Lista con viñetas refinadas */
+ul.lista-refinada, ol.lista-refinada {
+  margin: 0.8rem 0 0.8rem 1.5rem;
+  padding-left: 0.5rem;
+}
+ul.lista-refinada li, ol.lista-refinada li {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  font-size: 1.12rem;
+  padding-left: 0.4rem;
+}
+ul.lista-refinada li::marker {
+  color: var(--salvia);
+  content: "·  ";
+}
+
+/* Grid de dos columnas */
+.grid-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.8rem;
+  margin-top: 1rem;
+}
+
+.grid-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.4rem;
+  margin-top: 1rem;
+}
+
+/* Tarjeta de diseño (usada en diapositivas comparativas) */
+.tarjeta-diseno {
+  background: var(--marfil);
+  border: 1px solid var(--arena-oscura);
+  padding: 1.3rem 1.5rem;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s;
+  border-top: 3px solid var(--salvia);
+}
+.tarjeta-diseno.caso { border-top-color: var(--ambar); }
+.tarjeta-diseno.transversal { border-top-color: var(--terracota); }
+.tarjeta-diseno.ecologico { border-top-color: var(--salvia); }
+
+.tarjeta-diseno h4 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--tinta);
+  margin-bottom: 0.6rem;
+}
+
+.tarjeta-diseno .descripcion-corta {
+  font-size: 0.98rem;
+  color: var(--tinta-suave);
+  line-height: 1.45;
+  font-style: italic;
+}
+
+/* ========================================================
+   SIMULADOR 1: PREVALENCIA PUNTUAL VS. DE PERÍODO
+   ======================================================== */
+.simulador-prevalencia {
+  background: var(--marfil);
+  border: 1px solid var(--arena-oscura);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.linea-temporal-wrapper {
+  position: relative;
+  height: 220px;
+  margin: 1.5rem 0;
+  background: var(--arena-clara);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.eje-tiempo {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--tinta-suave);
+}
+
+.marca-mes {
+  position: absolute;
+  bottom: -1.5rem;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--tinta-suave);
+}
+
+.paciente-linea {
+  position: absolute;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--salvia);
+  opacity: 0.85;
+  transition: all 0.3s;
+}
+.paciente-linea.muerto { background: var(--terracota); opacity: 0.5; }
+.paciente-linea.activo-en-corte { opacity: 1; box-shadow: 0 0 0 2px var(--ambar); }
+.paciente-linea.incluido-periodo { opacity: 1; box-shadow: 0 0 0 2px var(--terracota); }
+
+.marca-corte {
+  position: absolute;
+  top: 0;
+  bottom: 1.5rem;
+  width: 3px;
+  background: var(--terracota);
+  cursor: ew-resize;
+  z-index: 10;
+}
+.marca-corte::after {
+  content: "CORTE";
+  position: absolute;
+  top: -1.3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--terracota);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.rango-periodo {
+  position: absolute;
+  top: 0;
+  bottom: 1.5rem;
+  background: rgba(212, 160, 63, 0.15);
+  border: 2px solid var(--ambar);
+  border-style: dashed;
+  display: none;
+}
+
+.controles-simulador {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.control-grupo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.btn-modo {
+  background: var(--arena);
+  border: 1px solid var(--arena-oscura);
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  color: var(--tinta);
+  transition: all 0.2s;
+}
+.btn-modo:hover { background: var(--arena-oscura); }
+.btn-modo.activo {
+  background: var(--terracota);
+  color: white;
+  border-color: var(--terracota);
+}
+
+input[type="range"] {
+  width: 200px;
+  accent-color: var(--terracota);
+}
+
+.resultados-simulador {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--arena-clara);
+  border-radius: 4px;
+}
+
+.resultado-item {
+  text-align: center;
+}
+.resultado-item .label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--salvia);
+  margin-bottom: 0.3rem;
+}
+.resultado-item .valor {
+  font-family: var(--serif);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--terracota);
+  line-height: 1;
+}
+.resultado-item .sublabel {
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+  margin-top: 0.2rem;
+}
+
+/* ========================================================
+   SIMULADOR 2: FALACIA ECOLÓGICA
+   ======================================================== */
+.simulador-ecologico {
+  background: var(--marfil);
+  border: 1px solid var(--arena-oscura);
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.paneles-ecologico {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 1rem 0;
+}
+
+.panel-vista {
+  background: var(--arena-clara);
+  border-radius: 4px;
+  padding: 1rem;
+  border: 1px solid var(--arena-oscura);
+}
+
+.panel-vista .titulo-panel {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--salvia);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.panel-vista .subtitulo-panel {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--tinta);
+  margin-bottom: 0.8rem;
+  font-style: italic;
+}
+
+.correlacion-display {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  background: var(--papel);
+  border-radius: 3px;
+}
+.correlacion-display .valor-correlacion {
+  font-size: 1.6rem;
+  color: var(--terracota);
+}
+.correlacion-display .valor-correlacion.negativa { color: var(--salvia-oscuro); }
+
+/* ========================================================
+   TABLA COMPARATIVA FINAL
+   ======================================================== */
+.tabla-comparativa {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
+  background: var(--marfil);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.tabla-comparativa th {
+  background: var(--salvia);
+  color: white;
+  font-family: var(--serif);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+}
+
+.tabla-comparativa td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--arena-oscura);
+  font-size: 1rem;
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+.tabla-comparativa td:first-child {
+  background: var(--arena);
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--terracota-oscuro);
+  width: 22%;
+}
+
+.tabla-comparativa td.vacio {
+  color: var(--tinta-suave);
+  font-style: italic;
+  background: var(--arena-clara);
+  opacity: 0.5;
+}
+
+.tabla-comparativa .celda-editable {
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.tabla-comparativa .celda-editable:hover {
+  background: var(--arena-clara);
+}
+
+.tabla-comparativa .celda-editable.revelada {
+  color: var(--tinta);
+  font-style: normal;
+  background: var(--marfil);
+  opacity: 1;
+}
+
+/* ========================================================
+   NUMERACIÓN DE CÁPSULAS Y BLOQUES
+   ======================================================== */
+.numero-capsula {
+  display: inline-block;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--salvia);
+  border-bottom: 2px solid var(--salvia-suave);
+  padding: 0.2rem 0;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.numero-capsula.bloque { color: var(--terracota); border-bottom-color: var(--terracota-suave); }
+
+/* ========================================================
+   DIAPOSITIVA DE CIERRE
+   ======================================================== */
+.cierre {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: linear-gradient(135deg, var(--arena-clara) 0%, var(--papel) 100%);
+}
+.cierre .puente-texto {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.8rem;
+  line-height: 1.4;
+  color: var(--tinta);
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+.cierre .puente-destaque {
+  color: var(--terracota);
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* ========================================================
+   AJUSTES RESPONSIVOS MENORES
+   ======================================================== */
+@media (max-width: 1100px) {
+  .diapositiva { padding: 2.5rem 3rem 4.5rem 3rem; }
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 1.8rem; }
+  .grid-doble, .grid-triple { grid-template-columns: 1fr; }
+}
+
+/* Clase de impresión oculta */
+.solo-imprimir { display: none; }
+
+</style>
+</head>
+<body>
+
+<div class="presentacion">
+
+<!-- ================================================================
+     DIAPOSITIVA 1 — PORTADA
+     ================================================================ -->
+<section class="diapositiva portada activa" data-segmento="Apertura" data-tiempo="0:00">
+  <div class="portada-contenido">
+    <div class="marca-institucional">Universidad Antonio Nariño · Maestría en Cuidados Paliativos</div>
+    <div class="eyebrow">Sesión 6 · 24 de abril de 2026</div>
+    <h1>Epidemiología<br>descriptiva en<br>cuidados paliativos</h1>
+    <p class="subtitulo">
+      Estudio de caso y serie de casos · Estudios transversales de prevalencia · Estudios ecológicos
+    </p>
+    <div class="meta-sesion">
+      <div>
+        <span class="dato-label">Metodología</span>
+        <span class="dato-valor">Journal Club</span>
+      </div>
+      <div>
+        <span class="dato-label">Duración</span>
+        <span class="dato-valor">120 minutos</span>
+      </div>
+      <div>
+        <span class="dato-label">Artículos</span>
+        <span class="dato-valor">3 reales · Latinoamérica</span>
+      </div>
+      <div>
+        <span class="dato-label">Docente</span>
+        <span class="dato-valor">Prof. J. W. Bogoya</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 2 — APERTURA NARRATIVA
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Apertura" data-tiempo="0–10 min">
+  <div class="eyebrow">Apertura narrativa</div>
+  <h1>Tres miradas, tres silencios</h1>
+  <p class="lead">
+    La epidemiología tiene tres maneras clásicas de mirar a María Luisa. Cada una ve algo distinto y calla algo distinto.
+  </p>
+
+  <div class="grid-triple" style="margin-top: 2rem;">
+    <div class="tarjeta-diseno caso">
+      <h4>Mirada del caso</h4>
+      <p class="descripcion-corta">Ve al individuo en detalle. No ve el patrón poblacional.</p>
+    </div>
+    <div class="tarjeta-diseno transversal">
+      <h4>Mirada transversal</h4>
+      <p class="descripcion-corta">Ve el patrón del momento. No ve a los que murieron antes del corte.</p>
+    </div>
+    <div class="tarjeta-diseno ecologico">
+      <h4>Mirada ecológica</h4>
+      <p class="descripcion-corta">Ve la estructura agregada. No ve al individuo concreto.</p>
+    </div>
+  </div>
+
+  <div class="cuadro-cita" style="margin-top: 2rem;">
+    <span class="etiqueta-cita">Pregunta vertebradora</span>
+    ¿Qué dice —y qué calla— cada uno de estos tres diseños sobre las personas que necesitan cuidados paliativos?
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 3 — ACTIVACIÓN CON MENTIMETER
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Apertura" data-tiempo="0–10 min">
+  <div class="eyebrow">Activación · Mentimeter</div>
+  <h1>Antes de empezar, una pregunta</h1>
+
+  <div class="cuadro-cita" style="font-size: 1.4rem; margin: 1.5rem 0;">
+    Si usted tuviera que demostrar cuantitativamente que en La Guajira existe inequidad en el acceso a opioides para el final de la vida, ¿qué diseño elegiría?
+  </div>
+
+  <div class="grid-doble">
+    <div class="cuadro-definicion">
+      <div class="termino">Opción A</div>
+      <div class="texto">Reporte o serie de casos de pacientes que murieron sin acceso a opioides</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Opción B</div>
+      <div class="texto">Transversal de prevalencia de dolor no controlado en pacientes paliativos del departamento</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Opción C</div>
+      <div class="texto">Ecológico que correlacione consumo de morfina por departamento con mortalidad por cáncer</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Opción D</div>
+      <div class="texto">Otro diseño (analítico, experimental, mixto)</div>
+    </div>
+  </div>
+
+  <p style="margin-top: 1.5rem; font-style: italic; color: var(--tinta-suave); font-size: 1rem;">
+    Al final de la sesión volveremos a esta pregunta. No hay respuesta correcta única; hay respuestas más o menos defendibles según lo que cada diseño puede legítimamente concluir.
+  </p>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 4 — CÁPSULA 1: DEFINICIÓN CASO / SERIE
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 1" data-tiempo="10–18 min">
+  <span class="numero-capsula">Cápsula conceptual 1</span>
+  <h1>Reporte y serie de casos</h1>
+
+  <div class="grid-doble" style="margin-top: 1.5rem;">
+    <div>
+      <div class="cuadro-definicion">
+        <div class="termino">Reporte de caso</div>
+        <div class="texto">Describe <strong>un único paciente</strong> con detalle clínico profundo. Diseño observacional descriptivo. Unidad de análisis: el individuo.</div>
+      </div>
+
+      <div class="cuadro-definicion">
+        <div class="termino">Serie de casos</div>
+        <div class="texto">Describe <strong>tres o más pacientes</strong> (algunos autores exigen n≥4) que comparten una característica clínica común bajo condiciones similares.</div>
+      </div>
+
+      <div class="cuadro-alerta">
+        <div class="titulo-alerta">Trampa clásica</div>
+        <p style="margin: 0; font-size: 1.05rem;">
+          Confundir descripción con evidencia causal. Ni el reporte ni la serie tienen grupo control. Son generadores de hipótesis, no probadores de causalidad.
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <h3>Papel legítimo en epidemiología</h3>
+      <p>La puerta de entrada del conocimiento a fenómenos nuevos, raros o poco estudiados.</p>
+
+      <div class="cuadro-ejemplo">
+        <div class="etiqueta">Ejemplo histórico 1 · 1961</div>
+        <p style="margin: 0;"><strong>Talidomida y focomelia.</strong> Pediatras alemanes reportaron series de casos de recién nacidos sin extremidades. La señal precedió a todo estudio analítico y llevó al retiro del medicamento.</p>
+      </div>
+
+      <div class="cuadro-ejemplo">
+        <div class="etiqueta">Ejemplo histórico 2 · 2015</div>
+        <p style="margin: 0;"><strong>Zika congénito en Brasil.</strong> Obstetras de Pernambuco reportaron microcefalia en recién nacidos de madres con exantema en el primer trimestre. Detonante de la emergencia continental.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 5 — ANATOMÍA DEL CASO
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 1" data-tiempo="10–18 min">
+  <span class="numero-capsula">Cápsula conceptual 1</span>
+  <h2>Anatomía del caso/serie</h2>
+
+  <div style="display: flex; justify-content: center; margin: 1rem 0;">
+    <svg viewBox="0 0 900 300" style="max-width: 100%; height: auto;">
+      <!-- Línea temporal horizontal -->
+      <line x1="80" y1="150" x2="820" y2="150" stroke="#6B8E6B" stroke-width="2"/>
+      <polygon points="820,150 810,145 810,155" fill="#6B8E6B"/>
+      <text x="840" y="155" font-family="JetBrains Mono" font-size="13" fill="#5A5550">tiempo</text>
+
+      <!-- Paciente individual destacado -->
+      <circle cx="400" cy="150" r="28" fill="#D4A03F" opacity="0.85"/>
+      <text x="400" y="157" text-anchor="middle" font-family="Fraunces" font-size="22" font-weight="700" fill="white">i</text>
+
+      <!-- Descriptor arriba -->
+      <text x="400" y="100" text-anchor="middle" font-family="Fraunces" font-size="18" font-weight="600" fill="#2C2824">Paciente individual (o pocos)</text>
+      <text x="400" y="120" text-anchor="middle" font-family="Crimson Pro" font-size="14" font-style="italic" fill="#5A5550">Descripción clínica detallada</text>
+
+      <!-- Salida flecha -->
+      <text x="400" y="210" text-anchor="middle" font-family="JetBrains Mono" font-size="12" fill="#6B8E6B" letter-spacing="1">GENERA</text>
+      <text x="400" y="240" text-anchor="middle" font-family="Fraunces" font-size="17" font-weight="600" fill="#B85C3C">Hipótesis · Señal de alarma</text>
+      <text x="400" y="265" text-anchor="middle" font-family="Crimson Pro" font-size="14" font-style="italic" fill="#5A5550">No causalidad, no prevalencia, no extrapolación</text>
+
+      <!-- Indicadores laterales -->
+      <text x="100" y="50" font-family="JetBrains Mono" font-size="11" fill="#8C3D22" font-weight="600">AUSENTE</text>
+      <text x="100" y="70" font-family="Crimson Pro" font-size="13" fill="#5A5550">Grupo control</text>
+      <text x="100" y="90" font-family="Crimson Pro" font-size="13" fill="#5A5550">Muestra representativa</text>
+      <text x="100" y="110" font-family="Crimson Pro" font-size="13" fill="#5A5550">Denominador poblacional</text>
+
+      <text x="700" y="50" font-family="JetBrains Mono" font-size="11" fill="#4A6B4A" font-weight="600">PRESENTE</text>
+      <text x="700" y="70" font-family="Crimson Pro" font-size="13" fill="#5A5550">Detalle clínico</text>
+      <text x="700" y="90" font-family="Crimson Pro" font-size="13" fill="#5A5550">Profundidad narrativa</text>
+      <text x="700" y="110" font-family="Crimson Pro" font-size="13" fill="#5A5550">Señal de fenómeno nuevo</text>
+    </svg>
+  </div>
+
+  <div class="cuadro-cita" style="margin-top: 1rem;">
+    <span class="etiqueta-cita">Transición al Journal Club 1</span>
+    Castiblanco y colegas describen <strong>nueve pacientes</strong> del INC de Bogotá tratados con lidocaína IV para dolor neuropático oncológico. El 89% mejoró. ¿Qué puede concluir legítimamente este estudio y qué no puede concluir?
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 6 — JOURNAL CLUB 1 (instrucciones)
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Bloque 1" data-tiempo="18–40 min">
+  <span class="numero-capsula bloque">Journal Club · Bloque 1</span>
+  <h1>Artículo 1 · Castiblanco et al. (2022)</h1>
+
+  <div class="cuadro-definicion" style="margin-top: 1rem;">
+    <div class="termino">Referencia</div>
+    <div class="texto">
+      Castiblanco-Delgado, D. S., Seija-Butnaru, D., & Molina-Arteta, B. M. (2022). <em>Intravenous lidocaine in cancer-related neuropathic pain: Case series.</em> Colombian Journal of Anesthesiology, 50(2), e1004. DOI: 10.5554/22562087.e1004
+    </div>
+  </div>
+
+  <h2 style="margin-top: 1.2rem;">Estructura del bloque (22 minutos)</h2>
+
+  <div class="grid-triple" style="margin-top: 1rem;">
+    <div class="tarjeta-diseno" style="border-top-color: var(--terracota);">
+      <h4>5 minutos · Presentación</h4>
+      <p class="descripcion-corta">El subgrupo asignado presenta su análisis usando la guía CASP de 8 preguntas. No leen; presentan como si convencieran a colegas.</p>
+    </div>
+    <div class="tarjeta-diseno" style="border-top-color: var(--salvia);">
+      <h4>12 minutos · Preguntas cruzadas</h4>
+      <p class="descripcion-corta">Cada uno de los otros dos subgrupos formula al menos dos preguntas críticas: una metodológica y una de aplicabilidad colombiana.</p>
+    </div>
+    <div class="tarjeta-diseno" style="border-top-color: var(--ambar);">
+      <h4>5 minutos · Síntesis</h4>
+      <p class="descripcion-corta">El subgrupo presentador escribe en el tablero <strong>una frase única</strong> (máx. 25 palabras) sobre qué puede y qué no puede concluir el estudio.</p>
+    </div>
+  </div>
+
+  <div class="cuadro-alerta" style="margin-top: 1.2rem;">
+    <div class="titulo-alerta">Pistas para la discusión</div>
+    <p style="margin: 0;">Atención especial a: ausencia de grupo control · regresión a la media · efecto placebo · representatividad de nueve pacientes de un centro urbano de tercer nivel · generalización a contextos rurales o indígenas.</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 7 — CÁPSULA 2: DEFINICIÓN TRANSVERSAL
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 2" data-tiempo="40–48 min">
+  <span class="numero-capsula">Cápsula conceptual 2</span>
+  <h1>Transversal de prevalencia</h1>
+
+  <p class="lead">
+    Una fotografía de la población en un momento. Mide simultáneamente exposición y desenlace.
+  </p>
+
+  <div class="grid-doble" style="margin-top: 1.2rem;">
+    <div class="cuadro-definicion">
+      <div class="termino">Prevalencia puntual</div>
+      <div class="texto">Número de casos entre tamaño de la población en un <strong>momento dado</strong>. Corte único. Útil para planeación.</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Prevalencia de período</div>
+      <div class="texto">Casos acumulados <strong>durante un período definido</strong>. Incluye los que estuvieron enfermos en algún momento. Cifra más alta.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 1.5rem;">Dos sesgos peligrosos</h3>
+
+  <div class="grid-doble">
+    <div class="cuadro-alerta">
+      <div class="titulo-alerta">Sesgo de selección</div>
+      <p style="margin: 0;">Si se estudia solo a quienes asisten a consulta, se excluyen los demasiado graves, los que murieron y los que el sistema expulsó. Subestima la prevalencia real.</p>
+    </div>
+    <div class="cuadro-alerta">
+      <div class="titulo-alerta">Sesgo de prevalencia (Neyman)</div>
+      <p style="margin: 0;">Los casos de larga duración están sobrerrepresentados. Los de corta duración (peor pronóstico, ya murieron) no pueden ser encuestados. <strong>En cuidados paliativos es devastador.</strong></p>
+    </div>
+  </div>
+
+  <div class="cuadro-cita" style="margin-top: 1.2rem;">
+    <span class="etiqueta-cita">Ejemplo que hay que transmitir</span>
+    Si hago una encuesta de prevalencia de dolor severo en pacientes oncológicos avanzados en un día de abril, <strong>no encontraré a los pacientes que murieron en marzo con dolor severo no controlado.</strong> La encuesta mostrará menos dolor del que realmente hay en la población.
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 8 — SIMULADOR DE PREVALENCIA
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 2" data-tiempo="40–48 min">
+  <span class="numero-capsula">Cápsula conceptual 2 · interactivo</span>
+  <h2>Prevalencia puntual vs. de período</h2>
+  <p>Arrastre el corte a lo largo del año para ver cambiar la prevalencia. Cambie a modo "período" para ver la diferencia.</p>
+
+  <div class="simulador-prevalencia">
+    <div class="controles-simulador">
+      <div class="control-grupo">
+        <button class="btn-modo activo" id="btn-puntual">Prevalencia puntual</button>
+        <button class="btn-modo" id="btn-periodo">Prevalencia de período</button>
+      </div>
+      <div class="control-grupo">
+        <span style="font-family: var(--mono); font-size: 0.8rem; color: var(--tinta-suave);">Ancho del período:</span>
+        <input type="range" id="ancho-periodo" min="1" max="12" value="3" disabled>
+        <span id="ancho-valor" style="font-family: var(--mono); font-size: 0.85rem; color: var(--terracota); font-weight: 600;">3 meses</span>
+      </div>
+    </div>
+
+    <div class="linea-temporal-wrapper" id="linea-temporal">
+      <div class="rango-periodo" id="rango-periodo"></div>
+      <div class="marca-corte" id="marca-corte" style="left: 50%;"></div>
+      <div class="eje-tiempo"></div>
+    </div>
+
+    <div class="resultados-simulador">
+      <div class="resultado-item">
+        <div class="label">Casos contados</div>
+        <div class="valor" id="casos-count">0</div>
+        <div class="sublabel">en el numerador</div>
+      </div>
+      <div class="resultado-item">
+        <div class="label">Población total</div>
+        <div class="valor" id="poblacion-count">20</div>
+        <div class="sublabel">en el denominador</div>
+      </div>
+      <div class="resultado-item">
+        <div class="label">Prevalencia</div>
+        <div class="valor" id="prevalencia-valor">0%</div>
+        <div class="sublabel" id="prevalencia-tipo">puntual</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top: 1rem; font-size: 1rem; color: var(--tinta-suave); font-style: italic;">
+    Las líneas <span style="color: var(--salvia); font-weight: 600;">verdes</span> son pacientes vivos durante ese período. Las líneas <span style="color: var(--terracota); font-weight: 600;">rojas</span> son pacientes que murieron. Nótese cómo el sesgo de prevalencia invisibiliza a los pacientes de corta duración.
+  </p>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 9 — JOURNAL CLUB 2 (instrucciones)
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Bloque 2" data-tiempo="48–68 min">
+  <span class="numero-capsula bloque">Journal Club · Bloque 2</span>
+  <h1>Artículo 2 · Arenas Ochoa et al. (2021)</h1>
+
+  <div class="cuadro-definicion" style="margin-top: 1rem;">
+    <div class="termino">Referencia</div>
+    <div class="texto">
+      Arenas Ochoa, L. F., et al. (2021). <em>Prevalence and characteristics of patients with heart failure needing palliative care.</em> BMC Palliative Care, 20(1), 184. DOI: 10.1186/s12904-021-00850-y
+    </div>
+  </div>
+
+  <div class="grid-doble" style="margin-top: 1.2rem;">
+    <div>
+      <h3>Hallazgo principal</h3>
+      <div style="font-family: var(--serif); font-size: 3.5rem; font-weight: 700; color: var(--terracota); line-height: 1;">44%</div>
+      <p style="font-size: 1rem; color: var(--tinta-suave); margin-top: 0.5rem;">de prevalencia de necesidad paliativa en 178 pacientes ambulatorios con insuficiencia cardíaca en dos clínicas de tercer nivel de Medellín.</p>
+    </div>
+
+    <div>
+      <h3>Estructura del bloque (20 minutos)</h3>
+      <ul class="lista-refinada">
+        <li><strong>5 min</strong> · Presentación del subgrupo con guía CASP</li>
+        <li><strong>10 min</strong> · Preguntas cruzadas</li>
+        <li><strong>5 min</strong> · Frase única en el tablero</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cuadro-cita" style="margin-top: 1.5rem;">
+    <span class="etiqueta-cita">Pregunta de apertura del bloque</span>
+    ¿Qué tipo de pacientes probablemente <strong>no están</strong> en ese estudio, y qué le hace eso a la cifra del 44%?
+  </div>
+
+  <div class="cuadro-alerta" style="margin-top: 1rem;">
+    <div class="titulo-alerta">Intervención docente clave</div>
+    <p style="margin: 0;">Si el subgrupo no menciona el sesgo de prevalencia espontáneamente, preguntar: ¿Qué pasa con los pacientes con IC severa que murieron en los dos meses previos al reclutamiento? ¿Están en el estudio?</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 10 — CÁPSULA 3: DEFINICIÓN ECOLÓGICO
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 3" data-tiempo="68–76 min">
+  <span class="numero-capsula">Cápsula conceptual 3</span>
+  <h1>Estudio ecológico</h1>
+
+  <p class="lead">
+    La unidad de análisis es el <strong>grupo</strong> (país, departamento, municipio), no el individuo. Variables agregadas, no individuales.
+  </p>
+
+  <div class="grid-triple" style="margin-top: 1.2rem;">
+    <div class="cuadro-definicion">
+      <div class="termino">Multigrupo</div>
+      <div class="texto">Compara varios grupos en un momento. Ej.: 17 países en 2020.</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Tendencia temporal</div>
+      <div class="texto">Compara el mismo grupo en distintos momentos. Ej.: Colombia 2000, 2010, 2020.</div>
+    </div>
+    <div class="cuadro-definicion">
+      <div class="termino">Mixto</div>
+      <div class="texto">Combina ambas dimensiones: varios grupos en varios momentos.</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top: 1.5rem;">La falacia ecológica (Robinson, 1950)</h3>
+  <div class="cuadro-alerta">
+    <div class="titulo-alerta">Definición operativa</div>
+    <p style="margin: 0;">
+      Error de inferir asociaciones a nivel <strong>individual</strong> a partir de asociaciones medidas a nivel de <strong>grupo</strong>. Una correlación ecológica fuerte puede coexistir con una correlación individual débil, nula o <em>de signo opuesto</em>.
+    </p>
+  </div>
+
+  <div class="cuadro-ejemplo" style="margin-top: 1rem;">
+    <div class="etiqueta">Ejemplo clásico · Durkheim 1897</div>
+    <p style="margin: 0;">A nivel de países, los países protestantes tenían más suicidios que los católicos. Se concluyó que el protestantismo causaba suicidio. <strong>Los datos individuales mostraron lo contrario:</strong> eran los católicos que vivían en países protestantes (minoría social) quienes más se suicidaban.</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 11 — DON AURELIO Y FALACIA ECOLÓGICA
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 3" data-tiempo="68–76 min">
+  <span class="numero-capsula">Cápsula conceptual 3</span>
+  <h2>Don Aurelio y la falacia ecológica</h2>
+
+  <div class="cuadro-cita">
+    <span class="etiqueta-cita">Ejemplo vertebrador</span>
+    La Guajira es el departamento con menor cobertura de servicios paliativos y mayor proporción de población wayúu. Tiene tasas altas de mortalidad sin control sintomático. <strong>¿Podemos concluir que Don Aurelio, individualmente, no tuvo acceso a cuidado paliativo?</strong>
+  </div>
+
+  <div class="grid-doble" style="margin-top: 1.5rem;">
+    <div class="cuadro-definicion" style="border-top-color: var(--terracota);">
+      <div class="termino">Lo que la correlación ecológica sí dice</div>
+      <div class="texto">Que en La Guajira, como grupo, hay menos recursos paliativos. Esto <strong>sí</strong> justifica priorización presupuestal regional.</div>
+    </div>
+    <div class="cuadro-definicion" style="border-top-color: var(--salvia);">
+      <div class="termino">Lo que la correlación ecológica no dice</div>
+      <div class="texto">Que Don Aurelio específicamente no recibió atención. Quizás una fundación local lo atendió. Quizás quien murió sin atención fue su vecino no indígena.</div>
+    </div>
+  </div>
+
+  <div class="cuadro-alerta" style="margin-top: 1rem;">
+    <div class="titulo-alerta">Principio pedagógico</div>
+    <p style="margin: 0;">Los estudios ecológicos <strong>sirven para diseñar políticas públicas de asignación de recursos a nivel de grupo</strong>, pero <strong>no sirven para diagnosticar ni atender a individuos</strong>. Confundir esos dos niveles es la raíz de muchas decisiones técnicamente erradas y políticamente peligrosas.</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 12 — SIMULADOR DE FALACIA ECOLÓGICA
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Cápsula 3" data-tiempo="68–76 min">
+  <span class="numero-capsula">Cápsula conceptual 3 · interactivo</span>
+  <h2>Simulador de falacia ecológica</h2>
+  <p style="font-size: 1.05rem;">Cada país tiene individuos distintos. Ajuste la heterogeneidad intranacional y observe cómo la correlación ecológica se mantiene mientras la individual puede colapsar o cambiar de signo.</p>
+
+  <div class="simulador-ecologico">
+    <div class="controles-simulador">
+      <div class="control-grupo">
+        <span style="font-family: var(--mono); font-size: 0.8rem; color: var(--tinta-suave);">Heterogeneidad intranacional:</span>
+        <input type="range" id="heterogeneidad" min="0" max="100" value="20">
+        <span id="heterogeneidad-valor" style="font-family: var(--mono); font-size: 0.85rem; color: var(--terracota); font-weight: 600;">baja</span>
+      </div>
+    </div>
+
+    <div class="paneles-ecologico">
+      <div class="panel-vista">
+        <div class="titulo-panel">Vista ecológica (país)</div>
+        <div class="subtitulo-panel">Cada punto es un país. Correlación entre cobertura de opioides y calidad de muerte.</div>
+        <canvas id="canvas-ecologico" width="340" height="240"></canvas>
+        <div class="correlacion-display">
+          r ecológica = <span class="valor-correlacion" id="r-ecologica">0.00</span>
+        </div>
+      </div>
+
+      <div class="panel-vista">
+        <div class="titulo-panel">Vista individual (paciente)</div>
+        <div class="subtitulo-panel">Cada punto es un paciente dentro de su país. La correlación individual puede ser distinta.</div>
+        <canvas id="canvas-individual" width="340" height="240"></canvas>
+        <div class="correlacion-display">
+          r individual = <span class="valor-correlacion" id="r-individual">0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin-top: 1rem; font-size: 1rem; color: var(--tinta-suave); font-style: italic;">
+    Nótese que con alta heterogeneidad, la correlación individual puede colapsar cerca de cero o invertirse, aunque la correlación ecológica se mantenga fuerte. Esto es exactamente la falacia ecológica.
+  </p>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 13 — JOURNAL CLUB 3 (instrucciones)
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Bloque 3" data-tiempo="76–94 min">
+  <span class="numero-capsula bloque">Journal Club · Bloque 3</span>
+  <h1>Artículo 3 · Pastrana & De Lima (2022)</h1>
+
+  <div class="cuadro-definicion" style="margin-top: 1rem;">
+    <div class="termino">Referencia</div>
+    <div class="texto">
+      Pastrana, T., & De Lima, L. (2022). <em>Palliative care in Latin America: Are we making any progress?</em> Journal of Pain and Symptom Management, 63(1), 33-41. DOI: 10.1016/j.jpainsymman.2021.07.020
+    </div>
+  </div>
+
+  <div class="grid-doble" style="margin-top: 1.2rem;">
+    <div>
+      <h3>Hallazgo clave</h3>
+      <div style="font-family: var(--serif); font-size: 3.2rem; font-weight: 700; color: var(--terracota); line-height: 1;">r = 0.72</div>
+      <p style="font-size: 1rem; color: var(--tinta-suave); margin-top: 0.5rem;">Correlación de Spearman entre consumo de morfina per cápita y número de servicios de CP por millón, en 17 países latinoamericanos (2020).</p>
+    </div>
+
+    <div>
+      <h3>Estructura del bloque (18 minutos)</h3>
+      <ul class="lista-refinada">
+        <li><strong>5 min</strong> · Presentación del subgrupo</li>
+        <li><strong>8 min</strong> · Preguntas cruzadas (más ágil)</li>
+        <li><strong>5 min</strong> · Frase única en el tablero</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cuadro-cita" style="margin-top: 1.5rem;">
+    <span class="etiqueta-cita">Pregunta de apertura del bloque</span>
+    ¿Qué podemos y qué no podemos concluir de esa correlación fuerte sobre <strong>un paciente individual</strong> en Montería o Leticia?
+  </div>
+
+  <div class="cuadro-alerta" style="margin-top: 1rem;">
+    <div class="titulo-alerta">Confusión frecuente a vigilar</div>
+    <p style="margin: 0;">Algunos estudiantes equiparan falacia ecológica con variable de confusión. Son distintas: la confusión opera <strong>dentro de un nivel</strong>; la falacia opera <strong>entre niveles</strong> (de grupo a individuo).</p>
+  </div>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 14 — SÍNTESIS: TABLA COMPARATIVA
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Síntesis" data-tiempo="94–112 min">
+  <span class="numero-capsula">Síntesis comparativa</span>
+  <h1>Los tres diseños, lado a lado</h1>
+  <p>Clic en cada celda para revelar la respuesta consensuada. La tabla se llena colectivamente durante la síntesis.</p>
+
+  <table class="tabla-comparativa" style="margin-top: 1.2rem;">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Unidad de análisis y pregunta</th>
+        <th>Sesgo principal</th>
+        <th>Utilidad en política pública</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Reporte y serie de casos</td>
+        <td class="vacio celda-editable" data-respuesta="Individuo. Genera hipótesis, describe fenómenos raros o nuevos.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Ausencia de grupo control, muestra pequeña, falta de representatividad.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Señal de alarma y priorización de agenda investigativa. No sustenta política poblacional.">Clic para revelar</td>
+      </tr>
+      <tr>
+        <td>Transversal de prevalencia</td>
+        <td class="vacio celda-editable" data-respuesta="Individuo. Describe la magnitud del fenómeno en un momento.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Sesgo de prevalencia (Neyman), sesgo de selección, temporalidad ambigua.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Planeación de servicios y estimación de necesidad. Requiere cautela con subestimación.">Clic para revelar</td>
+      </tr>
+      <tr>
+        <td>Ecológico</td>
+        <td class="vacio celda-editable" data-respuesta="Grupo (país, departamento). Describe patrones macroestructurales.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Falacia ecológica (inferencia a individuo), confusión ecológica.">Clic para revelar</td>
+        <td class="vacio celda-editable" data-respuesta="Priorización regional de recursos. No aplica a individuos concretos.">Clic para revelar</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 15 — PREGUNTAS SOCRÁTICAS DE CIERRE
+     ================================================================ -->
+<section class="diapositiva" data-segmento="Síntesis" data-tiempo="94–112 min">
+  <span class="numero-capsula">Cierre socrático</span>
+  <h1>Tres preguntas finales</h1>
+  <p>Conversación abierta. Sin levantar la mano. Invitar a quienes menos han participado.</p>
+
+  <div class="cuadro-cita" style="margin-top: 1.5rem;">
+    <span class="etiqueta-cita">Pregunta 1 · Decisión metodológica</span>
+    Si tuvieran que diseñar un estudio para medir el acceso real a cuidados paliativos en su región de Colombia, ¿qué diseño elegirían y por qué <strong>no</strong> los otros dos?
+  </div>
+
+  <div class="cuadro-cita">
+    <span class="etiqueta-cita">Pregunta 2 · Lo que callan los tres</span>
+    ¿Qué silencian estos tres diseños sobre María Luisa y Don Aurelio? ¿Qué parte de la realidad paliativa no puede capturar ninguno de los tres?
+  </div>
+
+  <div class="cuadro-cita">
+    <span class="etiqueta-cita">Pregunta 3 · Peligro político</span>
+    ¿Cuál de los tres diseños es <strong>el más peligroso políticamente</strong> si se interpreta mal, y por qué?
+  </div>
+
+  <p style="margin-top: 1.5rem; font-size: 1rem; color: var(--tinta-suave); font-style: italic;">
+    Respuesta esperada para la tercera: el ecológico, por la falacia. Un error en un reporte de caso afecta la interpretación de ese caso; un error en un ecológico puede distorsionar la asignación presupuestal nacional.
+  </p>
+</section>
+
+<!-- ================================================================
+     DIAPOSITIVA 16 — CIERRE CON PUENTE A SESIÓN 7
+     ================================================================ -->
+<section class="diapositiva cierre" data-segmento="Cierre" data-tiempo="112–115 min">
+  <div>
+    <div class="eyebrow" style="text-align: center; display: block;">Puente a Sesión 7 · 8 de mayo</div>
+    <div class="puente-texto">
+      Los tres diseños de hoy <span class="puente-destaque">describen pero no explican</span>.<br>
+      La próxima semana veremos los diseños que sí intentan explicar,<br>
+      pero a <em>un costo metodológico distinto</em>.
+    </div>
+
+    <div style="margin-top: 2.5rem; padding: 1.5rem 2rem; background: var(--arena); border-radius: 6px; max-width: 700px; margin-left: auto; margin-right: auto;">
+      <div class="eyebrow" style="display: block; margin-bottom: 0.5rem;">Epidemiología analítica en cuidados paliativos</div>
+      <p style="margin: 0; font-family: var(--serif); font-size: 1.25rem; font-style: italic; color: var(--tinta); line-height: 1.4;">
+        Casos y controles · Cohortes prospectivos · Cohortes retrospectivos · Casos y controles anidados
+      </p>
+    </div>
+
+    <div style="margin-top: 2.5rem;">
+      <button class="btn-modo" id="btn-revotar" style="font-size: 0.95rem; padding: 0.7rem 1.5rem;">Repetir pregunta inicial en Mentimeter</button>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.95rem; color: var(--tinta-suave);">
+      La comparación entre la votación inicial y la final es evidencia objetiva de aprendizaje durante la sesión.
+    </p>
+  </div>
+</section>
+
+</div>
+
+<!-- ================================================================
+     BARRA DE NAVEGACIÓN FIJA
+     ================================================================ -->
+<div class="nav-barra">
+  <div class="nav-progreso" id="nav-progreso"></div>
+  <div class="nav-info">
+    Diapositiva <span class="actual" id="actual">1</span> / <span id="total">16</span>
+    <span style="margin-left: 1.5rem;" id="segmento-actual">Apertura</span>
+  </div>
+  <div class="nav-botones">
+    <button class="nav-btn" id="btn-previa" title="Anterior (←)">‹</button>
+    <button class="nav-btn" id="btn-siguiente" title="Siguiente (→)">›</button>
+  </div>
+</div>
+
+<!-- Badge de segmento actual (visual superior) -->
+<div class="segmento-badge" id="segmento-badge">
+  <span id="segmento-nombre">Apertura</span> · <span class="tiempo" id="segmento-tiempo">0–10 min</span>
+</div>
+
+<script>
+// =====================================================================
+// SISTEMA DE NAVEGACIÓN DE DIAPOSITIVAS
+// =====================================================================
+const diapositivas = document.querySelectorAll('.diapositiva');
+const total = diapositivas.length;
+let actual = 0;
+
+document.getElementById('total').textContent = total;
+
+function mostrar(nuevo) {
+  if (nuevo < 0 || nuevo >= total) return;
+
+  const anterior = actual;
+  actual = nuevo;
+
+  diapositivas.forEach((d, i) => {
+    d.classList.remove('activa', 'salida');
+    if (i === actual) {
+      d.classList.add('activa');
+      // Actualizar segmento visible
+      document.getElementById('segmento-nombre').textContent = d.dataset.segmento || '';
+      document.getElementById('segmento-tiempo').textContent = d.dataset.tiempo || '';
+      document.getElementById('segmento-actual').textContent = d.dataset.segmento || '';
+    } else if (i < actual) {
+      d.classList.add('salida');
+    }
+  });
+
+  document.getElementById('actual').textContent = actual + 1;
+  document.getElementById('nav-progreso').style.width = ((actual + 1) / total * 100) + '%';
+  document.getElementById('btn-previa').disabled = (actual === 0);
+  document.getElementById('btn-siguiente').disabled = (actual === total - 1);
+}
+
+document.getElementById('btn-previa').addEventListener('click', () => mostrar(actual - 1));
+document.getElementById('btn-siguiente').addEventListener('click', () => mostrar(actual + 1));
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); mostrar(actual + 1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp')  { e.preventDefault(); mostrar(actual - 1); }
+  if (e.key === 'Home') mostrar(0);
+  if (e.key === 'End')  mostrar(total - 1);
+});
+
+mostrar(0); // Inicializar
+
+// =====================================================================
+// SIMULADOR 1: PREVALENCIA PUNTUAL VS. DE PERÍODO
+// =====================================================================
+// Generamos una cohorte ficticia pero pedagógicamente diseñada:
+// 20 pacientes con distintas duraciones de enfermedad. Algunos
+// de corta duración (típicos del sesgo de Neyman), algunos de larga.
+const pacientes = [
+  // [inicio en meses, fin en meses, muere (true) o vive (false)]
+  // Corta duración (alto riesgo de invisibilización por sesgo de prevalencia)
+  [0.5, 2.0, true],  [1.0, 2.5, true],  [2.0, 3.5, true],
+  [4.0, 5.5, true],  [7.5, 9.0, true],  [10.5, 12.0, true],
+  // Duración media
+  [0.5, 4.5, false], [2.0, 6.0, false], [3.5, 8.0, false],
+  [5.0, 9.5, false], [6.5, 11.0, false], [8.0, 12.0, false],
+  // Larga duración (sobrerrepresentados en el corte)
+  [0.0, 9.0, false], [1.0, 11.5, false], [0.5, 12.0, false],
+  [2.5, 12.0, false], [3.0, 12.0, false], [0.0, 12.0, false],
+  [1.5, 12.0, false], [4.0, 12.0, false]
+];
+
+const TOTAL_MESES = 12;
+const ALTURA_PACIENTE = 8;
+const SEPARACION = 9;
+
+function renderizarLineaTemporal() {
+  const wrapper = document.getElementById('linea-temporal');
+  const ancho = wrapper.clientWidth;
+  const margen = 16; // padding interno
+  const anchoEfectivo = ancho - margen * 2;
+
+  // Limpiar pacientes previos
+  wrapper.querySelectorAll('.paciente-linea').forEach(n => n.remove());
+  wrapper.querySelectorAll('.marca-mes').forEach(n => n.remove());
+
+  pacientes.forEach((paciente, i) => {
+    const [inicio, fin, muere] = paciente;
+    const left = margen + (inicio / TOTAL_MESES) * anchoEfectivo;
+    const width = ((fin - inicio) / TOTAL_MESES) * anchoEfectivo;
+    const top = 15 + i * SEPARACION;
+
+    const linea = document.createElement('div');
+    linea.className = 'paciente-linea' + (muere ? ' muerto' : '');
+    linea.style.left = left + 'px';
+    linea.style.width = width + 'px';
+    linea.style.top = top + 'px';
+    linea.dataset.inicio = inicio;
+    linea.dataset.fin = fin;
+    wrapper.appendChild(linea);
+  });
+
+  // Marcas de mes (cada 3 meses)
+  for (let m = 0; m <= 12; m += 3) {
+    const marca = document.createElement('div');
+    marca.className = 'marca-mes';
+    marca.style.left = (margen + (m / TOTAL_MESES) * anchoEfectivo) + 'px';
+    marca.textContent = `mes ${m}`;
+    wrapper.appendChild(marca);
+  }
+
+  actualizarPrevalencia();
+}
+
+let modoActual = 'puntual';
+let cortePos = 0.5; // posición como fracción 0-1
+let anchoPeriodo = 3; // meses
+
+document.getElementById('btn-puntual').addEventListener('click', (e) => {
+  modoActual = 'puntual';
+  document.getElementById('btn-puntual').classList.add('activo');
+  document.getElementById('btn-periodo').classList.remove('activo');
+  document.getElementById('ancho-periodo').disabled = true;
+  document.getElementById('rango-periodo').style.display = 'none';
+  document.getElementById('marca-corte').style.display = 'block';
+  document.getElementById('prevalencia-tipo').textContent = 'puntual';
+  actualizarPrevalencia();
+});
+
+document.getElementById('btn-periodo').addEventListener('click', (e) => {
+  modoActual = 'periodo';
+  document.getElementById('btn-periodo').classList.add('activo');
+  document.getElementById('btn-puntual').classList.remove('activo');
+  document.getElementById('ancho-periodo').disabled = false;
+  document.getElementById('rango-periodo').style.display = 'block';
+  document.getElementById('marca-corte').style.display = 'none';
+  document.getElementById('prevalencia-tipo').textContent = 'de período';
+  actualizarPrevalencia();
+});
+
+document.getElementById('ancho-periodo').addEventListener('input', (e) => {
+  anchoPeriodo = parseInt(e.target.value);
+  document.getElementById('ancho-valor').textContent = anchoPeriodo + (anchoPeriodo === 1 ? ' mes' : ' meses');
+  actualizarPrevalencia();
+});
+
+// Arrastre del corte
+let arrastrando = false;
+document.getElementById('marca-corte').addEventListener('mousedown', () => arrastrando = true);
+document.addEventListener('mouseup', () => arrastrando = false);
+document.getElementById('linea-temporal').addEventListener('mousemove', (e) => {
+  if (!arrastrando || modoActual !== 'puntual') return;
+  const wrapper = e.currentTarget;
+  const rect = wrapper.getBoundingClientRect();
+  const frac = Math.max(0.02, Math.min(0.98, (e.clientX - rect.left) / rect.width));
+  cortePos = frac;
+  document.getElementById('marca-corte').style.left = (frac * 100) + '%';
+  actualizarPrevalencia();
+});
+
+// Click directo en la línea (más intuitivo)
+document.getElementById('linea-temporal').addEventListener('click', (e) => {
+  const wrapper = e.currentTarget;
+  const rect = wrapper.getBoundingClientRect();
+  const frac = Math.max(0.02, Math.min(0.98, (e.clientX - rect.left) / rect.width));
+  cortePos = frac;
+  if (modoActual === 'puntual') {
+    document.getElementById('marca-corte').style.left = (frac * 100) + '%';
+  } else {
+    // En modo período, el clic define el centro del período
+  }
+  actualizarPrevalencia();
+});
+
+function actualizarPrevalencia() {
+  const wrapper = document.getElementById('linea-temporal');
+  let casos = 0;
+  const totalPac = pacientes.length;
+
+  if (modoActual === 'puntual') {
+    const mesCorte = cortePos * TOTAL_MESES;
+    pacientes.forEach((p, i) => {
+      const [inicio, fin] = p;
+      const linea = wrapper.querySelectorAll('.paciente-linea')[i];
+      if (mesCorte >= inicio && mesCorte <= fin) {
+        casos++;
+        if (linea) linea.classList.add('activo-en-corte');
+      } else {
+        if (linea) linea.classList.remove('activo-en-corte');
+      }
+      if (linea) linea.classList.remove('incluido-periodo');
+    });
+  } else {
+    // Período: centrado en cortePos
+    const centroMes = cortePos * TOTAL_MESES;
+    const mesInicioPeriodo = Math.max(0, centroMes - anchoPeriodo / 2);
+    const mesFinPeriodo = Math.min(TOTAL_MESES, centroMes + anchoPeriodo / 2);
+
+    const rect = wrapper.getBoundingClientRect();
+    const margen = 16;
+    const anchoEfectivo = wrapper.clientWidth - margen * 2;
+    const rangoEl = document.getElementById('rango-periodo');
+    rangoEl.style.left = (margen + (mesInicioPeriodo / TOTAL_MESES) * anchoEfectivo) + 'px';
+    rangoEl.style.width = (((mesFinPeriodo - mesInicioPeriodo) / TOTAL_MESES) * anchoEfectivo) + 'px';
+
+    pacientes.forEach((p, i) => {
+      const [inicio, fin] = p;
+      const linea = wrapper.querySelectorAll('.paciente-linea')[i];
+      // Incluir si se solapa con el período
+      if (fin >= mesInicioPeriodo && inicio <= mesFinPeriodo) {
+        casos++;
+        if (linea) linea.classList.add('incluido-periodo');
+      } else {
+        if (linea) linea.classList.remove('incluido-periodo');
+      }
+      if (linea) linea.classList.remove('activo-en-corte');
+    });
+  }
+
+  document.getElementById('casos-count').textContent = casos;
+  document.getElementById('poblacion-count').textContent = totalPac;
+  const prev = (casos / totalPac * 100).toFixed(0);
+  document.getElementById('prevalencia-valor').textContent = prev + '%';
+}
+
+// Inicializar línea temporal al cargar y ante resize
+window.addEventListener('load', () => setTimeout(renderizarLineaTemporal, 100));
+window.addEventListener('resize', () => setTimeout(renderizarLineaTemporal, 100));
+
+// =====================================================================
+// SIMULADOR 2: FALACIA ECOLÓGICA
+// =====================================================================
+// Generamos 6 países con tendencia ecológica positiva fuerte,
+// pero cada país contiene individuos cuya correlación intrapaís
+// puede variar según el nivel de heterogeneidad.
+
+const paises = [
+  // [mediaX, mediaY, nombre abreviado]
+  [20, 25, 'HND'],
+  [32, 40, 'BOL'],
+  [45, 55, 'PER'],
+  [58, 62, 'COL'],
+  [72, 75, 'CHL'],
+  [85, 88, 'URY']
+];
+
+function calcularCorrelacion(puntos) {
+  const n = puntos.length;
+  if (n < 2) return 0;
+  const mediaX = puntos.reduce((s, p) => s + p[0], 0) / n;
+  const mediaY = puntos.reduce((s, p) => s + p[1], 0) / n;
+  let num = 0, denX = 0, denY = 0;
+  puntos.forEach(([x, y]) => {
+    num += (x - mediaX) * (y - mediaY);
+    denX += (x - mediaX) ** 2;
+    denY += (y - mediaY) ** 2;
+  });
+  const den = Math.sqrt(denX * denY);
+  return den === 0 ? 0 : num / den;
+}
+
+function dibujarCanvas(canvasId, puntos, color, mostrarEtiquetas = false) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const margen = 30;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Ejes
+  ctx.strokeStyle = '#CCCCCC';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(margen, margen);
+  ctx.lineTo(margen, H - margen);
+  ctx.lineTo(W - margen, H - margen);
+  ctx.stroke();
+
+  // Etiquetas de ejes
+  ctx.fillStyle = '#5A5550';
+  ctx.font = '10px JetBrains Mono';
+  ctx.fillText('Cobertura de opioides →', margen, H - 8);
+  ctx.save();
+  ctx.translate(15, H / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textAlign = 'center';
+  ctx.fillText('Calidad de muerte →', 0, 0);
+  ctx.restore();
+
+  // Puntos
+  puntos.forEach(([x, y, label]) => {
+    const px = margen + (x / 100) * (W - 2 * margen);
+    const py = H - margen - (y / 100) * (H - 2 * margen);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(px, py, mostrarEtiquetas ? 8 : 3, 0, 2 * Math.PI);
+    ctx.fill();
+    if (mostrarEtiquetas && label) {
+      ctx.fillStyle = '#2C2824';
+      ctx.font = 'bold 9px JetBrains Mono';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, px, py - 12);
+    }
+  });
+
+  // Línea de tendencia
+  if (puntos.length > 1) {
+    const n = puntos.length;
+    const mediaX = puntos.reduce((s, p) => s + p[0], 0) / n;
+    const mediaY = puntos.reduce((s, p) => s + p[1], 0) / n;
+    let num = 0, den = 0;
+    puntos.forEach(([x, y]) => {
+      num += (x - mediaX) * (y - mediaY);
+      den += (x - mediaX) ** 2;
+    });
+    if (den !== 0) {
+      const pendiente = num / den;
+      const intercepto = mediaY - pendiente * mediaX;
+      const x1 = 0, y1 = intercepto;
+      const x2 = 100, y2 = pendiente * 100 + intercepto;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(margen + (x1 / 100) * (W - 2 * margen), H - margen - (y1 / 100) * (H - 2 * margen));
+      ctx.lineTo(margen + (x2 / 100) * (W - 2 * margen), H - margen - (y2 / 100) * (H - 2 * margen));
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+}
+
+function actualizarSimuladorEcologico() {
+  const heterogeneidad = parseInt(document.getElementById('heterogeneidad').value);
+  const nivelDispersion = heterogeneidad / 100 * 35; // 0 a 35 unidades de dispersión
+  const inversionFactor = Math.max(0, (heterogeneidad - 50) / 50); // a partir de 50 se invierte
+
+  // Etiqueta
+  let etiqueta;
+  if (heterogeneidad < 25) etiqueta = 'baja';
+  else if (heterogeneidad < 55) etiqueta = 'media';
+  else if (heterogeneidad < 80) etiqueta = 'alta';
+  else etiqueta = 'extrema (inversión)';
+  document.getElementById('heterogeneidad-valor').textContent = etiqueta;
+
+  // Canvas ecológico: solo los 6 países
+  dibujarCanvas('canvas-ecologico', paises, '#B85C3C', true);
+  const rEco = calcularCorrelacion(paises);
+  document.getElementById('r-ecologica').textContent = rEco.toFixed(2);
+
+  // Canvas individual: generar pacientes dentro de cada país
+  // La clave pedagógica: a medida que aumenta la heterogeneidad,
+  // las correlaciones intrapaís se desordenan y pueden invertirse
+  const individuos = [];
+  paises.forEach(([cx, cy]) => {
+    for (let i = 0; i < 15; i++) {
+      // Desviación base (random pero determinista con seed)
+      const angulo = (Math.PI * 2) * ((i * 7.3 + cx) % 1);
+      const radio = nivelDispersion * (0.5 + ((i * 3.7 + cy) % 1) * 0.5);
+      let dx = Math.cos(angulo) * radio;
+      let dy = Math.sin(angulo) * radio;
+
+      // Inversión de correlación intrapaís cuando heterogeneidad supera 50
+      // Sumamos una componente con pendiente negativa que se fortalece
+      if (inversionFactor > 0) {
+        const componenteNegativa = (i - 7) * inversionFactor * 2.5;
+        dx += componenteNegativa;
+        dy -= componenteNegativa;
+      }
+
+      const px = Math.max(5, Math.min(95, cx + dx));
+      const py = Math.max(5, Math.min(95, cy + dy));
+      individuos.push([px, py]);
+    }
+  });
+
+  dibujarCanvas('canvas-individual', individuos, '#6B8E6B', false);
+  const rInd = calcularCorrelacion(individuos);
+  document.getElementById('r-individual').textContent = rInd.toFixed(2);
+  const elRInd = document.getElementById('r-individual');
+  elRInd.classList.toggle('negativa', rInd < -0.1);
+}
+
+document.getElementById('heterogeneidad').addEventListener('input', actualizarSimuladorEcologico);
+window.addEventListener('load', () => setTimeout(actualizarSimuladorEcologico, 100));
+
+// =====================================================================
+// TABLA COMPARATIVA: CELDAS REVELABLES
+// =====================================================================
+document.querySelectorAll('.celda-editable').forEach(celda => {
+  celda.addEventListener('click', () => {
+    if (celda.classList.contains('revelada')) {
+      celda.textContent = 'Clic para revelar';
+      celda.classList.remove('revelada');
+      celda.classList.add('vacio');
+    } else {
+      celda.textContent = celda.dataset.respuesta;
+      celda.classList.add('revelada');
+      celda.classList.remove('vacio');
+    }
+  });
+});
+
+// =====================================================================
+// BOTÓN DE REVOTACIÓN
+// =====================================================================
+document.getElementById('btn-revotar').addEventListener('click', () => {
+  alert('Reabrir Mentimeter con la misma pregunta inicial: "Si usted tuviera que demostrar cuantitativamente inequidad en La Guajira, ¿qué diseño elegiría?"');
+});
+</script>
+
+</body>
+</html>
