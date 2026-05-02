@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentación maestra · Sesión 7 · Epidemiologías analíticas</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  /* Paleta institucional UAN-Maestría · presentación maestra usa las cuatro */
+  --terracota: #B85C3C;
+  --terracota-dark: #9C4830;
+  --terracota-soft: #EFD5C8;
+  --salvia: #7A8B6F;
+  --salvia-dark: #5C6E54;
+  --salvia-soft: #D9E0D2;
+  --arena: #C4A876;
+  --arena-dark: #8B7B5C;
+  --arena-deep: #6B5B40;
+  --arena-soft: #F5EEDD;
+  --ambar: #D4A547;
+  --ambar-dark: #A07930;
+  --ambar-deep: #6B4F0F;
+  --ambar-soft: #F4E4BC;
+  --charcoal: #2D2D2D;
+  --gris: #595959;
+  --gris-claro: #A6A6A6;
+  --blanco: #FFFFFF;
+  --crema: #FAF6EF;
+  --shadow-soft: 0 2px 8px rgba(45, 45, 45, 0.08);
+  --shadow-medium: 0 6px 20px rgba(45, 45, 45, 0.12);
+  --shadow-strong: 0 12px 40px rgba(45, 45, 45, 0.18);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--charcoal);
+  color: var(--charcoal);
+  line-height: 1.5;
+  font-size: 18px;
+}
+
+/* ============================ STAGE ============================ */
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--crema);
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  padding: 60px 80px 80px;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slide-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================ TIPOGRAFÍA ============================ */
+.slide h1 {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.slide h2 {
+  font-size: clamp(24px, 2.6vw, 36px);
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.slide h3 {
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 600;
+  margin: 16px 0 10px;
+  color: var(--gris);
+}
+
+.slide p { font-size: clamp(15px, 1.3vw, 19px); margin-bottom: 14px; line-height: 1.55; }
+.slide ul, .slide ol { padding-left: 26px; margin-bottom: 14px; }
+.slide li { font-size: clamp(14px, 1.2vw, 18px); margin-bottom: 8px; line-height: 1.5; }
+
+.kicker {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 16px;
+  margin-bottom: 14px;
+}
+
+/* ============================ NAV BAR ============================ */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(45, 45, 45, 0.92);
+  backdrop-filter: blur(8px);
+  color: var(--blanco);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 100;
+  font-size: 13px;
+}
+
+.nav-progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.nav-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--terracota), var(--salvia), var(--arena), var(--ambar));
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.nav-counter {
+  font-weight: 700;
+  color: var(--ambar-soft);
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+  text-align: right;
+}
+
+.nav-buttons { display: flex; gap: 8px; }
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--blanco);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.nav-btn:hover { background: rgba(255, 255, 255, 0.2); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.nav-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.slide-title-mini {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  font-size: 13px;
+  flex-shrink: 0;
+  max-width: 30vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================ SLIDE 1 — PORTADA ============================ */
+.slide-portada {
+  background: linear-gradient(135deg, var(--charcoal) 0%, var(--ambar-deep) 100%);
+  color: var(--blanco);
+  justify-content: center;
+  align-items: center;
+}
+
+.slide-portada .slide-inner {
+  text-align: center;
+  align-items: center;
+}
+
+.portada-tag {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--ambar-soft);
+}
+
+.slide-portada h1 {
+  background: linear-gradient(90deg, var(--terracota-soft), var(--salvia-soft), var(--arena-soft), var(--ambar-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(40px, 5.5vw, 76px);
+  margin-bottom: 24px;
+}
+
+.portada-pregunta {
+  font-size: clamp(20px, 2vw, 30px);
+  font-style: italic;
+  font-weight: 300;
+  max-width: 900px;
+  line-height: 1.4;
+  margin: 24px 0 36px;
+  color: var(--blanco);
+}
+
+.portada-pregunta strong { color: var(--ambar-soft); font-weight: 600; }
+
+.portada-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 30px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.portada-meta span { display: flex; align-items: center; gap: 8px; }
+
+/* ============================ SLIDE 2 — DESCRIPTIVO → ANALÍTICO ============================ */
+.transition-grid {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  margin-top: 30px;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .transition-grid { grid-template-columns: 1fr; }
+  .transition-arrow { transform: rotate(90deg); margin: 20px auto; }
+}
+
+.transition-side {
+  padding: 30px;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+}
+
+.transition-side.descriptivo { background: var(--arena-soft); border-left: 6px solid var(--gris); }
+.transition-side.analitico { background: var(--ambar-soft); border-left: 6px solid var(--terracota); }
+
+.transition-side h3 {
+  margin-top: 0;
+  color: var(--charcoal);
+}
+
+.transition-side .label-tag {
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.transition-side.descriptivo .label-tag { color: var(--gris); }
+.transition-side.analitico .label-tag { color: var(--terracota); }
+
+.transition-side ul { padding-left: 20px; }
+.transition-side li { font-size: 16px; }
+
+.transition-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: var(--terracota);
+  font-weight: 300;
+}
+
+/* ============================ SLIDE 3 — VISTA PANORÁMICA ============================ */
+.panoramic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) { .panoramic-grid { grid-template-columns: 1fr; } }
+
+.panoramic-card {
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  color: var(--blanco);
+}
+
+.panoramic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-strong);
+}
+
+.panoramic-card.A { background: linear-gradient(135deg, var(--terracota), var(--terracota-dark)); }
+.panoramic-card.B { background: linear-gradient(135deg, var(--salvia), var(--salvia-dark)); }
+.panoramic-card.C { background: linear-gradient(135deg, var(--arena-dark), var(--arena-deep)); }
+.panoramic-card.D { background: linear-gradient(135deg, var(--ambar-dark), var(--ambar-deep)); }
+
+.panoramic-card .pc-letter {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 70px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.18);
+  line-height: 1;
+}
+
+.panoramic-card h3 {
+  color: var(--blanco);
+  font-size: 20px;
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.panoramic-card .pc-subtitle {
+  font-size: 13px;
+  opacity: 0.85;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.panoramic-card .pc-question {
+  font-size: 14px;
+  font-style: italic;
+  margin-bottom: 14px;
+  opacity: 0.95;
+  border-left: 3px solid rgba(255,255,255,0.3);
+  padding-left: 12px;
+}
+
+.panoramic-card .pc-anchor {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ============================ SLIDE 4 — TABLA COMPARATIVA ============================ */
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.compare-table th {
+  padding: 12px 14px;
+  font-weight: 700;
+  text-align: left;
+  vertical-align: middle;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--blanco);
+}
+
+.compare-table th.col-A { background: var(--terracota); }
+.compare-table th.col-B { background: var(--salvia); }
+.compare-table th.col-C { background: var(--arena-dark); }
+.compare-table th.col-D { background: var(--ambar-dark); }
+.compare-table th.row-h {
+  background: var(--charcoal);
+  color: var(--blanco);
+  width: 180px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.compare-table td {
+  padding: 10px 14px;
+  background: var(--blanco);
+  border-radius: 6px;
+  vertical-align: top;
+  font-size: 14px;
+  color: var(--charcoal);
+  line-height: 1.45;
+}
+
+.compare-table tr:nth-child(even) td { background: var(--arena-soft); }
+
+.compare-table .reveal-cell {
+  opacity: 0.15;
+  background-image: repeating-linear-gradient(45deg, var(--gris-claro) 0, var(--gris-claro) 4px, transparent 4px, transparent 8px);
+  cursor: pointer;
+  transition: opacity 0.35s ease;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gris);
+  font-style: italic;
+  font-size: 12px;
+}
+
+.compare-table .reveal-cell.revealed {
+  opacity: 1;
+  background-image: none;
+  cursor: default;
+  font-style: normal;
+  display: block;
+}
+
+/* ============================ SLIDE 5 — OR vs RR (EJEMPLO NUMÉRICO) ============================ */
+.or-rr-block {
+  background: var(--blanco);
+  padding: 30px;
+  border-radius: var(--radius);
+  border: 1px solid var(--arena-soft);
+  margin-top: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.or-rr-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.or-rr-control {
+  background: var(--crema);
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--arena-soft);
+}
+
+.or-rr-control label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--gris);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.or-rr-control input[type="range"] {
+  width: 100%;
+  accent-color: var(--terracota);
+}
+
+.or-rr-control .control-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--terracota);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.or-rr-result-grid {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 18px;
+  align-items: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+  .or-rr-result-grid { grid-template-columns: 1fr; }
+}
+
+.or-rr-card {
+  padding: 24px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.or-rr-card.real { background: var(--salvia-soft); border-left: 4px solid var(--salvia); }
+.or-rr-card.ficticio { background: var(--terracota-soft); border-left: 4px solid var(--terracota); }
+
+.or-rr-card .label {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.or-rr-card.real .label { color: var(--salvia-dark); }
+.or-rr-card.ficticio .label { color: var(--terracota-dark); }
+
+.or-rr-card .big-value {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.or-rr-card.real .big-value { color: var(--salvia-dark); }
+.or-rr-card.ficticio .big-value { color: var(--terracota-dark); }
+
+.or-rr-card .small-detail {
+  font-size: 13px;
+  color: var(--gris);
+  margin-top: 6px;
+}
+
+.or-rr-arrow {
+  font-size: 36px;
+  color: var(--ambar);
+  text-align: center;
+  font-weight: 700;
+}
+
+.or-rr-attribution {
+  background: var(--ambar-soft);
+  border-left: 4px solid var(--ambar);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.or-rr-attribution strong { color: var(--ambar-deep); }
+
+/* ============================ SLIDE 6 — DECISION TREE ============================ */
+.decision-tree {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.dt-question {
+  background: var(--terracota);
+  color: var(--blanco);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.dt-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dt-option {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 18px;
+  background: var(--blanco);
+  border: 2px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 15px;
+  font-family: inherit;
+  text-align: left;
+}
+
+.dt-option:hover { border-color: var(--terracota); background: var(--terracota-soft); }
+.dt-option.selected { border-color: var(--terracota); background: var(--terracota-soft); font-weight: 600; }
+
+.dt-result {
+  margin-top: 18px;
+  padding: 18px 22px;
+  border-radius: var(--radius-sm);
+  display: none;
+  border-left: 5px solid var(--ambar);
+  background: var(--ambar-soft);
+}
+
+.dt-result.visible { display: block; animation: fadeIn 0.4s ease; }
+
+.dt-result h4 {
+  color: var(--ambar-deep);
+  font-size: 18px;
+  margin-bottom: 8px;
+  margin-top: 0;
+}
+
+.dt-result p { margin-bottom: 6px; font-size: 14px; }
+
+.dt-result.A { border-left-color: var(--terracota); background: var(--terracota-soft); }
+.dt-result.A h4 { color: var(--terracota-dark); }
+.dt-result.B { border-left-color: var(--salvia); background: var(--salvia-soft); }
+.dt-result.B h4 { color: var(--salvia-dark); }
+.dt-result.C { border-left-color: var(--arena-dark); background: var(--arena-soft); }
+.dt-result.C h4 { color: var(--arena-deep); }
+.dt-result.D { border-left-color: var(--ambar-dark); background: var(--ambar-soft); }
+.dt-result.D h4 { color: var(--ambar-deep); }
+
+.dt-reset {
+  background: transparent;
+  border: 1px solid var(--gris-claro);
+  color: var(--gris);
+  padding: 8px 16px;
+  border-radius: 16px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-top: 14px;
+  font-family: inherit;
+}
+
+.dt-reset:hover { background: var(--arena-soft); }
+
+/* ============================ SLIDE 7 — CASCADA ============================ */
+.cascada-wrap {
+  margin-top: 24px;
+}
+
+.cascada-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 14px 0;
+}
+
+.cascada-step {
+  flex: 1;
+  min-width: 160px;
+  padding: 18px 14px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  background: var(--blanco);
+  border: 2px solid var(--gris-claro);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.cascada-step .cs-num {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  font-weight: 700;
+  line-height: 28px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.cascada-step .cs-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.cascada-step .cs-station {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: var(--arena-soft);
+  color: var(--charcoal);
+}
+
+.cascada-step.lit-A { border-color: var(--terracota); }
+.cascada-step.lit-A .cs-num { background: var(--terracota); }
+.cascada-step.lit-A .cs-station { background: var(--terracota); color: var(--blanco); }
+
+.cascada-step.lit-B { border-color: var(--salvia); }
+.cascada-step.lit-B .cs-num { background: var(--salvia); }
+.cascada-step.lit-B .cs-station { background: var(--salvia); color: var(--blanco); }
+
+.cascada-step.lit-C { border-color: var(--arena-dark); }
+.cascada-step.lit-C .cs-num { background: var(--arena-dark); }
+.cascada-step.lit-C .cs-station { background: var(--arena-dark); color: var(--blanco); }
+
+.cascada-step.lit-D { border-color: var(--ambar-dark); }
+.cascada-step.lit-D .cs-num { background: var(--ambar-dark); }
+.cascada-step.lit-D .cs-station { background: var(--ambar-dark); color: var(--blanco); }
+
+.cascada-step.unlit { opacity: 0.55; }
+.cascada-step.unlit .cs-station { background: var(--gris-claro); color: var(--blanco); font-style: italic; }
+
+.cascada-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: var(--gris-claro);
+  flex-shrink: 0;
+}
+
+.cascada-conclusion {
+  background: var(--charcoal);
+  color: var(--blanco);
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.5;
+  border-left: 5px solid var(--ambar);
+}
+
+.cascada-conclusion strong { color: var(--ambar-soft); }
+
+/* ============================ SLIDE 8 — CIERRE ============================ */
+.slide-cierre {
+  background: linear-gradient(135deg, var(--charcoal) 0%, var(--terracota-dark) 100%);
+  color: var(--blanco);
+  justify-content: center;
+}
+
+.slide-cierre h1 {
+  color: var(--blanco);
+  text-align: center;
+  background: none;
+  -webkit-text-fill-color: var(--blanco);
+}
+
+.cierre-frase {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 28px 36px;
+  border-radius: var(--radius);
+  margin: 30px auto;
+  max-width: 880px;
+  font-style: italic;
+  font-size: clamp(18px, 1.8vw, 26px);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.cierre-frase::before, .cierre-frase::after {
+  content: '"';
+  font-size: 48px;
+  color: var(--ambar);
+  vertical-align: middle;
+  font-family: Georgia, serif;
+  line-height: 0;
+  opacity: 0.5;
+}
+
+.cierre-asignacion {
+  background: rgba(212, 165, 71, 0.15);
+  border: 1px solid var(--ambar);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin: 24px auto;
+  max-width: 880px;
+}
+
+.cierre-asignacion strong { color: var(--ambar-soft); }
+
+.cierre-asignacion h3 {
+  color: var(--ambar-soft);
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.cierre-credit {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 30px;
+  letter-spacing: 1px;
+}
+
+/* ============================ ANIMATIONS ============================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.5s ease; }
+
+/* ============================ KEYBOARD HINT ============================ */
+.kbd-hint {
+  display: inline-block;
+  font-family: 'Courier New', monospace;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin: 0 3px;
+}
+
+@media print {
+  .nav-bar { display: none; }
+  .slide { position: static; opacity: 1; pointer-events: auto; page-break-after: always; height: auto; }
+}
+</style>
+</head>
+<body>
+
+<div id="stage">
+
+  <!-- ============================ SLIDE 1 — PORTADA ============================ -->
+  <section class="slide slide-portada active" data-title="Portada">
+    <div class="slide-inner">
+      <span class="kicker portada-tag">Sesión 7 · Tema 2 · 8 de mayo de 2026</span>
+      <h1>Epidemiologías analíticas en cuidado paliativo</h1>
+      <p class="portada-pregunta">
+        ¿Qué dice —y qué calla— el <strong>diseño analítico</strong> sobre las personas que necesitan cuidados paliativos?
+      </p>
+      <div class="portada-meta">
+        <span>📐 Cuatro diseños · cuatro miradas</span>
+        <span>👥 María Luisa · Don Aurelio</span>
+        <span>🎓 Maestría en Cuidados Paliativos · UAN</span>
+      </div>
+      <div style="margin-top: 50px; font-size: 12px; opacity: 0.5; letter-spacing: 2px;">
+        <span class="kbd-hint">→</span> avanzar &nbsp;&nbsp; <span class="kbd-hint">←</span> retroceder &nbsp;&nbsp; <span class="kbd-hint">Esc</span> índice
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 2 — DESCRIPTIVO → ANALÍTICO ============================ -->
+  <section class="slide" data-title="Del descriptivo al analítico">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--terracota-soft); color: var(--terracota-dark);">EL SALTO CONCEPTUAL</span>
+      <h1>De contar a explicar</h1>
+      <p style="max-width: 880px;">En la sesión pasada describimos cuántas personas necesitan cuidados paliativos en Colombia. Hoy damos un paso difícil: pasar de <em>contar</em> a <em>explicar</em>.</p>
+
+      <div class="transition-grid">
+        <div class="transition-side descriptivo">
+          <span class="label-tag">Sesión 6 · descriptivo</span>
+          <h3>Lo que ya sabemos hacer</h3>
+          <ul>
+            <li>Estimar prevalencia de necesidad paliativa.</li>
+            <li>Describir la distribución geográfica de la mortalidad.</li>
+            <li>Comparar tasas entre departamentos.</li>
+            <li>Identificar el iceberg del subregistro.</li>
+          </ul>
+          <p style="font-size: 13px; color: var(--gris); margin-top: auto;"><em>Responde:</em> ¿cuántos? ¿dónde? ¿cuándo?</p>
+        </div>
+
+        <div class="transition-arrow">→</div>
+
+        <div class="transition-side analitico">
+          <span class="label-tag">Sesión 7 · analítico</span>
+          <h3>Lo que aprendemos hoy</h3>
+          <ul>
+            <li>Identificar factores asociados con desenlaces.</li>
+            <li>Evaluar la fuerza de las asociaciones.</li>
+            <li>Distinguir confusión, modificación de efecto, sesgos.</li>
+            <li>Inferir —con humildad— relaciones causales.</li>
+          </ul>
+          <p style="font-size: 13px; color: var(--gris); margin-top: auto;"><em>Responde:</em> ¿por qué? ¿qué factores explican? ¿qué predice qué?</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 3 — VISTA PANORÁMICA ============================ -->
+  <section class="slide" data-title="Las cuatro estaciones">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--ambar-soft); color: var(--ambar-deep);">VISTA PANORÁMICA</span>
+      <h1>Cuatro diseños · cuatro miradas</h1>
+      <p>Cada estación trabajó un diseño analítico observacional desde una pregunta paliativa concreta. Aquí los reunimos en una sola pantalla.</p>
+
+      <div class="panoramic-grid">
+        <div class="panoramic-card A">
+          <div class="pc-letter">A</div>
+          <h3>El caso que no fue</h3>
+          <div class="pc-subtitle">Casos y controles clásico</div>
+          <div class="pc-question">¿Qué factores se asocian con admisión tardía a cuidados paliativos en cáncer en Bogotá?</div>
+          <div><span class="pc-anchor">📍 María Luisa · Tolima rural</span></div>
+        </div>
+
+        <div class="panoramic-card B">
+          <div class="pc-letter">B</div>
+          <h3>El tiempo que sigue</h3>
+          <div class="pc-subtitle">Cohorte prospectiva</div>
+          <div class="pc-question">¿Cuál es la supervivencia tras inicio de CP domiciliarios en EPOC GOLD IV en La Guajira?</div>
+          <div><span class="pc-anchor">📍 Don Aurelio · Wayúu</span></div>
+        </div>
+
+        <div class="panoramic-card C">
+          <div class="pc-letter">C</div>
+          <h3>El pasado reconstruido</h3>
+          <div class="pc-subtitle">Cohorte histórica</div>
+          <div class="pc-question">¿Qué proporción de pacientes con EPOC en Boyacá accedió a opioides en su último año?</div>
+          <div><span class="pc-anchor">📍 María Luisa reconstruida · RIPS</span></div>
+        </div>
+
+        <div class="panoramic-card D">
+          <div class="pc-letter">D</div>
+          <h3>Lo mejor de dos mundos</h3>
+          <div class="pc-subtitle">Casos-controles anidado</div>
+          <div class="pc-question">Dentro de la cohorte OCCP, ¿qué predice muerte con dolor no controlado?</div>
+          <div><span class="pc-anchor">📍 Ambos · cohorte hipotética</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 4 — TABLA COMPARATIVA ============================ -->
+  <section class="slide" data-title="Tabla comparativa colectiva">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--salvia-soft); color: var(--salvia-dark);">CONSTRUCCIÓN COLECTIVA</span>
+      <h1>La tabla que armamos juntos</h1>
+      <p>Cada grupo aporta su columna. Las celdas grises se revelan al tocarlas — esperen los aportes de cada estación antes de develar las respuestas.</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th class="row-h">Dimensión</th>
+            <th class="col-A">A · Casos-controles</th>
+            <th class="col-B">B · Cohorte prospectiva</th>
+            <th class="col-C">C · Cohorte histórica</th>
+            <th class="col-D">D · Anidado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="row-h">Dirección temporal</th>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+          </tr>
+          <tr>
+            <th class="row-h">Medida natural</th>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+          </tr>
+          <tr>
+            <th class="row-h">Eslabón cascada</th>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+          </tr>
+          <tr>
+            <th class="row-h">Sesgo principal</th>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+            <td class="reveal-cell" onclick="revealCell(this)">tocar para revelar</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size: 13px; color: var(--gris); margin-top: 14px; font-style: italic;">Tip de uso: en plenaria, primero el grupo de cada estación expone su tarjeta de presentación (1 min). Luego usted toca la celda correspondiente para validar o complementar.</p>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 5 — OR vs RR ============================ -->
+  <section class="slide" data-title="Alerta · OR vs RR">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--terracota-soft); color: var(--terracota-dark);">⚠ ALERTA CONCEPTUAL</span>
+      <h1>La falacia de la enfermedad común</h1>
+      <p>Cuando el desenlace es frecuente y se reporta una OR donde correspondía un RR, la asociación se infla. Mueve los controles para verlo en vivo.</p>
+
+      <div class="or-rr-block">
+        <div class="or-rr-controls">
+          <div class="or-rr-control">
+            <label>Riesgo Relativo verdadero</label>
+            <input type="range" id="rrCtrl" min="1" max="3" step="0.1" value="1.8" oninput="updateORRR()">
+            <div class="control-value" id="rrCtrlVal">1,80</div>
+          </div>
+          <div class="or-rr-control">
+            <label>Prevalencia del desenlace</label>
+            <input type="range" id="prevCtrl" min="5" max="80" step="1" value="63" oninput="updateORRR()">
+            <div class="control-value" id="prevCtrlVal">63%</div>
+          </div>
+        </div>
+
+        <div class="or-rr-result-grid">
+          <div class="or-rr-card real">
+            <div class="label">RR real (lo que queremos saber)</div>
+            <div class="big-value" id="rrShow">1,80</div>
+            <div class="small-detail">razón de incidencias acumuladas</div>
+          </div>
+          <div class="or-rr-arrow">→</div>
+          <div class="or-rr-card ficticio">
+            <div class="label">OR reportada (lo que aparece)</div>
+            <div class="big-value" id="orShow">3,21</div>
+            <div class="small-detail" id="overestDetail">+78% de sobreestimación</div>
+          </div>
+        </div>
+
+        <div class="or-rr-attribution">
+          <strong>Atribución correcta:</strong> Cummings, P. (2009). <em>Methods for estimating adjusted risk ratios.</em> Stata Journal, 9(2), 175–196.
+          <br><span style="font-size: 12px;">No es Rothman ni Knol. La cuantificación clásica de esta sobreestimación es de Cummings.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 6 — DECISION TREE ============================ -->
+  <section class="slide" data-title="¿Qué diseño elijo?">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--arena-soft); color: var(--arena-deep);">ÁRBOL DE DECISIÓN</span>
+      <h1>¿Qué diseño elijo para mi pregunta?</h1>
+      <p>Tres preguntas en cadena, cuatro respuestas posibles. Útil para la asignación post-sesión "Tu María Luisa metodológica".</p>
+
+      <div class="decision-tree">
+        <!-- Q1 -->
+        <div class="dt-question">1️⃣ ¿La cohorte ya existe (prospectiva o histórica)?</div>
+        <div class="dt-options">
+          <button class="dt-option" onclick="dtAnswer('q1', 'no_cohorte')">No existe ninguna cohorte</button>
+          <button class="dt-option" onclick="dtAnswer('q1', 'si_cohorte')">Sí, hay una cohorte preexistente</button>
+        </div>
+
+        <!-- Q2 -->
+        <div id="q2" style="display: none; margin-top: 20px;">
+          <div class="dt-question">2️⃣ ¿Necesito medir exposiciones costosas (extracción manual, biomarcador)?</div>
+          <div class="dt-options">
+            <button class="dt-option" onclick="dtAnswer('q2', 'no_caro')">No, las variables son fáciles de obtener</button>
+            <button class="dt-option" onclick="dtAnswer('q2', 'si_caro')">Sí, son muy costosas por participante</button>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div id="q3" style="display: none; margin-top: 20px;">
+          <div class="dt-question">3️⃣ ¿Tengo tiempo y presupuesto para seguimiento prospectivo?</div>
+          <div class="dt-options">
+            <button class="dt-option" onclick="dtAnswer('q3', 'si_tiempo')">Sí, puedo hacer seguimiento concurrente</button>
+            <button class="dt-option" onclick="dtAnswer('q3', 'no_tiempo')">No, necesito reconstruir desde registros</button>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="dt-result" id="dtResult"></div>
+
+        <button class="dt-reset" onclick="resetDT()">↺ Reiniciar el árbol</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 7 — CASCADA DE NECESIDAD ============================ -->
+  <section class="slide" data-title="La cascada iluminada">
+    <div class="slide-inner">
+      <span class="kicker" style="background: var(--ambar-soft); color: var(--ambar-deep);">SÍNTESIS DEL CURSO</span>
+      <h1>Cada diseño ilumina un eslabón distinto</h1>
+      <p>La cascada de necesidad paliativa no satisfecha estructura todo el curso. Cada diseño analítico es como una linterna: alumbra una zona específica y deja otras en penumbra.</p>
+
+      <div class="cascada-wrap">
+        <div class="cascada-flow">
+          <div class="cascada-step unlit">
+            <div class="cs-num">1</div>
+            <div class="cs-name">Carga de enfermedad</div>
+            <div class="cs-station">no iluminada</div>
+          </div>
+          <div class="cascada-arrow">→</div>
+          <div class="cascada-step lit-D">
+            <div class="cs-num">2</div>
+            <div class="cs-name">Necesidad paliativa estimada</div>
+            <div class="cs-station">D · anidado</div>
+          </div>
+          <div class="cascada-arrow">→</div>
+          <div class="cascada-step lit-C">
+            <div class="cs-num">3</div>
+            <div class="cs-name">Cobertura del sistema</div>
+            <div class="cs-station">C · histórica</div>
+          </div>
+          <div class="cascada-arrow">→</div>
+          <div class="cascada-step lit-A">
+            <div class="cs-num">4</div>
+            <div class="cs-name">Brecha de acceso</div>
+            <div class="cs-station">A · caso-control</div>
+          </div>
+          <div class="cascada-arrow">→</div>
+          <div class="cascada-step lit-B">
+            <div class="cs-num">5</div>
+            <div class="cs-name">Calidad del morir</div>
+            <div class="cs-station">B · cohorte</div>
+          </div>
+        </div>
+
+        <div class="cascada-conclusion">
+          <strong>Eso es lo que responde la pregunta vertebral.</strong> No hay un "mejor diseño" universal. Cada uno habla con autoridad sobre <em>su</em> eslabón y se calla en los demás. El primero —<strong>carga de enfermedad</strong>— sigue requiriendo diseños transversales poblacionales que están fuera del alcance de esta sesión, pero cuyo lugar dejamos marcado para no olvidarlo.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ SLIDE 8 — CIERRE ============================ -->
+  <section class="slide slide-cierre" data-title="Cierre">
+    <div class="slide-inner">
+      <span class="kicker portada-tag">CIERRE · MINUTOS 110-120</span>
+      <h1>María Luisa · Don Aurelio</h1>
+
+      <div class="cierre-frase">
+        Ningún diseño cuenta toda la historia. Por eso necesitamos varios. Y por eso necesitamos preguntar siempre <em>qué silencia</em> el que escogimos.
+      </div>
+
+      <div class="cierre-asignacion">
+        <h3>📝 Asignación post-sesión · "Tu María Luisa metodológica"</h3>
+        <p style="margin: 0;">Vuelvan a su caso "Tu María Luisa" del semestre. Decidan cuál de los cuatro diseños analíticos sería el más apropiado para responder la pregunta más urgente que ese caso plantea, y justifiquen con tres argumentos metodológicos sustentados. <strong>200–300 palabras. Entrega antes del 22 de mayo de 2026 (Sesión 8).</strong></p>
+      </div>
+
+      <div class="cierre-credit">
+        UAN · MAESTRÍA EN CUIDADOS PALIATIVOS · PROFESOR JORGE WILHELM BOGOYA LÓPEZ
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ============== NAV BAR ============== -->
+<div class="nav-bar">
+  <div class="slide-title-mini" id="navTitle">Portada</div>
+  <div class="nav-counter"><span id="navCurrent">1</span> / <span id="navTotal">8</span></div>
+  <div class="nav-progress"><div class="nav-progress-bar" id="navProgress"></div></div>
+  <div class="nav-buttons">
+    <button class="nav-btn" id="btnPrev" onclick="prevSlide()" title="Anterior (←)">‹</button>
+    <button class="nav-btn" id="btnNext" onclick="nextSlide()" title="Siguiente (→)">›</button>
+  </div>
+  <div class="nav-hint">
+    <span class="kbd-hint">←</span><span class="kbd-hint">→</span> navegar &nbsp;
+    <span class="kbd-hint">F</span> pantalla completa
+  </div>
+</div>
+
+<script>
+// ============== NAVEGACIÓN ==============
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+let current = 0;
+
+function showSlide(idx) {
+  slides[current].classList.remove('active');
+  current = Math.max(0, Math.min(total - 1, idx));
+  slides[current].classList.add('active');
+  updateNav();
+  // Scroll al inicio del slide
+  slides[current].scrollTop = 0;
+}
+
+function updateNav() {
+  document.getElementById('navCurrent').textContent = current + 1;
+  document.getElementById('navTotal').textContent = total;
+  document.getElementById('navTitle').textContent = slides[current].dataset.title || '';
+  document.getElementById('navProgress').style.width = ((current + 1) / total * 100) + '%';
+  document.getElementById('btnPrev').disabled = (current === 0);
+  document.getElementById('btnNext').disabled = (current === total - 1);
+}
+
+function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+// Atajos de teclado
+document.addEventListener('keydown', (e) => {
+  // Ignorar si el foco está en input/textarea
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+  if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+  else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+  else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  else if (e.key === 'f' || e.key === 'F') {
+    e.preventDefault();
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  }
+  else if (/^[1-9]$/.test(e.key)) {
+    const n = parseInt(e.key) - 1;
+    if (n < total) showSlide(n);
+  }
+});
+
+// ============== SLIDE 4 — REVEAL CELLS ==============
+const REVEAL_CONTENT = {
+  'Dirección temporal-A': '<strong style="color:var(--terracota)">←</strong> Desenlace → exposición<br><small>retrospectiva</small>',
+  'Dirección temporal-B': '<strong style="color:var(--salvia)">→</strong> Exposición → desenlace<br><small>concurrente</small>',
+  'Dirección temporal-C': '<strong style="color:var(--arena-dark)">→</strong> Reconstruida<br><small>cohorte ya cerrada</small>',
+  'Dirección temporal-D': '<strong style="color:var(--ambar-dark)">↩</strong> Anidado en cohorte<br><small>temporalidad heredada</small>',
+  'Medida natural-A': '<strong style="color:var(--terracota)">OR</strong><br><small>odds ratio</small>',
+  'Medida natural-B': '<strong style="color:var(--salvia)">RR · DI · HR</strong><br><small>incidencia y razón de tasas</small>',
+  'Medida natural-C': '<strong style="color:var(--arena-dark)">Cobertura · proporción</strong><br><small>con análisis de sensibilidad</small>',
+  'Medida natural-D': '<strong style="color:var(--ambar-dark)">OR ≈ HR</strong><br><small>condicional, aprox. al hazard</small>',
+  'Eslabón cascada-A': 'Brecha de acceso',
+  'Eslabón cascada-B': 'Calidad del morir',
+  'Eslabón cascada-C': 'Cobertura del sistema',
+  'Eslabón cascada-D': 'Necesidad paliativa estimada',
+  'Sesgo principal-A': '<strong>Berkson</strong><br><small>filtro hospitalario</small>',
+  'Sesgo principal-B': '<strong>Trabajador sano</strong><br><small>los más enfermos no entran</small>',
+  'Sesgo principal-C': '<strong>Subregistro diferencial</strong><br><small>iceberg estructural</small>',
+  'Sesgo principal-D': '<strong>Hereda los de la cohorte madre</strong><br><small>incluido el trabajador sano</small>'
+};
+
+function revealCell(td) {
+  if (td.classList.contains('revealed')) return;
+  // Identificar fila y columna
+  const tr = td.parentElement;
+  const tds = Array.from(tr.querySelectorAll('td, th'));
+  const colIdx = tds.indexOf(td); // 0 es row-h, 1=A, 2=B, 3=C, 4=D
+  const cols = ['', 'A', 'B', 'C', 'D'];
+  const col = cols[colIdx];
+  const row = tr.querySelector('.row-h')?.textContent.trim() || '';
+  const key = `${row}-${col}`;
+  const content = REVEAL_CONTENT[key];
+  if (content) {
+    td.classList.add('revealed');
+    td.innerHTML = content;
+  }
+}
+
+// ============== SLIDE 5 — CALCULADORA OR vs RR ==============
+function updateORRR() {
+  const rr = parseFloat(document.getElementById('rrCtrl').value);
+  const prevSlider = document.getElementById('prevCtrl');
+
+  // Limitar el slider de prevalencia: p0 × rr debe ser < 1
+  // → max = floor(99/rr) para mantener p1 < 1
+  const maxAllowed = Math.floor(99 / rr);
+  prevSlider.max = maxAllowed;
+  if (parseFloat(prevSlider.value) > maxAllowed) prevSlider.value = maxAllowed;
+
+  const prev = parseFloat(prevSlider.value) / 100;
+
+  document.getElementById('rrCtrlVal').textContent = rr.toFixed(2).replace('.', ',');
+  document.getElementById('prevCtrlVal').textContent = (prev * 100).toFixed(0) + '%';
+
+  // Convención pedagógica: 'prev' = incidencia en el grupo no expuesto (p0).
+  // Esta es la convención más común en la literatura clínica para discutir la falacia.
+  // Reproduce los valores aproximados: a 10% → OR≈1.98, a 30% → OR≈2.74, a 50% → OR≈9.0
+  const p0 = prev;
+  const p1 = p0 * rr;
+  if (p1 >= 1 || p0 >= 1 || p1 <= 0 || p0 <= 0) {
+    document.getElementById('orShow').textContent = '—';
+    document.getElementById('overestDetail').textContent = 'fuera de rango';
+    return;
+  }
+  const or = (p1 / (1 - p1)) / (p0 / (1 - p0));
+  const overest = ((or / rr) - 1) * 100;
+
+  document.getElementById('rrShow').textContent = rr.toFixed(2).replace('.', ',');
+  document.getElementById('orShow').textContent = or.toFixed(2).replace('.', ',');
+  document.getElementById('overestDetail').textContent =
+    overest > 0
+      ? `+${overest.toFixed(0)}% de sobreestimación`
+      : (overest < 0 ? `${overest.toFixed(0)}% (atenuación)` : 'sin diferencia');
+}
+
+// ============== SLIDE 6 — DECISION TREE ==============
+const dtState = {};
+
+function dtAnswer(q, ans) {
+  dtState[q] = ans;
+
+  // Resaltar la opción seleccionada
+  const containers = { q1: 0, q2: 1, q3: 2 };
+  const idx = containers[q];
+  const buttons = document.querySelectorAll('.dt-options')[idx]?.querySelectorAll('.dt-option');
+  buttons?.forEach(btn => btn.classList.remove('selected'));
+  event.target.classList.add('selected');
+
+  // Lógica de avance
+  if (q === 'q1') {
+    if (ans === 'no_cohorte') {
+      // Solo queda casos-controles clásico (Estación A)
+      showResult('A');
+    } else {
+      document.getElementById('q2').style.display = 'block';
+      document.getElementById('q3').style.display = 'none';
+      hideResult();
+    }
+  } else if (q === 'q2') {
+    if (ans === 'si_caro') {
+      // Anidado (Estación D)
+      showResult('D');
+    } else {
+      document.getElementById('q3').style.display = 'block';
+      hideResult();
+    }
+  } else if (q === 'q3') {
+    if (ans === 'si_tiempo') {
+      showResult('B');
+    } else {
+      showResult('C');
+    }
+  }
+}
+
+function showResult(designKey) {
+  const result = document.getElementById('dtResult');
+  result.className = 'dt-result visible ' + designKey;
+
+  const RESULTS = {
+    'A': {
+      title: '🎯 Estación A · Casos y controles clásico',
+      body: 'Como no hay cohorte preexistente, parten <em>desde el desenlace</em> y miran hacia atrás. Eficiente, económico, ideal para preguntas sobre brecha de acceso. Recuerden vigilar el sesgo de Berkson y la temporalidad ambigua.'
+    },
+    'B': {
+      title: '🎯 Estación B · Cohorte prospectiva',
+      body: 'Tienen una cohorte, las exposiciones son fáciles de medir y tienen tiempo para seguimiento. Excelente para temporalidad y múltiples desenlaces. Vigilen pérdidas diferenciales y sesgo del trabajador sano.'
+    },
+    'C': {
+      title: '🎯 Estación C · Cohorte histórica',
+      body: 'Hay registros existentes, pero no pueden esperar años de seguimiento. Reconstruyan la cohorte desde RIPS-DANE-BDUA con análisis de sensibilidad por subregistro. Reporten transparentemente las limitaciones.'
+    },
+    'D': {
+      title: '🎯 Estación D · Casos-controles anidado',
+      body: 'Tienen la cohorte y las exposiciones son caras. El nested resuelve <em>dos problemas a la vez</em>: el costo de la cohorte completa y la temporalidad ambigua del caso-control clásico. Muestreo por densidad de incidencia, ratio 1:3.'
+    }
+  };
+
+  const data = RESULTS[designKey];
+  result.innerHTML = `<h4>${data.title}</h4><p>${data.body}</p>`;
+}
+
+function hideResult() {
+  document.getElementById('dtResult').className = 'dt-result';
+}
+
+function resetDT() {
+  Object.keys(dtState).forEach(k => delete dtState[k]);
+  document.getElementById('q2').style.display = 'none';
+  document.getElementById('q3').style.display = 'none';
+  hideResult();
+  document.querySelectorAll('.dt-option').forEach(btn => btn.classList.remove('selected'));
+}
+
+// ============== INIT ==============
+window.addEventListener('DOMContentLoaded', () => {
+  updateNav();
+  updateORRR();
+});
+</script>
+
+</body>
+</html>

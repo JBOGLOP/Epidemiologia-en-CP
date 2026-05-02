@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard en vivo · Sesión 7</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+:root {
+  --terracota: #B85C3C;
+  --terracota-soft: #EFD5C8;
+  --salvia: #7A8B6F;
+  --salvia-soft: #D9E0D2;
+  --arena: #C4A876;
+  --arena-dark: #8B7B5C;
+  --arena-soft: #F5EEDD;
+  --ambar: #D4A547;
+  --ambar-soft: #F4E4BC;
+  --ambar-deep: #6B4F0F;
+  --charcoal: #2D2D2D;
+  --gris: #595959;
+  --gris-claro: #A6A6A6;
+  --blanco: #FFFFFF;
+  --crema: #FAF6EF;
+  --shadow-soft: 0 2px 8px rgba(45, 45, 45, 0.08);
+  --shadow-medium: 0 6px 20px rgba(45, 45, 45, 0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--charcoal);
+  color: var(--charcoal);
+  font-size: 18px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ================ HEADER STATUS BAR ================ */
+.status-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--charcoal);
+  color: var(--blanco);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-bottom: 4px solid var(--ambar);
+}
+
+.status-bar h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.status-bar .session-tag {
+  background: var(--ambar);
+  color: var(--charcoal);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-bar .live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+}
+
+.live-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--gris-claro);
+  transition: background 0.3s ease;
+}
+
+.live-dot.active {
+  background: #4CAF50;
+  box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  animation: pulse-dot 1.5s ease-out infinite;
+}
+
+.live-dot.error { background: #E53935; }
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+  100% { box-shadow: 0 0 0 12px rgba(76, 175, 80, 0); }
+}
+
+.status-bar button {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--blanco);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.status-bar button:hover { background: rgba(255,255,255,0.2); }
+
+/* ================ MAIN CONTAINER ================ */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px;
+  background: var(--crema);
+  min-height: calc(100vh - 80px);
+}
+
+/* ================ TABS ================ */
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 22px;
+  border-bottom: 2px solid var(--gris-claro);
+  flex-wrap: wrap;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--gris);
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.tab:hover { color: var(--charcoal); }
+
+.tab.active {
+  color: var(--ambar-deep);
+  border-bottom-color: var(--ambar);
+}
+
+.tab .tab-count {
+  display: inline-block;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 6px;
+  font-weight: 700;
+}
+
+.tab.active .tab-count { background: var(--ambar); color: var(--charcoal); }
+
+.tab-panel { display: none; animation: fadeIn 0.3s ease; }
+.tab-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================ TOP STATS ================ */
+.top-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  border-top: 4px solid var(--ambar);
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-card .stat-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gris);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-card .stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.stat-card .stat-detail {
+  font-size: 12px;
+  color: var(--gris);
+  margin-top: 4px;
+}
+
+.stat-card.A { border-top-color: var(--terracota); }
+.stat-card.A .stat-value { color: var(--terracota); }
+.stat-card.B { border-top-color: var(--salvia); }
+.stat-card.B .stat-value { color: var(--salvia); }
+.stat-card.C { border-top-color: var(--arena-dark); }
+.stat-card.C .stat-value { color: var(--arena-dark); }
+.stat-card.D { border-top-color: var(--ambar); }
+.stat-card.D .stat-value { color: var(--ambar-deep); }
+
+/* ================ COMPARATIVE TABLE ================ */
+.comp-section { margin-bottom: 30px; }
+
+.comp-section h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+  color: var(--charcoal);
+}
+
+.comp-section .section-hint {
+  font-size: 13px;
+  color: var(--gris);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.comp-table-wrap {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 4px;
+  box-shadow: var(--shadow-soft);
+  overflow-x: auto;
+}
+
+.comp-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 14px;
+}
+
+.comp-table th {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: middle;
+  font-weight: 700;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.comp-table th.col-grp {
+  background: var(--charcoal);
+  color: var(--blanco);
+  width: 130px;
+  font-size: 14px;
+}
+
+.comp-table th.col-A { background: var(--terracota); color: var(--blanco); }
+.comp-table th.col-B { background: var(--salvia); color: var(--blanco); }
+.comp-table th.col-C { background: var(--arena-dark); color: var(--blanco); }
+.comp-table th.col-D { background: var(--ambar); color: var(--charcoal); }
+
+.comp-table td {
+  padding: 12px 14px;
+  background: var(--crema);
+  border-radius: 6px;
+  vertical-align: top;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.comp-table tr:nth-child(even) td { background: var(--arena-soft); }
+
+.comp-table .grupo-cell {
+  background: var(--charcoal);
+  color: var(--blanco);
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+}
+
+.comp-cell-empty { color: var(--gris-claro); font-style: italic; font-size: 12px; }
+
+.comp-cell-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--charcoal);
+  display: block;
+}
+
+.comp-cell-meta {
+  font-size: 11px;
+  color: var(--gris);
+  margin-top: 2px;
+}
+
+.comp-table .col-A + td { border-left: 3px solid var(--terracota-soft); }
+
+/* ================ DISTRIBUTION CHARTS ================ */
+.dist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.dist-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  box-shadow: var(--shadow-soft);
+  border-left: 5px solid var(--gris-claro);
+}
+
+.dist-card.A { border-left-color: var(--terracota); }
+.dist-card.B { border-left-color: var(--salvia); }
+.dist-card.C { border-left-color: var(--arena-dark); }
+.dist-card.D { border-left-color: var(--ambar); }
+
+.dist-card .dist-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.dist-card.A .dist-tag { background: var(--terracota-soft); color: var(--terracota); }
+.dist-card.B .dist-tag { background: var(--salvia-soft); color: var(--salvia); }
+.dist-card.C .dist-tag { background: var(--arena-soft); color: var(--arena-dark); }
+.dist-card.D .dist-tag { background: var(--ambar-soft); color: var(--ambar-deep); }
+
+.dist-card h4 {
+  font-size: 15px;
+  margin-bottom: 4px;
+  color: var(--charcoal);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.dist-card .dist-meta {
+  font-size: 12px;
+  color: var(--gris);
+  margin-bottom: 14px;
+}
+
+.dist-card .chart-wrap {
+  position: relative;
+  height: 160px;
+  margin-top: 8px;
+}
+
+.dist-card .dist-summary {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--gris-claro);
+  font-size: 12px;
+  color: var(--gris);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dist-card .dist-summary strong { color: var(--charcoal); }
+
+.dist-correct-banner {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4CAF50;
+  color: #2E5D2E;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* ================ REFLECTION GALLERY ================ */
+.reflection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.reflection-section {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  box-shadow: var(--shadow-soft);
+  border-top: 5px solid var(--gris-claro);
+}
+
+.reflection-section.B { border-top-color: var(--salvia); }
+.reflection-section.C { border-top-color: var(--arena-dark); }
+.reflection-section.D { border-top-color: var(--ambar); }
+
+.reflection-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--charcoal);
+}
+
+.reflection-section .ref-question {
+  font-size: 13px;
+  color: var(--gris);
+  margin-bottom: 16px;
+  font-style: italic;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--gris-claro);
+}
+
+.reflection-quote {
+  background: var(--crema);
+  border-left: 4px solid var(--ambar);
+  padding: 14px 18px 14px 22px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-sm);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.reflection-quote:hover {
+  background: var(--ambar-soft);
+  transform: translateX(2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.reflection-quote .quote-attribution {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--ambar-deep);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.reflection-quote .quote-text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--charcoal);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.reflection-quote.expanded {
+  background: var(--ambar-soft);
+  border-left-width: 6px;
+}
+
+.reflection-empty {
+  background: var(--arena-soft);
+  border: 1px dashed var(--arena-dark);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--arena-dark);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ================ TRAJECTORY SECTION ================ */
+.trajectory-table-wrap {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  box-shadow: var(--shadow-soft);
+  overflow-x: auto;
+}
+
+.trajectory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.trajectory-table th, .trajectory-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--arena-soft);
+}
+
+.trajectory-table th {
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gris);
+  font-weight: 700;
+  background: var(--arena-soft);
+}
+
+.trajectory-table .grp-A { color: var(--terracota); font-weight: 700; }
+.trajectory-table .grp-B { color: var(--salvia); font-weight: 700; }
+.trajectory-table .grp-C { color: var(--arena-dark); font-weight: 700; }
+.trajectory-table .grp-D { color: var(--ambar-deep); font-weight: 700; }
+
+.completion-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.completion-cell.done { background: rgba(76, 175, 80, 0.15); color: #2E7D32; }
+.completion-cell.pending { background: var(--arena-soft); color: var(--gris-claro); }
+
+.score-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.score-pill.high { background: rgba(76, 175, 80, 0.15); color: #2E7D32; }
+.score-pill.mid { background: var(--ambar-soft); color: var(--ambar-deep); }
+.score-pill.low { background: rgba(229, 57, 53, 0.12); color: #C62828; }
+
+/* ================ EMPTY STATE ================ */
+.empty-state {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--gris);
+}
+
+.empty-state h2 { font-size: 24px; margin-bottom: 12px; color: var(--charcoal); }
+.empty-state p { font-size: 16px; max-width: 520px; margin: 0 auto; }
+
+.empty-state-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  opacity: 0.4;
+}
+
+/* ================ DISCUSSION PROMPTS ================ */
+.discussion-banner {
+  background: linear-gradient(135deg, var(--charcoal) 0%, var(--ambar-deep) 100%);
+  color: var(--blanco);
+  padding: 22px 26px;
+  border-radius: var(--radius);
+  margin: 24px 0;
+  border-left: 5px solid var(--ambar);
+}
+
+.discussion-banner h3 {
+  font-size: 16px;
+  color: var(--ambar);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.discussion-banner p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.discussion-banner p:last-child { margin-bottom: 0; }
+
+.discussion-banner em { color: var(--ambar-soft); font-style: italic; }
+
+@media (max-width: 700px) {
+  .container { padding: 16px; }
+  .status-bar { padding: 12px 16px; }
+  .status-bar h1 { font-size: 18px; }
+  .stat-card .stat-value { font-size: 28px; }
+}
+
+@media print {
+  .status-bar, .tabs { display: none; }
+  .tab-panel { display: block !important; page-break-after: always; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== STATUS BAR ============== -->
+<div class="status-bar">
+  <h1>
+    <span class="session-tag">Sesión 7 · 8 may 2026</span>
+    Dashboard en vivo · Resultados por grupo
+  </h1>
+  <div class="live-indicator">
+    <div class="live-dot" id="liveDot"></div>
+    <span id="liveStatus">Conectando…</span>
+    <span id="lastUpdate" style="opacity:0.6;"></span>
+    <button onclick="refrescarManual()">↻ Refrescar ahora</button>
+  </div>
+</div>
+
+<!-- ============== MAIN CONTAINER ============== -->
+<div class="container">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="comparativa" onclick="cambiarTab('comparativa')">
+      Comparativa entre grupos
+    </button>
+    <button class="tab" data-tab="quiz" onclick="cambiarTab('quiz')">
+      Distribución del quiz <span class="tab-count" id="cQuiz">0</span>
+    </button>
+    <button class="tab" data-tab="reflexivas" onclick="cambiarTab('reflexivas')">
+      Respuestas reflexivas <span class="tab-count" id="cReflex">0</span>
+    </button>
+    <button class="tab" data-tab="trayectoria" onclick="cambiarTab('trayectoria')">
+      Trayectoria por grupo
+    </button>
+  </div>
+
+  <!-- TAB 1: COMPARATIVA -->
+  <div class="tab-panel active" id="panel-comparativa">
+    <div class="top-stats" id="topStats"></div>
+
+    <div class="comp-section">
+      <h2>Métricas calculadas por grupo y estación</h2>
+      <p class="section-hint">Cada celda muestra el último valor registrado por ese grupo en esa estación. Las celdas vacías indican que el grupo aún no llegó a esa estación.</p>
+
+      <div class="comp-table-wrap">
+        <table class="comp-table" id="compTable">
+          <thead>
+            <tr>
+              <th class="col-grp">Grupo</th>
+              <th class="col-A">A · Casos-controles<br><span style="font-weight:400; font-size:11px; opacity:0.85;">OR · IC95 · preset</span></th>
+              <th class="col-B">B · Cohorte prospectiva<br><span style="font-weight:400; font-size:11px; opacity:0.85;">RR · RDI · IA</span></th>
+              <th class="col-C">C · Cohorte histórica<br><span style="font-weight:400; font-size:11px; opacity:0.85;">cobertura · factor</span></th>
+              <th class="col-D">D · Anidado<br><span style="font-weight:400; font-size:11px; opacity:0.85;">casos · controles · ratio</span></th>
+            </tr>
+          </thead>
+          <tbody id="compBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="discussion-banner">
+      <h3>💬 Para discusión en plenaria</h3>
+      <p><em>"Si dos grupos pasaron por la misma estación pero llegaron a métricas distintas, ¿qué decisión metodológica explica la diferencia?"</em></p>
+      <p><em>"¿Qué grupo eligió un preset diferente en la Estación A, y por qué cambia eso la conclusión?"</em></p>
+    </div>
+  </div>
+
+  <!-- TAB 2: QUIZ -->
+  <div class="tab-panel" id="panel-quiz">
+    <h2 style="margin-bottom: 6px;">Distribución de respuestas del quiz</h2>
+    <p class="section-hint" style="margin-bottom: 20px;">Cada gráfico muestra qué letra eligieron los grupos. Las preguntas con respuestas dispersas son las más interesantes para discutir.</p>
+
+    <div class="dist-grid" id="distGrid"></div>
+
+    <div class="discussion-banner">
+      <h3>💬 Para discusión en plenaria</h3>
+      <p><em>"¿Qué pregunta tuvo mayor dispersión? ¿Por qué creen que ese concepto fue el más confuso?"</em></p>
+      <p><em>"En las preguntas donde un grupo no acertó: ¿qué razonamiento alternativo defenderían si esa respuesta fuera correcta?"</em></p>
+    </div>
+  </div>
+
+  <!-- TAB 3: REFLEXIVAS -->
+  <div class="tab-panel" id="panel-reflexivas">
+    <h2 style="margin-bottom: 6px;">Respuestas reflexivas · galería</h2>
+    <p class="section-hint" style="margin-bottom: 20px;">Las preguntas reflexivas no tienen respuesta única. Toquen una cita para destacarla en pantalla durante la discusión.</p>
+
+    <div class="reflection-grid" id="reflectionGrid"></div>
+
+    <div class="discussion-banner">
+      <h3>💬 Para discusión en plenaria</h3>
+      <p><em>"¿Qué carta a Don Aurelio les conmovió más? ¿Qué frase capturaba mejor el silencio del diseño?"</em></p>
+      <p><em>"Comparen la defensa ante el comité de ética: ¿algún grupo se atrevió a decir 'no usaría RIPS'? ¿Por qué sí o no?"</em></p>
+    </div>
+  </div>
+
+  <!-- TAB 4: TRAYECTORIA -->
+  <div class="tab-panel" id="panel-trayectoria">
+    <h2 style="margin-bottom: 6px;">Trayectoria de cada grupo</h2>
+    <p class="section-hint" style="margin-bottom: 20px;">Resumen agregado por equipo: estaciones completadas, aciertos del quiz y tiempo total de actividad.</p>
+
+    <div class="trajectory-table-wrap">
+      <table class="trajectory-table" id="trajTable">
+        <thead>
+          <tr>
+            <th>Grupo</th>
+            <th>Estaciones</th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>D</th>
+            <th>Aciertos quiz</th>
+            <th>Caracteres escritos</th>
+            <th>Duración</th>
+            <th>Última actividad</th>
+          </tr>
+        </thead>
+        <tbody id="trajBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================================
+//  CONFIGURACIÓN
+// ============================================================================
+const CONFIG = {
+  endpointURL: 'https://script.google.com/macros/s/AKfycbzEjjg97_JXgeBFQyHFRSr28mnR22D4XsS_oe_B_H_jZe4crgdk830Mth9xzbsOGhhU/exec',
+  token: 'UAN_SES7_2026_8MAY',
+  refreshSeconds: 20  // intervalo de polling
+};
+
+// Etiquetas legibles para preguntas del quiz
+const QUIZ_LABELS = {
+  'A': {
+    p1: { texto: 'P1 · ¿Por qué María Luisa no apareció ni como caso ni como control?', correcta: 'C', tipo: 'cerrada' },
+    p2: { texto: 'P2 · OR observada de 2.25 con desenlace 50%', correcta: 'B', tipo: 'cerrada+just' },
+    p4_ilumina: { texto: 'P4 ilumina · eslabón cascada', correcta: 'D', tipo: 'cerrada' },
+    p4_calla: { texto: 'P4 calla · eslabón cascada (exploratoria)', correcta: null, tipo: 'exploratoria' }
+  },
+  'B': {
+    p1: { texto: 'P1 · sesgo del trabajador sano', correcta: 'C', tipo: 'cerrada' },
+    p2: { texto: 'P2 · hazards no proporcionales', correcta: 'C', tipo: 'cerrada+just' },
+    p3_ilumina: { texto: 'P3 ilumina · eslabón cascada', correcta: 'E', tipo: 'cerrada' },
+    p3_calla: { texto: 'P3 calla · eslabón cascada (exploratoria)', correcta: null, tipo: 'exploratoria' },
+    p4_carta_don_aurelio: { texto: 'P4 reflexiva · carta a Don Aurelio', correcta: null, tipo: 'reflexiva' }
+  },
+  'C': {
+    p1: { texto: 'P1 · iceberg de cobertura', correcta: 'C', tipo: 'cerrada' },
+    p2: { texto: 'P2 · variables no recuperables desde RIPS', correcta: 'C', tipo: 'cerrada+just' },
+    p3_ilumina: { texto: 'P3 ilumina · eslabón cascada', correcta: 'C', tipo: 'cerrada' },
+    p3_calla: { texto: 'P3 calla · eslabón cascada (exploratoria)', correcta: null, tipo: 'exploratoria' },
+    p4_argumento_etica: { texto: 'P4 reflexiva · defensa ante comité de ética', correcta: null, tipo: 'reflexiva' }
+  },
+  'D': {
+    p1: { texto: 'P1 · OR → HR vía muestreo por densidad', correcta: 'C', tipo: 'cerrada' },
+    p2: { texto: 'P2 · qué NO resuelve el anidado', correcta: 'C', tipo: 'cerrada+just' },
+    p3_ilumina: { texto: 'P3 ilumina · eslabón cascada', correcta: 'B', tipo: 'cerrada' },
+    p3_calla: { texto: 'P3 calla · eslabón cascada (exploratoria)', correcta: null, tipo: 'exploratoria' },
+    p4_recomendacion_maestria: { texto: 'P4 reflexiva · recomendación a la maestría', correcta: null, tipo: 'reflexiva' }
+  }
+};
+
+const COLORES_GRUPO = { A: '#B85C3C', B: '#7A8B6F', C: '#8B7B5C', D: '#D4A547' };
+const COLOR_CORRECTA = '#4CAF50';
+const COLOR_INCORRECTA = '#E53935';
+
+// Estado global
+let chartsActivos = {};
+let datos = { resumen: [], quiz: [], trayectoria: [] };
+let timerRefresh = null;
+
+// ============================================================================
+//  POLLING DEL ENDPOINT
+// ============================================================================
+async function fetchDashboard() {
+  try {
+    const url = `${CONFIG.endpointURL}?accion=dashboard_vivo&token=${CONFIG.token}`;
+    const res = await fetch(url, { method: 'GET' });
+    const data = await res.json();
+    if (data.ok) {
+      datos = data;
+      renderTodo();
+      marcarLive(true, data.timestamp);
+    } else {
+      marcarLive(false, null, data.error || 'Respuesta inválida');
+    }
+  } catch (err) {
+    marcarLive(false, null, 'Sin conexión');
+  }
+}
+
+function marcarLive(ok, timestamp, error) {
+  const dot = document.getElementById('liveDot');
+  const status = document.getElementById('liveStatus');
+  const lastUp = document.getElementById('lastUpdate');
+  if (ok) {
+    dot.classList.add('active');
+    dot.classList.remove('error');
+    status.textContent = 'En vivo';
+    if (timestamp) {
+      const t = new Date(timestamp);
+      const horaCO = t.toLocaleString('es-CO', {
+        timeZone: 'America/Bogota',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+      lastUp.textContent = `· última actualización ${horaCO}`;
+    }
+  } else {
+    dot.classList.remove('active');
+    dot.classList.add('error');
+    status.textContent = error || 'Error';
+    lastUp.textContent = '';
+  }
+}
+
+function refrescarManual() {
+  fetchDashboard();
+}
+
+// ============================================================================
+//  RENDER PRINCIPAL
+// ============================================================================
+function renderTodo() {
+  if (!datos.resumen || datos.resumen.length === 0) {
+    mostrarEstadoVacio();
+    return;
+  }
+  renderTopStats();
+  renderComparativa();
+  renderQuizDistribucion();
+  renderReflexivas();
+  renderTrayectoria();
+}
+
+function mostrarEstadoVacio() {
+  const html = `
+    <div class="empty-state">
+      <div class="empty-state-icon">⏳</div>
+      <h2>Aún no hay datos registrados</h2>
+      <p>La dashboard se llenará automáticamente cuando los grupos comiencen a avanzar por las estaciones. Refrescaremos cada ${CONFIG.refreshSeconds} segundos.</p>
+    </div>
+  `;
+  document.getElementById('panel-comparativa').innerHTML = html;
+}
+
+// ============================================================================
+//  TOP STATS
+// ============================================================================
+function renderTopStats() {
+  const grupos = new Set(datos.resumen.map(r => r.equipo).filter(Boolean));
+  const filasTotal = datos.resumen.length;
+
+  const porEstacion = { A: 0, B: 0, C: 0, D: 0 };
+  datos.resumen.forEach(r => {
+    if (porEstacion[r.estacion] !== undefined) porEstacion[r.estacion]++;
+  });
+
+  const html = `
+    <div class="stat-card">
+      <div class="stat-label">Grupos activos</div>
+      <div class="stat-value">${grupos.size}</div>
+      <div class="stat-detail">de 4 posibles</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Eventos registrados</div>
+      <div class="stat-value">${filasTotal}</div>
+      <div class="stat-detail">total acumulado</div>
+    </div>
+    <div class="stat-card A">
+      <div class="stat-label">Estación A</div>
+      <div class="stat-value">${porEstacion.A}</div>
+      <div class="stat-detail">eventos</div>
+    </div>
+    <div class="stat-card B">
+      <div class="stat-label">Estación B</div>
+      <div class="stat-value">${porEstacion.B}</div>
+      <div class="stat-detail">eventos</div>
+    </div>
+    <div class="stat-card C">
+      <div class="stat-label">Estación C</div>
+      <div class="stat-value">${porEstacion.C}</div>
+      <div class="stat-detail">eventos</div>
+    </div>
+    <div class="stat-card D">
+      <div class="stat-label">Estación D</div>
+      <div class="stat-value">${porEstacion.D}</div>
+      <div class="stat-detail">eventos</div>
+    </div>
+  `;
+  document.getElementById('topStats').innerHTML = html;
+}
+
+// ============================================================================
+//  COMPARATIVA · tabla 4×4 con últimas métricas por grupo y estación
+// ============================================================================
+function renderComparativa() {
+  const grupos = ['A', 'B', 'C', 'D'];
+  const tbody = document.getElementById('compBody');
+
+  const filas = grupos.map(grp => {
+    const filasGrupo = datos.resumen.filter(r => r.equipo === grp);
+
+    const cells = ['A', 'B', 'C', 'D'].map(est => {
+      const filasEst = filasGrupo.filter(r => r.estacion === est);
+      if (filasEst.length === 0) return `<td class="comp-cell-empty">— sin datos —</td>`;
+
+      // Buscar el último valor calculado (no quiz_aciertos vacíos)
+      const ultimas = filasEst.slice().reverse();
+
+      if (est === 'A') {
+        const calc = ultimas.find(f => f.A_OR !== '' && f.A_OR != null);
+        if (!calc) return `<td class="comp-cell-empty">— en progreso —</td>`;
+        const ic = (calc.A_IC95_inf !== '' && calc.A_IC95_sup !== '')
+          ? `[${formatNum(calc.A_IC95_inf)}–${formatNum(calc.A_IC95_sup)}]`
+          : '';
+        return `<td>
+          <span class="comp-cell-value">OR ${formatNum(calc.A_OR)}</span>
+          <span class="comp-cell-meta">${ic}${calc.A_preset ? ' · ' + calc.A_preset : ''}</span>
+        </td>`;
+      }
+
+      if (est === 'B') {
+        const calc = ultimas.find(f => f.B_RR !== '' && f.B_RR != null);
+        if (!calc) return `<td class="comp-cell-empty">— en progreso —</td>`;
+        return `<td>
+          <span class="comp-cell-value">RR ${formatNum(calc.B_RR)}</span>
+          <span class="comp-cell-meta">RDI ${formatNum(calc.B_RDI)} · IA<sub>e</sub> ${formatNum(calc.B_IA_expuestos)}</span>
+        </td>`;
+      }
+
+      if (est === 'C') {
+        const calc = ultimas.find(f => f.C_cobertura_corregida !== '' && f.C_cobertura_corregida != null);
+        if (!calc) {
+          const cruda = ultimas.find(f => f.C_cobertura_cruda !== '' && f.C_cobertura_cruda != null);
+          if (!cruda) return `<td class="comp-cell-empty">— en progreso —</td>`;
+          return `<td>
+            <span class="comp-cell-value">${formatPct(cruda.C_cobertura_cruda)}</span>
+            <span class="comp-cell-meta">cobertura cruda</span>
+          </td>`;
+        }
+        return `<td>
+          <span class="comp-cell-value">${formatPct(calc.C_cobertura_corregida)}</span>
+          <span class="comp-cell-meta">corregida ×${formatNum(calc.C_factor_iceberg)}</span>
+        </td>`;
+      }
+
+      if (est === 'D') {
+        const calc = ultimas.find(f => f.D_casos !== '' && f.D_casos != null);
+        if (!calc) return `<td class="comp-cell-empty">— en progreso —</td>`;
+        return `<td>
+          <span class="comp-cell-value">${calc.D_casos} : ${calc.D_controles}</span>
+          <span class="comp-cell-meta">1:${calc.D_ratio} · ahorro ${formatNum(calc.D_ahorro_pct)}%</span>
+        </td>`;
+      }
+
+      return `<td></td>`;
+    }).join('');
+
+    return `<tr><td class="grupo-cell">Grupo ${grp}</td>${cells}</tr>`;
+  });
+
+  tbody.innerHTML = filas.join('');
+}
+
+// ============================================================================
+//  QUIZ DISTRIBUCIÓN · charts de barras por pregunta
+// ============================================================================
+function renderQuizDistribucion() {
+  // Consolidar respuestas por estación + pregunta
+  const grouped = {};
+  datos.quiz.forEach(q => {
+    const key = `${q.estacion}__${q.pregunta}`;
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(q);
+  });
+
+  const grid = document.getElementById('distGrid');
+  grid.innerHTML = '';
+
+  // Limpiar charts previos
+  Object.values(chartsActivos).forEach(c => c.destroy());
+  chartsActivos = {};
+
+  let totalEvaluables = 0;
+
+  // Iterar en orden A, B, C, D y por pregunta
+  ['A', 'B', 'C', 'D'].forEach(est => {
+    const labels = QUIZ_LABELS[est] || {};
+    Object.keys(labels).forEach(preg => {
+      const key = `${est}__${preg}`;
+      const respuestas = grouped[key] || [];
+      const meta = labels[preg];
+
+      // Saltar reflexivas: tienen su propia tab
+      if (meta.tipo === 'reflexiva') return;
+
+      const cardId = `chart-${est}-${preg}`;
+      const card = document.createElement('div');
+      card.className = `dist-card ${est}`;
+      card.innerHTML = `
+        <span class="dist-tag">Estación ${est}</span>
+        <h4>${meta.texto}</h4>
+        <div class="dist-meta">${respuestas.length} respuesta${respuestas.length === 1 ? '' : 's'} ${meta.correcta ? '· correcta: ' + meta.correcta : '· exploratoria'}</div>
+        <div class="chart-wrap"><canvas id="${cardId}"></canvas></div>
+        <div class="dist-summary" id="summary-${est}-${preg}"></div>
+      `;
+      grid.appendChild(card);
+
+      // Construir distribución
+      const dist = { A: 0, B: 0, C: 0, D: 0, E: 0 };
+      respuestas.forEach(r => {
+        const letra = (r.respuesta || '').toUpperCase();
+        if (dist[letra] !== undefined) dist[letra]++;
+      });
+
+      const labelsArr = ['A', 'B', 'C', 'D', 'E'];
+      const dataArr = labelsArr.map(l => dist[l]);
+      const colors = labelsArr.map(l => {
+        if (meta.correcta && l === meta.correcta) return COLOR_CORRECTA;
+        if (meta.correcta && l !== meta.correcta && dist[l] > 0) return '#E5A6A0';
+        return '#D4C7A8';
+      });
+
+      const ctx = document.getElementById(cardId).getContext('2d');
+      chartsActivos[cardId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labelsArr,
+          datasets: [{
+            data: dataArr,
+            backgroundColor: colors,
+            borderRadius: 6,
+            barThickness: 28
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.parsed.y} grupo${ctx.parsed.y === 1 ? '' : 's'}`
+              }
+            }
+          },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1, precision: 0 }, grid: { color: '#F5EEDD' } },
+            x: { grid: { display: false }, ticks: { font: { weight: 'bold', size: 13 } } }
+          }
+        }
+      });
+
+      // Resumen de aciertos
+      if (meta.correcta) {
+        const aciertos = respuestas.filter(r => r.acerto === true || r.acerto === 'TRUE').length;
+        const total = respuestas.length;
+        totalEvaluables += total;
+        const pct = total > 0 ? (aciertos / total * 100).toFixed(0) : 0;
+        document.getElementById(`summary-${est}-${preg}`).innerHTML = `
+          <span><strong>${aciertos}/${total}</strong> aciertos</span>
+          <span><strong>${pct}%</strong> tasa de acierto</span>
+        `;
+      } else {
+        document.getElementById(`summary-${est}-${preg}`).innerHTML = `
+          <span><strong>${respuestas.length}</strong> respuestas registradas</span>
+          <span style="color: var(--ambar-deep);">sin respuesta única</span>
+        `;
+      }
+    });
+  });
+
+  document.getElementById('cQuiz').textContent = totalEvaluables;
+
+  if (grid.children.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column: 1 / -1;">
+        <div class="empty-state-icon">📊</div>
+        <h2>Aún no hay respuestas de quiz</h2>
+        <p>Los gráficos aparecerán automáticamente cuando los grupos toquen "Verificar respuestas" en el paso 7 de cada estación.</p>
+      </div>
+    `;
+  }
+}
+
+// ============================================================================
+//  REFLEXIVAS · galería de citas
+// ============================================================================
+function renderReflexivas() {
+  const grid = document.getElementById('reflectionGrid');
+  grid.innerHTML = '';
+  let totalReflexivas = 0;
+
+  const reflexionesPorEstacion = {
+    'B': {
+      pregunta: 'p4_carta_don_aurelio',
+      titulo: 'Estación B · Cartas a Don Aurelio',
+      contexto: '¿Qué le diría a Don Aurelio sobre lo que este estudio podría —y no podría— decir de él?'
+    },
+    'C': {
+      pregunta: 'p4_argumento_etica',
+      titulo: 'Estación C · Defensas ante comité de ética',
+      contexto: 'Argumento para defender el uso de RIPS conociendo todas sus limitaciones.'
+    },
+    'D': {
+      pregunta: 'p4_recomendacion_maestria',
+      titulo: 'Estación D · Recomendaciones a la maestría',
+      contexto: '¿Qué diseño priorizar en investigación paliativa colombiana y qué condiciones tendrían que cumplirse?'
+    }
+  };
+
+  Object.entries(reflexionesPorEstacion).forEach(([est, meta]) => {
+    const respuestas = datos.quiz.filter(q =>
+      q.estacion === est &&
+      q.pregunta === meta.pregunta &&
+      q.justificacion_o_texto &&
+      String(q.justificacion_o_texto).trim().length > 0
+    );
+
+    totalReflexivas += respuestas.length;
+
+    const section = document.createElement('div');
+    section.className = `reflection-section ${est}`;
+
+    let citasHTML = '';
+    if (respuestas.length === 0) {
+      citasHTML = `<div class="reflection-empty">Aún no hay respuestas reflexivas para esta estación.</div>`;
+    } else {
+      citasHTML = respuestas.map(r => {
+        const ini = r.iniciales ? ` · ${r.iniciales}` : '';
+        return `
+          <div class="reflection-quote" onclick="this.classList.toggle('expanded')">
+            <div class="quote-attribution">
+              <span>Grupo ${r.equipo}${ini}</span>
+              <span style="opacity:0.6;">${String(r.timestamp_co).split(' ')[1] || ''}</span>
+            </div>
+            <div class="quote-text">${escapeHTML(r.justificacion_o_texto)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    section.innerHTML = `
+      <h3>${meta.titulo}</h3>
+      <div class="ref-question">${meta.contexto}</div>
+      ${citasHTML}
+    `;
+    grid.appendChild(section);
+  });
+
+  document.getElementById('cReflex').textContent = totalReflexivas;
+}
+
+// ============================================================================
+//  TRAYECTORIA · tabla resumen por grupo
+// ============================================================================
+function renderTrayectoria() {
+  const tbody = document.getElementById('trajBody');
+  if (!datos.trayectoria || datos.trayectoria.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:30px; color:var(--gris); font-style:italic;">Sin datos de trayectoria. La hoja Dashboard_Trayectoria del Sheets debe estar generada.</td></tr>`;
+    return;
+  }
+
+  const filas = datos.trayectoria.map(t => {
+    const grpClass = t.equipo && /^[ABCD]$/.test(t.equipo) ? `grp-${t.equipo}` : '';
+    const completo = (val) => val === true || val === 'TRUE' || val === 'true';
+
+    const cellComp = (val) => completo(val)
+      ? `<span class="completion-cell done">✓</span>`
+      : `<span class="completion-cell pending">·</span>`;
+
+    let scorePill = '';
+    if (t.aciertos_porcentaje !== '' && t.aciertos_porcentaje != null) {
+      const pct = parseFloat(t.aciertos_porcentaje);
+      const cls = pct >= 75 ? 'high' : (pct >= 50 ? 'mid' : 'low');
+      scorePill = `<span class="score-pill ${cls}">${t.aciertos_totales}/${t.preguntas_evaluables_totales} · ${pct.toFixed(0)}%</span>`;
+    } else {
+      scorePill = `<span style="color:var(--gris-claro); font-style:italic;">— sin quiz —</span>`;
+    }
+
+    const dur = t.duracion_minutos !== '' ? `${t.duracion_minutos} min` : '—';
+    const charsTotales = (Number(t.caracteres_dice_totales) || 0) +
+                         (Number(t.caracteres_calla_totales) || 0) +
+                         (Number(t.caracteres_reflexivas_totales) || 0);
+
+    return `
+      <tr>
+        <td><span class="${grpClass}">Grupo ${t.equipo}</span><br><small style="color:var(--gris); font-size:11px;">${t.iniciales_distintas || ''}</small></td>
+        <td><strong>${t.estaciones_visitadas}</strong> <small style="color:var(--gris);">(${t.estaciones_lista || '—'})</small></td>
+        <td>${cellComp(t.A_completada)}</td>
+        <td>${cellComp(t.B_completada)}</td>
+        <td>${cellComp(t.C_completada)}</td>
+        <td>${cellComp(t.D_completada)}</td>
+        <td>${scorePill}</td>
+        <td>${charsTotales.toLocaleString('es-CO')} <small style="color:var(--gris);">car.</small></td>
+        <td>${dur}</td>
+        <td><small>${t.ultima_actividad || '—'}</small></td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = filas.join('');
+}
+
+// ============================================================================
+//  TABS
+// ============================================================================
+function cambiarTab(tabId) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabId));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `panel-${tabId}`));
+}
+
+// ============================================================================
+//  UTILIDADES
+// ============================================================================
+function formatNum(n, dec = 2) {
+  if (n === '' || n == null || !isFinite(n)) return '—';
+  return Number(n).toFixed(dec).replace('.', ',');
+}
+
+function formatPct(n) {
+  if (n === '' || n == null || !isFinite(n)) return '—';
+  return (Number(n) * 100).toFixed(1).replace('.', ',') + '%';
+}
+
+function escapeHTML(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ============================================================================
+//  INIT
+// ============================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  fetchDashboard();
+  timerRefresh = setInterval(fetchDashboard, CONFIG.refreshSeconds * 1000);
+});
+
+// Atajos de teclado
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' || e.key === 'R') refrescarManual();
+  if (e.key === '1') cambiarTab('comparativa');
+  if (e.key === '2') cambiarTab('quiz');
+  if (e.key === '3') cambiarTab('reflexivas');
+  if (e.key === '4') cambiarTab('trayectoria');
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estación C · El pasado reconstruido · Cohorte histórica</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  /* Paleta institucional UAN-Maestría · Estación C · color principal ARENA */
+  --arena: #C4A876;
+  --arena-dark: #8B7B5C;
+  --arena-soft: #F5EEDD;
+  --arena-glow: rgba(196, 168, 118, 0.18);
+  --arena-deep: #6B5B40;
+  --terracota: #B85C3C;
+  --terracota-soft: #EFD5C8;
+  --salvia: #7A8B6F;
+  --salvia-soft: #D9E0D2;
+  --ambar: #D4A547;
+  --ambar-soft: #F4E4BC;
+  --charcoal: #2D2D2D;
+  --gris: #595959;
+  --gris-claro: #A6A6A6;
+  --blanco: #FFFFFF;
+  --crema: #FAF6EF;
+  --shadow-soft: 0 2px 8px rgba(45, 45, 45, 0.08);
+  --shadow-medium: 0 6px 20px rgba(45, 45, 45, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--crema);
+  color: var(--charcoal);
+  line-height: 1.6;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ================ TOP BAR ================ */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--blanco);
+  border-bottom: 3px solid var(--arena-dark);
+  box-shadow: var(--shadow-soft);
+}
+
+.top-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+.brand-dot {
+  width: 36px; height: 36px;
+  background: var(--arena-dark);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--blanco); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-text strong { color: var(--arena-dark); font-size: 14px; letter-spacing: 0.5px; }
+.brand-text span { color: var(--gris); font-size: 12px; }
+
+.step-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.step-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--gris-claro);
+  background: var(--blanco);
+  color: var(--gris);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.step-dot:hover { border-color: var(--arena-dark); color: var(--arena-dark); }
+.step-dot.active {
+  background: var(--arena-dark); border-color: var(--arena-dark);
+  color: var(--blanco);
+  box-shadow: 0 0 0 4px var(--arena-glow);
+}
+.step-dot.completed { background: var(--arena-soft); border-color: var(--arena-dark); color: var(--arena-dark); }
+
+/* ================ TEAM BANNER ================ */
+.team-banner {
+  background: var(--charcoal);
+  color: var(--blanco);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap; justify-content: center;
+  font-size: 14px;
+}
+
+.team-banner label {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--ambar);
+}
+
+.team-banner select, .team-banner input {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--blanco);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.team-banner select option { background: var(--charcoal); color: var(--blanco); }
+.team-banner input { width: 100px; }
+.team-banner input::placeholder { color: rgba(255,255,255,0.5); }
+
+.team-banner select:focus, .team-banner input:focus {
+  outline: 2px solid var(--ambar);
+  border-color: var(--ambar);
+}
+
+.team-banner .team-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; opacity: 0.85;
+}
+
+.team-banner .team-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gris-claro);
+  transition: background 0.3s ease;
+}
+.team-banner .team-dot.active { background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
+.team-banner .team-dot.error { background: #E53935; }
+
+/* ================ INDICADOR DE GUARDADO ================ */
+.save-indicator {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  z-index: 200;
+  background: var(--blanco);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-medium);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; font-weight: 500;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  border-left: 4px solid var(--gris-claro);
+  max-width: 320px;
+}
+
+.save-indicator.visible { opacity: 1; transform: translateY(0); }
+.save-indicator.saving { border-left-color: var(--ambar); }
+.save-indicator.success { border-left-color: #4CAF50; }
+.save-indicator.error { border-left-color: #E53935; }
+
+.save-indicator .save-icon {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.save-indicator.saving .save-icon::after {
+  content: '';
+  width: 18px; height: 18px;
+  border: 2px solid var(--ambar);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.save-indicator.success .save-icon { color: #4CAF50; font-weight: 700; font-size: 18px; }
+.save-indicator.success .save-icon::after { content: '✓'; }
+.save-indicator.error .save-icon { color: #E53935; font-weight: 700; font-size: 18px; }
+.save-indicator.error .save-icon::after { content: '✕'; }
+
+.save-indicator .save-text { line-height: 1.3; color: var(--charcoal); }
+.save-indicator .save-text small { display: block; color: var(--gris); font-size: 12px; font-weight: 400; }
+
+/* ================ HERO ================ */
+.hero {
+  background: linear-gradient(135deg, var(--arena-dark) 0%, var(--arena-deep) 100%);
+  color: var(--blanco);
+  padding: 50px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--blanco);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  opacity: 0.95;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.hero-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
+
+.hero-meta-item {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+}
+
+/* ================ MAIN ================ */
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+/* ================ STEPS ================ */
+.step {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border-left: 5px solid var(--gris-claro);
+  transition: border-left-color 0.3s ease;
+}
+
+.step.active { border-left-color: var(--arena-dark); box-shadow: var(--shadow-medium); }
+.step.completed { border-left-color: var(--terracota); }
+
+.step-header {
+  padding: 20px 26px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+
+.step-header:hover { background: var(--arena-soft); }
+.step-title-block { display: flex; align-items: center; gap: 16px; flex: 1; }
+
+.step-num {
+  width: 38px; height: 38px;
+  background: var(--gris-claro); color: var(--blanco);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.step.active .step-num { background: var(--arena-dark); }
+.step.completed .step-num { background: var(--terracota); }
+
+.step-title { font-size: 18px; font-weight: 600; color: var(--charcoal); }
+.step-subtitle { font-size: 13px; color: var(--gris); margin-top: 2px; }
+
+.step-toggle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--arena-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--gris);
+  transition: transform 0.3s ease;
+}
+
+.step.active .step-toggle, .step.completed .step-toggle { transform: rotate(180deg); }
+
+.step-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+.step.active .step-body, .step.completed .step-body { max-height: 12000px; }
+
+.step-content { padding: 0 26px 28px; }
+
+/* ================ TIPOGRAFÍA ================ */
+h2 { color: var(--arena-dark); font-size: 22px; margin: 24px 0 12px; font-weight: 700; }
+h3 { color: var(--terracota); font-size: 17px; margin: 20px 0 10px; font-weight: 600; }
+h4 { color: var(--charcoal); font-size: 15px; margin: 16px 0 8px; font-weight: 600; }
+p { margin-bottom: 12px; }
+strong { color: var(--charcoal); font-weight: 600; }
+em { color: var(--arena-dark); font-style: italic; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; }
+
+/* ================ CASE NARRATIVE (María Luisa reconstruida) ================ */
+.case-narrative {
+  background: linear-gradient(135deg, var(--arena-soft) 0%, var(--terracota-soft) 100%);
+  border-left: 4px solid var(--arena-dark);
+  padding: 22px 26px;
+  border-radius: var(--radius-sm);
+  margin: 20px 0;
+  position: relative;
+}
+
+.case-narrative::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 18px;
+  font-size: 80px;
+  color: var(--arena-dark);
+  opacity: 0.2;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.case-narrative .case-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--arena-dark);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.case-narrative p { margin-bottom: 10px; font-size: 15.5px; line-height: 1.7; }
+.case-narrative p:last-child { margin-bottom: 0; }
+
+/* ================ ALERTAS ================ */
+.alert-box {
+  background: var(--ambar-soft);
+  border-left: 4px solid var(--ambar);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.alert-box .alert-title {
+  font-weight: 700;
+  color: #8B6914;
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.info-box {
+  background: var(--arena-soft);
+  border-left: 4px solid var(--arena-dark);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.info-box .info-title { font-weight: 700; color: var(--arena-deep); margin-bottom: 6px; }
+
+.didactic-tag {
+  display: inline-block;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.verify-tag {
+  display: inline-block;
+  background: var(--ambar);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ================ DIAGRAMA TEMPORAL ================ */
+.svg-wrap {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 16px 0;
+  overflow-x: auto;
+  border: 1px solid var(--arena-soft);
+}
+
+/* ================ RECONSTRUCCIÓN DESDE FUENTES (cards) ================ */
+.fuente-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.fuente-card {
+  background: var(--blanco);
+  border: 2px solid var(--arena-soft);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.fuente-card:hover {
+  border-color: var(--arena-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-soft);
+}
+
+.fuente-card.expanded { background: var(--arena-soft); border-color: var(--arena-dark); }
+
+.fuente-card .fuente-tag {
+  display: inline-block;
+  background: var(--arena-dark);
+  color: var(--blanco);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.fuente-card h4 { color: var(--arena-deep); margin-top: 0; margin-bottom: 6px; font-size: 14px; }
+.fuente-card .fuente-summary { font-size: 13px; color: var(--gris); }
+.fuente-card .fuente-detail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--arena); font-size: 13px; }
+.fuente-card.expanded .fuente-detail { display: block; }
+
+/* ================ ICEBERG ================ */
+.iceberg-wrap {
+  background: linear-gradient(180deg, #E8F4F8 0%, #B8DCE6 50%, #2C5566 100%);
+  border-radius: var(--radius);
+  padding: 24px 18px;
+  margin: 18px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.iceberg-svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+
+.iceberg-caption {
+  text-align: center;
+  font-size: 13px;
+  color: var(--blanco);
+  margin-top: 12px;
+  font-style: italic;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* ================ COBERTURA CALCULADORA ================ */
+.cobertura-builder {
+  background: var(--crema);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 18px 0;
+  border: 1px solid var(--arena-soft);
+}
+
+.cobertura-input-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) { .cobertura-input-row { grid-template-columns: 1fr; } }
+
+.cobertura-input-label {
+  font-size: 14px;
+  color: var(--charcoal);
+}
+
+.cobertura-input-row input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--arena-soft);
+  border-radius: var(--radius-sm);
+  background: var(--blanco);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--arena-deep);
+  font-family: inherit;
+}
+
+.cobertura-input-row input:focus { outline: none; border-color: var(--arena-dark); background: var(--arena-soft); }
+
+.cobertura-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+@media (max-width: 600px) { .cobertura-result { grid-template-columns: 1fr; } }
+
+.cobertura-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: center;
+  border-top: 4px solid var(--arena-dark);
+}
+
+.cobertura-card.corrected { border-top-color: var(--terracota); }
+
+.cobertura-card .cob-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--gris);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.cobertura-card .cob-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--arena-dark);
+  line-height: 1.15;
+}
+
+.cobertura-card.corrected .cob-value { color: var(--terracota); }
+
+.cobertura-card .cob-formula {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--gris);
+  margin-top: 8px;
+}
+
+/* Slider iceberg */
+.slider-wrap {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: var(--blanco);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--arena-soft);
+}
+
+.slider-wrap label {
+  display: block;
+  font-size: 13px;
+  color: var(--gris);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.slider-wrap input[type="range"] {
+  width: 100%;
+  margin: 6px 0;
+  accent-color: var(--arena-dark);
+}
+
+.slider-wrap .slider-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--arena-dark);
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* ================ DUAL ZONE ================ */
+.dual-zone {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+@media (max-width: 700px) { .dual-zone { grid-template-columns: 1fr; } }
+
+.dual-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  min-height: 180px;
+}
+
+.dual-card.dice { background: var(--salvia-soft); border-left: 4px solid var(--salvia); }
+.dual-card.calla { background: var(--terracota-soft); border-left: 4px solid var(--terracota); }
+
+.dual-card h4 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.dual-card.dice h4 { color: var(--salvia); }
+.dual-card.calla h4 { color: var(--terracota); }
+
+.dual-card textarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+}
+
+.dual-card textarea:focus { outline: 2px solid var(--arena-dark); border-color: var(--arena-dark); }
+
+/* ================ NAV BUTTONS ================ */
+.step-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--arena-soft);
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--arena-dark); color: var(--blanco); }
+.btn-primary:hover { background: var(--arena-deep); transform: translateX(2px); }
+.btn-secondary { background: var(--blanco); color: var(--gris); border: 1px solid var(--gris-claro); }
+.btn-secondary:hover { background: var(--arena-soft); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* ================ SYNTHESIS ================ */
+.synthesis {
+  background: linear-gradient(135deg, var(--arena-dark) 0%, var(--arena-deep) 100%);
+  color: var(--blanco);
+  padding: 32px;
+  border-radius: var(--radius);
+  margin: 30px 0 20px;
+}
+
+.synthesis h2 { color: var(--blanco); margin-top: 0; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+.synthesis h3 { color: var(--ambar-soft); }
+.synthesis ul { padding-left: 20px; }
+.synthesis li { margin-bottom: 8px; }
+
+/* ================ APORTE DEL GRUPO ================ */
+.grupo-aporte {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.35);
+  animation: fadeIn 0.6s ease;
+}
+
+.grupo-aporte-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.grupo-aporte-bloque {
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--ambar);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.grupo-aporte-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--ambar);
+  margin-bottom: 6px;
+}
+
+.grupo-aporte-texto {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--blanco);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.grupo-aporte-texto:empty::before {
+  content: '— sin texto registrado —';
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.grupo-aporte-vacio {
+  background: rgba(212, 165, 71, 0.2);
+  border: 1px dashed var(--ambar);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--ambar-soft);
+  text-align: center;
+}
+
+/* ================ AUTOEVALUACIÓN INTERACTIVA ================ */
+.quiz-block {
+  background: var(--blanco);
+  border: 2px solid var(--arena-soft);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 24px 0 16px;
+}
+
+.quiz-block-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--arena-dark);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.quiz-block-subtitle {
+  font-size: 13.5px;
+  color: var(--gris);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.quiz-question {
+  background: var(--arena-soft);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--arena-dark);
+}
+
+.quiz-q-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quiz-q-num {
+  background: var(--arena-dark);
+  color: var(--blanco);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.quiz-q-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1.45;
+}
+
+.quiz-q-text em { color: var(--arena-dark); }
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--blanco);
+  border: 2px solid var(--arena-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.quiz-option:hover { border-color: var(--arena-dark); background: var(--arena-soft); }
+
+.quiz-option .quiz-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.quiz-option.selected { border-color: var(--arena-dark); background: var(--arena-soft); }
+.quiz-option.selected .quiz-letter { background: var(--arena-dark); }
+.quiz-option .quiz-text { flex: 1; color: var(--charcoal); }
+
+.quiz-option.correct-selected {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.12);
+}
+.quiz-option.correct-selected .quiz-letter { background: #4CAF50; }
+.quiz-option.correct-selected::after {
+  content: '✓';
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.incorrect-selected {
+  border-color: #E53935;
+  background: rgba(229, 57, 53, 0.08);
+}
+.quiz-option.incorrect-selected .quiz-letter { background: #E53935; }
+.quiz-option.incorrect-selected::after {
+  content: '✕';
+  color: #E53935;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.correct-revealed {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.06);
+  border-style: dashed;
+}
+.quiz-option.correct-revealed .quiz-letter { background: #4CAF50; }
+.quiz-option.correct-revealed::after {
+  content: 'Respuesta correcta';
+  color: #4CAF50;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.quiz-option.locked { cursor: default; pointer-events: none; }
+
+.quiz-justify-textarea {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+  min-height: 70px;
+}
+
+.quiz-justify-textarea:focus { outline: 2px solid var(--arena-dark); border-color: var(--arena-dark); }
+
+.quiz-justify-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.55;
+  display: none;
+}
+
+.quiz-feedback.visible { display: block; animation: fadeIn 0.4s ease; }
+
+.quiz-feedback.feedback-correct {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4CAF50;
+  color: #2E5D2E;
+}
+
+.quiz-feedback.feedback-incorrect {
+  background: rgba(229, 57, 53, 0.08);
+  border-left: 3px solid #E53935;
+  color: #7D1F1D;
+}
+
+.quiz-feedback.feedback-reflexiva {
+  background: rgba(212, 165, 71, 0.12);
+  border-left: 3px solid var(--ambar);
+  color: #6B4F0F;
+}
+
+.quiz-feedback strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.quiz-dual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) { .quiz-dual-row { grid-template-columns: 1fr; } }
+
+.quiz-dual-col-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.quiz-dual-col-label.ilumina { color: var(--salvia); }
+.quiz-dual-col-label.calla { color: var(--terracota); }
+
+.quiz-verify-wrap { margin-top: 18px; display: flex; justify-content: center; }
+
+.btn-verify {
+  background: var(--arena-dark);
+  color: var(--blanco);
+  padding: 12px 28px;
+  border-radius: 24px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn-verify:hover { background: var(--arena-deep); transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+.btn-verify:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.quiz-summary {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--arena-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--charcoal);
+  display: none;
+  text-align: center;
+}
+
+.quiz-summary.visible { display: block; animation: fadeIn 0.5s ease; }
+
+.quiz-summary .score-big {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--arena-dark);
+  margin: 4px 0;
+}
+
+/* ================ FOOTER ================ */
+footer {
+  background: var(--charcoal);
+  color: var(--gris-claro);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 40px;
+}
+
+footer strong { color: var(--blanco); }
+
+/* ================ ANIMATIONS ================ */
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.pulse { animation: pulse 0.6s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.5s ease; }
+
+.timeline-arrow { stroke-dasharray: 6; animation: dash 1.5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -12; } }
+
+@media (max-width: 700px) {
+  .hero { padding: 36px 18px 44px; }
+  .step-header { padding: 16px 18px; }
+  .step-content { padding: 0 18px 22px; }
+  .step-title { font-size: 16px; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+}
+
+@media print {
+  .top-bar, .step-toggle, .step-nav-buttons, footer, .save-indicator, .team-banner { display: none; }
+  .step-body { max-height: none !important; }
+  .step { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== TOP BAR ============== -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="brand">
+      <div class="brand-dot">C</div>
+      <div class="brand-text">
+        <strong>ESTACIÓN C · ARENA</strong>
+        <span>Cohorte histórica · 15 minutos</span>
+      </div>
+    </div>
+    <div class="step-nav" id="stepNav"></div>
+  </div>
+</div>
+
+<!-- ============== TEAM BANNER ============== -->
+<div class="team-banner">
+  <label for="teamSelect">Equipo:</label>
+  <select id="teamSelect" onchange="onTeamChange()">
+    <option value="">— Selecciona —</option>
+    <option value="A">Grupo A</option>
+    <option value="B">Grupo B</option>
+    <option value="C">Grupo C</option>
+    <option value="D">Grupo D</option>
+  </select>
+  <label for="initialsInput">Iniciales:</label>
+  <input type="text" id="initialsInput" maxlength="6" placeholder="ej. JP" oninput="onInitialsChange()">
+  <div class="team-status">
+    <div class="team-dot" id="teamDot"></div>
+    <span id="teamStatusText">Sin identificar</span>
+  </div>
+</div>
+
+<!-- ============== INDICADOR DE GUARDADO ============== -->
+<div class="save-indicator" id="saveIndicator">
+  <div class="save-icon"></div>
+  <div class="save-text" id="saveText">Guardando…<small id="saveSubtext"></small></div>
+</div>
+
+<!-- ============== HERO ============== -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Sesión 7 · Tema 2 · Epidemiologías analíticas</span>
+    <h1>El pasado reconstruido</h1>
+    <p class="hero-sub">¿Qué proporción de pacientes con EPOC avanzada en Boyacá entre 2019 y 2024 accedió a opioides en su último año de vida? La pregunta que solo los registros pueden responder — con todas sus cautelas.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">📐 <span><strong>Diseño:</strong> cohorte histórica</span></div>
+      <div class="hero-meta-item">📊 <span><strong>Foco:</strong> cobertura + subregistro</span></div>
+      <div class="hero-meta-item">⏱ <span><strong>Tiempo:</strong> 15 min</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============== STEP 1 — MARÍA LUISA RECONSTRUIDA ============== -->
+  <div class="step active" data-step="1">
+    <div class="step-header" onclick="toggleStep(1)">
+      <div class="step-title-block">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">El caso disparador</div>
+          <div class="step-subtitle">María Luisa, ahora reconstruida desde RIPS · 1 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <div class="case-narrative">
+          <div class="case-label">📍 María Luisa · Tolima rural · cáncer de cérvix · sin RIPS confirmado</div>
+          <p>En la Estación A, María Luisa fue una sombra del estudio: nunca llegó al hospital de tercer nivel y por eso no apareció ni como caso ni como control. La pregunta quedó abierta: <strong>¿es su trayectoria típica o excepcional?</strong></p>
+          <p>Ahora cambiamos de lente. En lugar de partir del hospital, partiremos del <strong>certificado de defunción</strong>. Buscamos a "todas las María Luisas posibles" en los registros administrativos del país: mujeres que murieron por cáncer en zonas rurales sin contacto formal con el sistema. ¿Las encontraremos? ¿Cuántas estarán bien registradas? ¿Cuántas perdimos antes de empezar?</p>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">Pregunta de investigación de la Estación C</div>
+          <p style="margin: 0;">¿Qué proporción de pacientes con <strong>EPOC avanzada</strong> en <strong>Boyacá</strong> entre <strong>2019 y 2024</strong> accedió al menos a una prescripción de opioides en su último año de vida, y qué factores estructurales se asocian con ese acceso?</p>
+        </div>
+
+        <h3>¿Por qué cohorte histórica para esta pregunta?</h3>
+        <ul>
+          <li><strong>Los datos ya existen:</strong> RIPS, SISPRO, Estadísticas Vitales DANE acumulan registros administrativos durante años.</li>
+          <li><strong>El seguimiento prospectivo sería inviable:</strong> esperar 5 años para ver muertes en una cohorte concurrente de Boyacá es operativa y económicamente prohibitivo.</li>
+          <li><strong>Conserva la lógica direccional de cohorte:</strong> exposición (residir en municipio rural, régimen subsidiado, etc.) → desenlace (muerte sin opioides).</li>
+          <li><strong>Permite estimar denominadores poblacionales</strong> aproximados — pero solo aproximados, y este "aproximadamente" es el corazón de la estación.</li>
+        </ul>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" disabled>← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(2)">Siguiente: lógica temporal →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 2 — LÓGICA TEMPORAL DE LA COHORTE HISTÓRICA ============== -->
+  <div class="step" data-step="2">
+    <div class="step-header" onclick="toggleStep(2)">
+      <div class="step-title-block">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">La lógica temporal del diseño</div>
+          <div class="step-subtitle">Cohorte hacia adelante, observada hacia atrás · 1,5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>La cohorte histórica es un diseño <em>híbrido en el tiempo</em>: la exposición precede al desenlace (lógica de cohorte), pero todo el seguimiento ya ocurrió cuando empieza el estudio.</p>
+
+        <div class="svg-wrap">
+          <svg viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 800px;">
+            <!-- Eje del tiempo -->
+            <line x1="60" y1="180" x2="760" y2="180" stroke="#595959" stroke-width="2"/>
+            <polygon points="760,180 752,176 752,184" fill="#595959"/>
+
+            <!-- Etiquetas eje -->
+            <text x="80" y="205" font-size="12" fill="#595959" font-style="italic">2019 (T₀)</text>
+            <text x="600" y="205" font-size="12" fill="#595959" font-style="italic">2024 (cierre)</text>
+            <text x="730" y="205" font-size="12" fill="var(--terracota)" font-style="italic" font-weight="700">HOY</text>
+
+            <!-- Punto T0 (pasado) -->
+            <circle cx="100" cy="180" r="10" fill="#8B7B5C"/>
+            <text x="100" y="160" text-anchor="middle" font-size="11" fill="#8B7B5C" font-weight="700">EXPOSICIÓN</text>
+            <text x="100" y="148" text-anchor="middle" font-size="10" fill="#595959">documentada en RIPS</text>
+
+            <!-- Punto cierre (pasado reciente) -->
+            <circle cx="620" cy="180" r="10" fill="#B85C3C"/>
+            <text x="620" y="160" text-anchor="middle" font-size="11" fill="#B85C3C" font-weight="700">DESENLACE</text>
+            <text x="620" y="148" text-anchor="middle" font-size="10" fill="#595959">ya ocurrido</text>
+
+            <!-- Punto presente -->
+            <circle cx="730" cy="180" r="12" fill="#D4A547" stroke="#fff" stroke-width="2"/>
+            <text x="730" y="225" text-anchor="middle" font-size="11" fill="#8B6914" font-weight="700">INVESTIGADOR</text>
+
+            <!-- Flecha hacia adelante (lógica del diseño) -->
+            <path d="M 110 100 Q 360 60, 610 100" stroke="#8B7B5C" stroke-width="2.5" fill="none" class="timeline-arrow" marker-end="url(#arrowH)"/>
+
+            <defs>
+              <marker id="arrowH" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#8B7B5C"/>
+              </marker>
+            </defs>
+
+            <!-- Mirada del investigador (flecha curva hacia atrás) -->
+            <path d="M 720 165 Q 600 50, 350 50 Q 200 50, 110 130" stroke="#D4A547" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+            <text x="380" y="40" text-anchor="middle" font-size="12" fill="#8B6914" font-weight="700" font-style="italic">El investigador reconstruye lo que ya sucedió</text>
+
+            <!-- Etiqueta de dirección -->
+            <text x="380" y="118" text-anchor="middle" font-size="13" fill="#8B7B5C" font-weight="700" font-style="italic">Lógica del diseño: exposición → desenlace (igual que cohorte prospectiva)</text>
+          </svg>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ La diferencia clave con la cohorte prospectiva</div>
+          <p style="margin:0;">En la cohorte prospectiva (Estación B), <strong>el investigador construye la base de datos en tiempo real</strong>: define las variables, asegura la calidad, persigue las pérdidas. En la cohorte histórica, <strong>el investigador hereda lo que el sistema ya recogió</strong>, con todas sus virtudes y defectos. La calidad del estudio depende de la calidad del registro original — y eso, en Colombia rural, es un asunto serio.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Siguiente: fuentes de datos →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 3 — RECONSTRUCCIÓN DESDE FUENTES ============== -->
+  <div class="step" data-step="3">
+    <div class="step-header" onclick="toggleStep(3)">
+      <div class="step-title-block">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Tarea 1 · Reconstruir la cohorte desde registros</div>
+          <div class="step-subtitle">Cuatro fuentes — toquen para expandir · 3 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Para identificar a los pacientes con EPOC avanzada en Boyacá entre 2019 y 2024, necesitamos cruzar varias fuentes administrativas. Cada una aporta algo y deja algo en silencio.</p>
+
+        <div class="fuente-grid">
+          <div class="fuente-card" onclick="toggleFuente(this)">
+            <span class="fuente-tag">RIPS</span>
+            <h4>Registros Individuales de Prestación de Servicios</h4>
+            <div class="fuente-summary">El núcleo del cruce: códigos CIE-10 de EPOC severa (J44.0, J44.1, J44.9 con marcadores).</div>
+            <div class="fuente-detail">
+              <p><strong>Aporta:</strong> consultas, hospitalizaciones, prescripciones, procedimientos. Cobertura nacional teórica del 100 %.</p>
+              <p><strong>Calla:</strong> pacientes que nunca consultaron. Errores de codificación frecuentes en zonas rurales. Subregistro estructural por departamento y régimen.</p>
+              <p><strong>Acceso:</strong> SISPRO/MinSalud, con tabulados por departamento.</p>
+            </div>
+          </div>
+
+          <div class="fuente-card" onclick="toggleFuente(this)">
+            <span class="fuente-tag">DANE</span>
+            <h4>Estadísticas Vitales</h4>
+            <div class="fuente-summary">Certificados de defunción con causa básica codificada en CIE-10.</div>
+            <div class="fuente-detail">
+              <p><strong>Aporta:</strong> el desenlace de mortalidad y su fecha. Permite identificar muertos sin contacto previo con el sistema (cruce con RIPS).</p>
+              <p><strong>Calla:</strong> calidad del diagnóstico depende de quien certificó. La causa básica puede esconder el desenlace de interés en la cadena de morbilidades.</p>
+              <p><strong>Acceso:</strong> microdatos públicos DANE, con identificadores anonimizados.</p>
+            </div>
+          </div>
+
+          <div class="fuente-card" onclick="toggleFuente(this)">
+            <span class="fuente-tag">INCB</span>
+            <h4>Junta Internacional de Fiscalización de Estupefacientes</h4>
+            <div class="fuente-summary">Consumo nacional de opioides reportado por país.</div>
+            <div class="fuente-detail">
+              <p><strong>Aporta:</strong> denominador macro de cuánto opioide se usa en Colombia comparado con la región y el mundo.</p>
+              <p><strong>Calla:</strong> distribución intra-país. No permite saber si el opioide reportado llegó a Boyacá rural o se quedó en hospitales urbanos privados.</p>
+              <p><strong>Acceso:</strong> reportes anuales públicos.</p>
+            </div>
+          </div>
+
+          <div class="fuente-card" onclick="toggleFuente(this)">
+            <span class="fuente-tag">BDUA</span>
+            <h4>Base de Datos Única de Afiliados</h4>
+            <div class="fuente-summary">Régimen de afiliación, EPS, fecha de inicio y terminación.</div>
+            <div class="fuente-detail">
+              <p><strong>Aporta:</strong> variable estructural clave (subsidiado/contributivo) y continuidad del aseguramiento durante el seguimiento.</p>
+              <p><strong>Calla:</strong> población migrante o sin afiliación formal. Cambios frecuentes de EPS dificultan continuidad.</p>
+              <p><strong>Acceso:</strong> ADRES, mediante solicitud institucional.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">El cruce que construye la cohorte</div>
+          <p style="margin: 0;">Identificamos a las personas en RIPS con códigos CIE-10 de EPOC severa entre 2019–2024 (cohorte de exposición). Las seguimos en RIPS hasta el desenlace o el cierre. Cruzamos con DANE para detectar muertes que no quedaron en RIPS. Verificamos régimen y continuidad en BDUA. INCB queda como contexto agregado para la discusión sobre disponibilidad de opioides.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(2)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(4)">Siguiente: estimar cobertura →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 4 — CALCULAR COBERTURA + ICEBERG ============== -->
+  <div class="step" data-step="4">
+    <div class="step-header" onclick="toggleStep(4)">
+      <div class="step-title-block">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Tarea 2 · Estimar cobertura de opioides</div>
+          <div class="step-subtitle">Datos editables · cálculo de cobertura cruda · 4 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Trabajen con los datos didácticos del cruce RIPS-DANE para Boyacá. Pueden modificar los valores. La pregunta clave: <em>¿qué proporción de pacientes con EPOC avanzada accedió al menos a una prescripción de opioides en su último año de vida?</em></p>
+
+        <span class="didactic-tag">Datos didácticos · cohorte simulada Boyacá 2019–2024</span>
+        <span class="verify-tag" style="margin-left:8px;">[DATO POR VERIFICAR]</span>
+
+        <div class="cobertura-builder">
+          <div class="cobertura-input-row">
+            <span class="cobertura-input-label">Pacientes con códigos CIE-10 de EPOC severa en RIPS Boyacá 2019–2024</span>
+            <input type="number" id="N_cohorte" value="1200" min="0" oninput="updateCobertura()">
+          </div>
+          <div class="cobertura-input-row">
+            <span class="cobertura-input-label">Fallecidos en el período con marcador de EPOC en certificado de defunción (DANE)</span>
+            <input type="number" id="N_fallecidos" value="480" min="0" oninput="updateCobertura()">
+          </div>
+          <div class="cobertura-input-row">
+            <span class="cobertura-input-label">Fallecidos con al menos una prescripción de opioide en el último año de vida (RIPS)</span>
+            <input type="number" id="N_opioides" value="96" min="0" oninput="updateCobertura()">
+          </div>
+        </div>
+
+        <h3>Cobertura cruda (sin corregir por subregistro)</h3>
+
+        <div class="cobertura-result">
+          <div class="cobertura-card">
+            <div class="cob-label">Letalidad observada</div>
+            <div class="cob-value" id="letalidad">40%</div>
+            <div class="cob-formula">fallecidos / cohorte</div>
+          </div>
+          <div class="cobertura-card corrected">
+            <div class="cob-label">Cobertura de opioides al final de vida</div>
+            <div class="cob-value" id="cobertura">20%</div>
+            <div class="cob-formula">opioides / fallecidos</div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ ¿20 % es la cobertura real?</div>
+          <p style="margin:0;">Esta cifra es <strong>la punta del iceberg</strong>. El denominador "1.200 pacientes en RIPS" subestima la población verdadera con EPOC avanzada en Boyacá: hay personas que <em>nunca consultaron</em>, otras cuyo diagnóstico fue mal codificado, y otras cuyos RIPS fueron rechazados por errores administrativos. La cobertura real es <em>menor</em> al 20 %.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(3)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(4, 'cobertura_cruda', 5)">Siguiente: el iceberg →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 5 — ICEBERG Y COBERTURA CORREGIDA ============== -->
+  <div class="step" data-step="5">
+    <div class="step-header" onclick="toggleStep(5)">
+      <div class="step-title-block">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-title">Tarea 3 · Corregir por subregistro</div>
+          <div class="step-subtitle">El iceberg de Sesión 5 reaparece · 3 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>En Sesión 5 trabajamos el iceberg del subregistro: lo que ven los registros administrativos es solo una fracción de la población real. Aquí esa idea se vuelve crítica para interpretar la cobertura.</p>
+
+        <div class="iceberg-wrap">
+          <svg class="iceberg-svg" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" style="max-width:520px;">
+            <!-- Línea de agua -->
+            <line x1="0" y1="160" x2="600" y2="160" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+            <text x="20" y="155" font-size="11" fill="#FFFFFF" font-style="italic">línea del registro</text>
+
+            <!-- Iceberg superior (lo registrado) -->
+            <polygon points="200,160 400,160 360,60 240,60" fill="#F5EEDD" opacity="0.95" stroke="#8B7B5C" stroke-width="2"/>
+            <text x="300" y="100" text-anchor="middle" font-size="14" fill="#6B5B40" font-weight="700">VISIBLE</text>
+            <text x="300" y="120" text-anchor="middle" font-size="12" fill="#6B5B40">en RIPS</text>
+            <text x="300" y="138" text-anchor="middle" font-size="11" fill="#6B5B40" id="iceberg-visible">1.200 pacientes</text>
+
+            <!-- Iceberg sumergido -->
+            <polygon points="200,160 400,160 480,360 120,360" fill="#C4A876" opacity="0.85" stroke="#6B5B40" stroke-width="2"/>
+            <text x="300" y="220" text-anchor="middle" font-size="14" fill="#FFFFFF" font-weight="700">INVISIBLE</text>
+            <text x="300" y="240" text-anchor="middle" font-size="12" fill="#FFFFFF">a los registros</text>
+            <text x="300" y="270" text-anchor="middle" font-size="11" fill="#FFFFFF">• Nunca consultaron</text>
+            <text x="300" y="290" text-anchor="middle" font-size="11" fill="#FFFFFF">• Mala codificación</text>
+            <text x="300" y="310" text-anchor="middle" font-size="11" fill="#FFFFFF">• RIPS rechazados</text>
+            <text x="300" y="330" text-anchor="middle" font-size="11" fill="#FFFFFF" id="iceberg-invisible">≈ 2.400 pacientes adicionales</text>
+
+            <!-- Detalles decorativos -->
+            <path d="M 0 160 Q 100 165 200 160" stroke="#FFFFFF" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M 400 160 Q 500 155 600 160" stroke="#FFFFFF" stroke-width="1" fill="none" opacity="0.4"/>
+          </svg>
+          <p class="iceberg-caption">Los registros administrativos son apenas la punta. Lo que está bajo la línea del agua es lo que el diseño no puede ver pero sí puede estimar.</p>
+        </div>
+
+        <div class="slider-wrap">
+          <label for="factor_iceberg">Factor de corrección por subregistro estimado <small style="color:var(--gris); font-weight:400;">(cuántas veces más grande es la población real)</small></label>
+          <input type="range" id="factor_iceberg" min="1" max="6" step="0.5" value="3" oninput="updateIceberg()">
+          <div class="slider-value">×<span id="factor_value">3</span></div>
+        </div>
+
+        <div class="cobertura-result">
+          <div class="cobertura-card">
+            <div class="cob-label">Cobertura cruda (paso anterior)</div>
+            <div class="cob-value" id="cob_cruda">20%</div>
+            <div class="cob-formula">opioides / fallecidos en RIPS</div>
+          </div>
+          <div class="cobertura-card corrected">
+            <div class="cob-label">Cobertura corregida por subregistro</div>
+            <div class="cob-value" id="cob_corregida">6,7%</div>
+            <div class="cob-formula">opioides / (fallecidos × factor)</div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ El factor de corrección no es arbitrario</div>
+          <p style="margin:0;">Mover el slider muestra cómo cambia la cobertura "real" según el supuesto sobre el subregistro. En Boyacá rural, los estudios cualitativos sugieren factores de 2 a 4 veces para EPOC avanzada en zonas dispersas. Un buen análisis epidemiológico <strong>reportaría escenarios</strong> en lugar de un solo número, y cada uno con su justificación. Esto se llama <em>análisis de sensibilidad</em>.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(4)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(5, 'iceberg_cobertura_corregida', 6)">Siguiente: limitaciones →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 6 — LIMITACIONES Y SESGOS ============== -->
+  <div class="step" data-step="6">
+    <div class="step-header" onclick="toggleStep(6)">
+      <div class="step-title-block">
+        <div class="step-num">6</div>
+        <div>
+          <div class="step-title">Limitaciones específicas de la cohorte histórica</div>
+          <div class="step-subtitle">Lo que el registro nunca puede recuperar · 1,5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>La cohorte histórica tiene la lógica direccional correcta y los datos ya disponibles, pero hereda <em>todo lo que el sistema decidió no registrar</em>. Cinco limitaciones específicas:</p>
+
+        <h3>1. Subregistro diferencial</h3>
+        <p>El subregistro no es uniforme. Es mayor en zonas rurales, en régimen subsidiado, en pacientes mayores y en mujeres. Si el subregistro está correlacionado con la exposición de interés, sesga la asociación de manera <em>diferencial</em>, no atenuante.</p>
+
+        <h3>2. Mala clasificación de exposición y desenlace</h3>
+        <p>Los códigos CIE-10 dependen de la calidad del diagnóstico clínico y de la codificación administrativa. Una EPOC mal estadificada queda como J44.9 (no especificada), y se pierde el marcador de severidad que define la cohorte.</p>
+
+        <h3>3. Variables clave que <em>no</em> existen en el registro</h3>
+        <p>RIPS no tiene EVA del dolor. No tiene presencia de cuidador. No tiene preferencias del paciente sobre el final de la vida. Lo que el sistema no registró entonces, <strong>no se puede recuperar ahora</strong>. Estas son las variables que más importan en cuidado paliativo, y las menos disponibles en datos administrativos.</p>
+
+        <h3>4. Pérdida diferencial al cruzar fuentes</h3>
+        <p>El cruce RIPS × DANE × BDUA depende de identificadores que pueden estar mal escritos, repetidos, o ausentes. La pérdida en el cruce no es aleatoria: las poblaciones más vulnerabilizadas pierden más datos en cada cruce.</p>
+
+        <h3>5. Sesgo de inmortalidad temporal (immortal time bias)</h3>
+        <p>Si definimos "exposición" como un evento que ocurre después del momento cero (ej.: "tuvo al menos una hospitalización en CP"), todos los expuestos por definición sobrevivieron hasta esa hospitalización. Esa supervivencia "garantizada" infla artificialmente la sobrevida del grupo expuesto.</p>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ La virtud de la cohorte histórica</div>
+          <p style="margin:0;">A pesar de todas estas limitaciones, la cohorte histórica es <strong>la única forma factible</strong> de hacer epidemiología paliativa con denominadores poblacionales en un país donde no hay observatorios prospectivos masivos. La pregunta no es <em>"¿usarla o no?"</em>, sino <em>"¿con qué transparencia reportar sus límites?"</em>.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(5)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(7)">Siguiente: ¿qué dice y qué calla? →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 7 — DICE / CALLA + QUIZ ============== -->
+  <div class="step" data-step="7">
+    <div class="step-header" onclick="toggleStep(7)">
+      <div class="step-title-block">
+        <div class="step-num">7</div>
+        <div>
+          <div class="step-title">Tarea 4 · ¿Qué dice y qué calla este diseño?</div>
+          <div class="step-subtitle">El corazón del trabajo · 2,5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <div class="case-narrative">
+          <div class="case-label">Pregunta vertebral</div>
+          <p style="font-size:18px; font-weight:600; color: var(--arena-dark);">¿Qué dice —y qué calla— el diseño de cohorte histórica sobre María Luisa?</p>
+        </div>
+
+        <p>Escriban en cada cuadro al menos dos ideas. Recuerden: <strong>en este diseño María Luisa <em>podría</em> aparecer</strong> si su muerte fue certificada en DANE, aunque nunca pasó por un hospital de tercer nivel. Pero también podría seguir invisible, si su certificado tiene errores o si nunca llegó al sistema.</p>
+
+        <div class="dual-zone">
+          <div class="dual-card dice">
+            <h4>✓ Lo que SÍ dice</h4>
+            <textarea id="diceText" placeholder="Ej.: con el cruce DANE-RIPS podemos identificar muertes por EPOC sin contacto previo con el sistema, lo que rescata casos que el caso-control hospitalario no veía..."></textarea>
+          </div>
+          <div class="dual-card calla">
+            <h4>✗ Lo que CALLA</h4>
+            <textarea id="callaText" placeholder="Ej.: que las variables más importantes en CP (dolor, cuidador, preferencias) no están en RIPS y no se pueden recuperar. El subregistro deja a las María Luisas más invisibles fuera incluso de DANE..."></textarea>
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-block-title">🧭 Auto-evaluación · Pistas para discutir</div>
+          <div class="quiz-block-subtitle">Discutan en grupo, marquen su respuesta y al final toquen "Verificar". Las respuestas quedan registradas con su grupo.</div>
+
+          <!-- ============== PREGUNTA 1 ============== -->
+          <div class="quiz-question" data-q="1">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 1</span>
+            </div>
+            <div class="quiz-q-text">¿Por qué decimos que la cobertura cruda del 20 % es <em>la punta del iceberg</em>?</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '1', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Porque el 20 % es matemáticamente incorrecto y debe recalcularse con otra fórmula.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Porque la prescripción de opioides en el último año de vida no es un buen indicador de calidad del cuidado paliativo.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Porque el denominador (pacientes con EPOC avanzada en RIPS) <em>subestima</em> la población verdadera por subregistro estructural; la cobertura real es menor al 20 %.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">Porque el cálculo asume que todos los pacientes recibieron exactamente una prescripción.</span>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 2 ============== -->
+          <div class="quiz-question" data-q="2">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 2</span>
+            </div>
+            <div class="quiz-q-text">¿Cuál de estas variables <em>no</em> se puede reconstruir desde fuentes administrativas (RIPS, DANE, BDUA), por más completos que estén los registros?</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '2', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Régimen de afiliación al SGSSS y municipio de residencia.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Fecha y causa básica de defunción.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Intensidad del dolor en la EVA, presencia de cuidador familiar y preferencias del paciente sobre su muerte.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">Número de hospitalizaciones por descompensación de EPOC en el período.</span>
+              </div>
+            </div>
+            <label class="quiz-justify-label" for="q2_justify">Justifiquen brevemente: ¿qué consecuencia tiene esta ausencia para la pregunta paliativa? (queda registrado)</label>
+            <textarea class="quiz-justify-textarea" id="q2_justify" placeholder="Ej.: si no podemos medir dolor ni cuidador, la cobertura de opioides es solo un proxy débil de la calidad real del CP recibido..."></textarea>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 3 — doble selección sobre cascada ============== -->
+          <div class="quiz-question" data-q="3">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 3</span>
+            </div>
+            <div class="quiz-q-text">En la cascada de necesidad paliativa no satisfecha, ¿qué eslabón <strong>ilumina</strong> este diseño y cuál <strong>deja en penumbra</strong>?</div>
+
+            <div class="quiz-dual-row">
+              <div>
+                <div class="quiz-dual-col-label ilumina">✓ Ilumina (auto-evaluado)</div>
+                <div class="quiz-options quiz-options-compact" data-correct="C" data-q-suffix="ilumina">
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="quiz-dual-col-label calla">✗ Calla (sin respuesta única — exploratorio)</div>
+                <div class="quiz-options quiz-options-compact" data-q-suffix="calla">
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 4 — reflexiva ============== -->
+          <div class="quiz-question" data-q="4">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 4 · reflexiva</span>
+            </div>
+            <div class="quiz-q-text">Si tuvieran que <em>defender</em> ante un comité de ética el uso de RIPS para responder esta pregunta, sabiendo todas sus limitaciones, ¿qué argumento darían?</div>
+            <p style="font-size: 13px; color: var(--gris); margin-top: 8px; margin-bottom: 4px;">Sin respuesta única. La pregunta apunta al equilibrio entre limitaciones epistémicas y responsabilidad pública de generar evidencia donde no la hay.</p>
+            <label class="quiz-justify-label" for="q4_argumento">Su argumento (queda registrado):</label>
+            <textarea class="quiz-justify-textarea" id="q4_argumento" rows="4" placeholder="A pesar de que RIPS subestima la población real y omite variables clínicas clave, su uso se justifica porque..."></textarea>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+
+          <div class="quiz-verify-wrap">
+            <button class="btn-verify" id="btnVerify" onclick="verifyQuiz()">Verificar mis respuestas</button>
+          </div>
+
+          <div class="quiz-summary" id="quizSummary"></div>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(6)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(7, 'dice_calla', 8)">Siguiente: tarjeta para plenaria →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 8 — TARJETA PLENARIA ============== -->
+  <div class="step" data-step="8">
+    <div class="step-header" onclick="toggleStep(8)">
+      <div class="step-title-block">
+        <div class="step-num">8</div>
+        <div>
+          <div class="step-title">Tarjeta de presentación a la plenaria</div>
+          <div class="step-subtitle">Un minuto en plenaria · ensayo final</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>En el bloque de plenaria de integración (minutos 85–93), cada estación tendrá <strong>1 minuto</strong>. Esta es la tarjeta-síntesis que deben preparar.</p>
+
+        <div class="synthesis">
+          <h2>📌 Síntesis · Estación C</h2>
+
+          <h3>Pregunta de investigación</h3>
+          <p>Cobertura de opioides en pacientes con EPOC avanzada en Boyacá 2019–2024, reconstruida desde RIPS, DANE, BDUA e INCB.</p>
+
+          <h3>Diseño · medida · resultado</h3>
+          <ul>
+            <li><strong>Diseño:</strong> cohorte histórica con cruce de cuatro fuentes administrativas.</li>
+            <li><strong>Medida:</strong> proporción de cobertura (con análisis de sensibilidad por factor de subregistro).</li>
+            <li><span class="didactic-tag">didáctico</span> Cobertura cruda 20 %; corregida con factor ×3, baja a 6,7 %.</li>
+            <li><strong>Eslabón de la cascada que ilumina:</strong> cobertura del sistema.</li>
+          </ul>
+
+          <h3>El punto clave</h3>
+          <p>La cohorte histórica es la única forma factible de tener denominadores poblacionales sobre cuidado paliativo en Colombia. Su valor está en hacer visible el iceberg, no en pretender que la punta es todo el iceberg.</p>
+
+          <h3>Limitaciones a reportar transparentemente</h3>
+          <ul>
+            <li><strong>Subregistro diferencial:</strong> mayor en zonas rurales y régimen subsidiado.</li>
+            <li><strong>Variables ausentes:</strong> dolor, cuidador, preferencias — todo lo que más importa en CP, no está en RIPS.</li>
+          </ul>
+
+          <h3>Lo que dice y lo que calla sobre María Luisa</h3>
+          <ul>
+            <li><strong>Dice:</strong> mediante el cruce DANE-RIPS, María Luisa <em>podría</em> aparecer en la cohorte aunque nunca llegó al hospital de tercer nivel — su muerte por cáncer queda registrada en el certificado de defunción.</li>
+            <li><strong>Calla:</strong> si el certificado tiene errores o si la codificación rural fue deficiente, María Luisa sigue invisible. Y en cualquier caso, no podemos saber cómo fue su dolor ni quién la cuidó.</li>
+          </ul>
+
+          <!-- ===== APORTE DEL GRUPO ===== -->
+          <div id="grupoAporteWrap" class="grupo-aporte" style="display:none;">
+            <h3>✍ Lo que añadió su grupo</h3>
+            <div class="grupo-aporte-meta" id="grupoAporteMeta"></div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">DICE</div>
+              <div class="grupo-aporte-texto" id="grupoAporteDice"></div>
+            </div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">CALLA</div>
+              <div class="grupo-aporte-texto" id="grupoAporteCalla"></div>
+            </div>
+            <div class="grupo-aporte-vacio" id="grupoAporteVacio" style="display:none;">
+              ⚠ Aún no han escrito en el paso 7. Vuelvan, escriban sus reflexiones, y al avanzar aparecerán aquí.
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">🎤 Para el orador del grupo</div>
+          <p style="margin:0;">Hablen sin leer. Mantengan los 60 segundos. La frase de cierre sugerida: "El registro nos da denominadores, pero no nos dice cómo dolió. Ese silencio es lo que el diseño no puede romper".</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(7)">← Anterior</button>
+          <button class="btn btn-primary" onclick="markComplete()">✓ Completar estación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>Estación C · El pasado reconstruido</strong></p>
+  <p>Sesión 7 · Tema 2 · Epidemiologías analíticas en cuidado paliativo · 8 de mayo de 2026</p>
+  <p>Universidad Antonio Nariño · Maestría en Cuidados Paliativos · Profesor Jorge Wilhelm Bogoya López</p>
+  <p style="margin-top:12px; opacity:0.7; font-size:12px;">Datos numéricos son didácticos y no representan estadísticas oficiales sobre Colombia. APA 7.ª edición. Personas vulnerabilizadas — nunca vulnerables.</p>
+</footer>
+
+<script>
+// ============== ESTADO Y NAVEGACIÓN ==============
+const totalSteps = 8;
+let currentStep = 1;
+let completedSteps = new Set();
+
+function buildStepNav() {
+  const nav = document.getElementById('stepNav');
+  nav.innerHTML = '';
+  for (let i = 1; i <= totalSteps; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'step-dot';
+    dot.textContent = i;
+    dot.onclick = () => goToStep(i);
+    if (i === currentStep) dot.classList.add('active');
+    if (completedSteps.has(i)) dot.classList.add('completed');
+    nav.appendChild(dot);
+  }
+}
+
+function toggleStep(n) {
+  if (currentStep === n) {
+    completedSteps.add(n);
+    document.querySelector(`.step[data-step="${n}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('completed');
+    currentStep = 0;
+  } else {
+    goToStep(n);
+  }
+  buildStepNav();
+}
+
+function goToStep(n) {
+  if (n < 1 || n > totalSteps) return;
+  if (currentStep && currentStep !== n) {
+    completedSteps.add(currentStep);
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('completed');
+  }
+  const newStep = document.querySelector(`.step[data-step="${n}"]`);
+  newStep.classList.remove('completed');
+  newStep.classList.add('active');
+  currentStep = n;
+  buildStepNav();
+  setTimeout(() => {
+    newStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
+function markComplete() {
+  for (let i = 1; i <= totalSteps; i++) completedSteps.add(i);
+  document.querySelectorAll('.step').forEach(s => s.classList.add('completed'));
+  buildStepNav();
+  alert('✓ Estación C completada. Ya pueden volver a la plenaria con su tarjeta de síntesis.');
+}
+
+// ============== UTILIDADES NUMÉRICAS ==============
+function num(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+
+function fmtPct(n, decimals = 1) {
+  if (!isFinite(n) || isNaN(n)) return '—';
+  return (n * 100).toFixed(decimals).replace('.', ',') + '%';
+}
+
+// ============== TOGGLE TARJETAS DE FUENTE ==============
+function toggleFuente(card) {
+  card.classList.toggle('expanded');
+}
+
+// ============== CALCULADORA DE COBERTURA ==============
+function updateCobertura() {
+  const N = num('N_cohorte');
+  const F = num('N_fallecidos');
+  const O = num('N_opioides');
+  const letalidad = N > 0 ? F / N : NaN;
+  const cobertura = F > 0 ? O / F : NaN;
+
+  document.getElementById('letalidad').textContent = fmtPct(letalidad, 0);
+  document.getElementById('cobertura').textContent = fmtPct(cobertura, 0);
+
+  // Refrescar también el iceberg si está disponible
+  updateIceberg();
+}
+
+// ============== ICEBERG: cobertura corregida ==============
+function updateIceberg() {
+  const factor = num('factor_iceberg') || 3;
+  const N = num('N_cohorte');
+  const F = num('N_fallecidos');
+  const O = num('N_opioides');
+
+  document.getElementById('factor_value').textContent = factor.toString().replace('.', ',');
+
+  const visiblePac = N;
+  const invisiblePac = Math.round(N * (factor - 1));
+
+  const ivisible = document.getElementById('iceberg-visible');
+  const iinvisible = document.getElementById('iceberg-invisible');
+  if (ivisible) ivisible.textContent = `${visiblePac.toLocaleString('es-CO')} pacientes`;
+  if (iinvisible) iinvisible.textContent = `≈ ${invisiblePac.toLocaleString('es-CO')} pacientes adicionales`;
+
+  const cobCruda = F > 0 ? O / F : NaN;
+  const cobCorregida = (F * factor) > 0 ? O / (F * factor) : NaN;
+
+  const cobCrudaEl = document.getElementById('cob_cruda');
+  const cobCorrEl = document.getElementById('cob_corregida');
+  if (cobCrudaEl) cobCrudaEl.textContent = fmtPct(cobCruda, 0);
+  if (cobCorrEl) {
+    cobCorrEl.textContent = fmtPct(cobCorregida, 1);
+    cobCorrEl.classList.remove('pulse');
+    void cobCorrEl.offsetWidth;
+    cobCorrEl.classList.add('pulse');
+  }
+}
+
+// ============================================================================
+//  CLIENTE DE PERSISTENCIA · Apps Script
+// ============================================================================
+const CONFIG = {
+  endpointURL: 'https://script.google.com/macros/s/AKfycbzEjjg97_JXgeBFQyHFRSr28mnR22D4XsS_oe_B_H_jZe4crgdk830Mth9xzbsOGhhU/exec',
+  token: 'UAN_SES7_2026_8MAY',
+  estacion: 'C',
+  versionHTML: '1.0'
+};
+
+let teamState = { equipo: '', iniciales: '' };
+
+function initTeamFromStorage() {
+  try {
+    const saved = sessionStorage.getItem('uan_ses7_team');
+    if (saved) {
+      const obj = JSON.parse(saved);
+      if (obj.equipo) {
+        document.getElementById('teamSelect').value = obj.equipo;
+        teamState.equipo = obj.equipo;
+      }
+      if (obj.iniciales) {
+        document.getElementById('initialsInput').value = obj.iniciales;
+        teamState.iniciales = obj.iniciales;
+      }
+      updateTeamStatus();
+    }
+  } catch (e) { }
+}
+
+function persistTeam() {
+  try { sessionStorage.setItem('uan_ses7_team', JSON.stringify(teamState)); } catch (e) { }
+}
+
+function onTeamChange() {
+  teamState.equipo = document.getElementById('teamSelect').value;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function onInitialsChange() {
+  teamState.iniciales = document.getElementById('initialsInput').value.trim().toUpperCase();
+  document.getElementById('initialsInput').value = teamState.iniciales;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function updateTeamStatus() {
+  const dot = document.getElementById('teamDot');
+  const text = document.getElementById('teamStatusText');
+  if (teamState.equipo) {
+    dot.classList.add('active');
+    dot.classList.remove('error');
+    const ini = teamState.iniciales ? ' · ' + teamState.iniciales : '';
+    text.textContent = `Grupo ${teamState.equipo}${ini}`;
+  } else {
+    dot.classList.remove('active', 'error');
+    text.textContent = 'Sin identificar';
+  }
+}
+
+function showSaveIndicator(state, mainText, subText = '') {
+  const ind = document.getElementById('saveIndicator');
+  const txt = document.getElementById('saveText');
+  const sub = document.getElementById('saveSubtext');
+  ind.classList.remove('saving', 'success', 'error');
+  ind.classList.add(state, 'visible');
+  txt.firstChild.textContent = mainText;
+  sub.textContent = subText;
+  if (state !== 'saving') {
+    setTimeout(() => ind.classList.remove('visible'), 3000);
+  }
+}
+
+async function sendToBackend(paso, pasoNombre, tipoDato, payload) {
+  if (!teamState.equipo) {
+    showSaveIndicator('error', 'Selecciona un equipo', 'No se puede guardar sin identificar el grupo.');
+    return { ok: false, reason: 'no_team' };
+  }
+  showSaveIndicator('saving', 'Guardando…', `Paso ${paso} · Grupo ${teamState.equipo}`);
+
+  const body = {
+    token: CONFIG.token,
+    equipo: teamState.equipo,
+    iniciales: teamState.iniciales,
+    estacion: CONFIG.estacion,
+    paso: paso,
+    paso_nombre: pasoNombre,
+    tipo_dato: tipoDato,
+    payload: payload,
+    version_html: CONFIG.versionHTML,
+    user_agent: navigator.userAgent.substring(0, 200)
+  };
+
+  try {
+    const res = await fetch(CONFIG.endpointURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showSaveIndicator('success', '✓ Guardado', `Fila ${data.fila_total} · ${data.timestamp}`);
+      return { ok: true, data: data };
+    } else {
+      showSaveIndicator('error', 'Error al guardar', data.error || 'Respuesta inválida');
+      return { ok: false, data: data };
+    }
+  } catch (err) {
+    showSaveIndicator('error', 'Sin conexión', 'Verifica internet y vuelve a tocar Siguiente.');
+    return { ok: false, error: err.message };
+  }
+}
+
+// ============== RECOLECCIÓN POR PASO ==============
+function collectStepPayload(paso) {
+  switch (paso) {
+    case 4: {
+      const N = num('N_cohorte');
+      const F = num('N_fallecidos');
+      const O = num('N_opioides');
+      const letalidad = N > 0 ? F / N : null;
+      const cobertura = F > 0 ? O / F : null;
+      const round = (x) => x === null || !isFinite(x) ? null : +x.toFixed(4);
+      return {
+        N_cohorte: N,
+        N_fallecidos: F,
+        N_con_opioides: O,
+        letalidad: round(letalidad),
+        cobertura_cruda: round(cobertura)
+      };
+    }
+    case 5: {
+      const factor = num('factor_iceberg') || 3;
+      const N = num('N_cohorte');
+      const F = num('N_fallecidos');
+      const O = num('N_opioides');
+      const cobCruda = F > 0 ? O / F : null;
+      const cobCorr = (F * factor) > 0 ? O / (F * factor) : null;
+      const round = (x) => x === null || !isFinite(x) ? null : +x.toFixed(4);
+      return {
+        factor_iceberg: factor,
+        cobertura_cruda: round(cobCruda),
+        cobertura_corregida: round(cobCorr),
+        poblacion_invisible_estimada: Math.round(N * (factor - 1))
+      };
+    }
+    case 7: {
+      return {
+        dice: document.getElementById('diceText').value.trim(),
+        calla: document.getElementById('callaText').value.trim(),
+        quiz: collectQuizState()
+      };
+    }
+    default:
+      return {};
+  }
+}
+
+// ============== INYECTAR APORTE EN TARJETA DEL PASO 8 ==============
+function inyectarAporteEnTarjeta(payload) {
+  const wrap = document.getElementById('grupoAporteWrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  const ahora = new Date();
+  const horaCO = ahora.toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  const ini = teamState.iniciales ? ` · ${teamState.iniciales}` : '';
+  document.getElementById('grupoAporteMeta').textContent =
+    `Registrado por Grupo ${teamState.equipo}${ini} · ${horaCO}`;
+
+  const dice = (payload.dice || '').trim();
+  const calla = (payload.calla || '').trim();
+  document.getElementById('grupoAporteDice').textContent = dice;
+  document.getElementById('grupoAporteCalla').textContent = calla;
+  document.getElementById('grupoAporteVacio').style.display = (!dice && !calla) ? 'block' : 'none';
+}
+
+async function saveAndAdvance(pasoActual, pasoNombre, pasoSiguiente) {
+  if (!teamState.equipo) {
+    showSaveIndicator('error', 'Selecciona un equipo arriba', 'No puedes continuar sin identificar el grupo.');
+    document.getElementById('teamSelect').focus();
+    document.querySelector('.team-banner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const payload = collectStepPayload(pasoActual);
+  let tipoDato = 'calculo';
+  if (pasoActual === 7) tipoDato = 'texto_libre';
+
+  if (pasoActual === 7) {
+    inyectarAporteEnTarjeta(payload);
+  }
+
+  goToStep(pasoSiguiente);
+  sendToBackend(pasoActual, pasoNombre, tipoDato, payload);
+}
+
+// ============================================================================
+//  AUTO-EVALUACIÓN INTERACTIVA DEL PASO 7
+// ============================================================================
+let quizState = {};
+let quizVerified = false;
+
+const QUIZ_FEEDBACK = {
+  '1': {
+    correct: 'C',
+    feedback: {
+      'A': 'No: el cálculo aritmético del 20 % es correcto. El problema es que el <em>denominador</em> no representa la población verdadera.',
+      'B': 'Es una crítica válida del indicador, pero no es la razón pedagógica de la metáfora del iceberg en este contexto.',
+      'C': '<strong>Correcto.</strong> El subregistro estructural en Boyacá rural significa que muchos pacientes con EPOC avanzada nunca aparecen en RIPS — porque no consultaron, porque su diagnóstico fue mal codificado, o porque sus RIPS fueron rechazados. El denominador real es mayor; la cobertura real es menor al 20 %.',
+      'D': 'No: el cálculo no asume nada sobre número de prescripciones por paciente; cuenta a quienes tuvieron <em>al menos una</em>.'
+    }
+  },
+  '2': {
+    correct: 'C',
+    feedback: {
+      'A': 'No: régimen y municipio están en BDUA y RIPS, son variables administrativas estándar.',
+      'B': 'No: las defunciones están en DANE con causa básica codificada.',
+      'C': '<strong>Correcto.</strong> Las variables clínicas finas y subjetivas — intensidad del dolor, presencia de cuidador, preferencias del paciente — <em>nunca</em> se registraron en sistemas administrativos. Lo que el sistema no recogió entonces, no se puede recuperar ahora. Y son justamente las variables que más importan en cuidado paliativo.',
+      'D': 'No: las hospitalizaciones por descompensación están en RIPS con códigos específicos.'
+    }
+  },
+  '3-ilumina': {
+    correct: 'C',
+    feedback: {
+      'A': 'En parte: la cohorte histórica puede aproximarse a la carga, pero su valor central es otro.',
+      'B': 'Cercano: la necesidad estimada se beneficia de la cohorte, pero requiere también supuestos epidemiológicos adicionales.',
+      'C': '<strong>Correcto.</strong> La cohorte histórica con cruce de fuentes (RIPS + DANE + BDUA) está optimizada para estimar <em>cobertura</em>: cuántos del total accedieron al servicio o medicamento de interés. Tiene numerador (los que recibieron) y denominador (la cohorte completa). Esa es la pregunta que ningún otro diseño de la sesión responde tan directamente.',
+      'D': 'No tanto: la brecha de acceso (entre quienes llegan tarde y los que no llegan) la ilumina mejor el caso-control de la Estación A.',
+      'E': 'No: la calidad del morir requiere variables clínicas finas que RIPS no tiene; la ilumina la cohorte prospectiva de la Estación B.'
+    }
+  }
+};
+
+function selectOption(optionEl, qid, letter) {
+  if (quizVerified) return;
+  const parent = optionEl.parentElement;
+  parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+  optionEl.classList.add('selected');
+  quizState[qid] = letter;
+}
+
+function verifyQuiz() {
+  if (quizVerified) return;
+  quizVerified = true;
+
+  let correctCount = 0;
+  const evaluables = ['1', '2', '3-ilumina'];
+
+  evaluables.forEach(qid => {
+    const userAnswer = quizState[qid];
+    const meta = QUIZ_FEEDBACK[qid];
+    if (!meta) return;
+    const correctLetter = meta.correct;
+    const isCorrect = (userAnswer === correctLetter);
+    if (isCorrect) correctCount++;
+
+    let optionsContainer;
+    if (qid.startsWith('3-')) {
+      const suffix = qid.split('-')[1];
+      optionsContainer = document.querySelector(`.quiz-options[data-q-suffix="${suffix}"]`);
+    } else {
+      optionsContainer = document.querySelector(`.quiz-question[data-q="${qid}"] > .quiz-options`);
+    }
+    if (!optionsContainer) return;
+
+    optionsContainer.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.add('locked');
+      const letterEl = opt.querySelector('.quiz-letter');
+      const letter = letterEl ? letterEl.textContent.trim() : '';
+      if (opt.classList.contains('selected')) {
+        opt.classList.remove('selected');
+        if (letter === correctLetter) opt.classList.add('correct-selected');
+        else opt.classList.add('incorrect-selected');
+      } else if (letter === correctLetter) {
+        opt.classList.add('correct-revealed');
+      }
+    });
+
+    if (qid === '1' || qid === '2') {
+      const fbEl = document.getElementById('fb-' + qid);
+      if (fbEl) {
+        if (userAnswer && meta.feedback[userAnswer]) {
+          fbEl.classList.add('visible');
+          fbEl.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+          fbEl.innerHTML = `<strong>${isCorrect ? '✓ Correcto' : '✕ No es la mejor respuesta'}</strong>${meta.feedback[userAnswer]}`;
+        } else if (!userAnswer) {
+          fbEl.classList.add('visible', 'feedback-incorrect');
+          fbEl.innerHTML = `<strong>Sin respuesta</strong>La respuesta correcta era <strong>${correctLetter}</strong>. ${meta.feedback[correctLetter]}`;
+        }
+      }
+    }
+  });
+
+  // Pregunta 3 doble selección
+  const meta3 = QUIZ_FEEDBACK['3-ilumina'];
+  const userIlumina = quizState['3-ilumina'];
+  const userCalla = quizState['3-calla'];
+  const fb3 = document.getElementById('fb-3');
+  if (fb3) {
+    let html = '';
+    const iluminaCorrect = (userIlumina === meta3.correct);
+    if (userIlumina) {
+      html += `<strong>${iluminaCorrect ? '✓ Ilumina' : '✕ Ilumina'}</strong>${meta3.feedback[userIlumina]}<br><br>`;
+    } else {
+      html += `<strong>Ilumina · sin respuesta</strong>La respuesta esperada era <strong>C · cobertura del sistema</strong>. ${meta3.feedback['C']}<br><br>`;
+    }
+    if (userCalla) {
+      const labels = { A: 'carga de enfermedad', B: 'necesidad paliativa estimada', C: 'cobertura del sistema', D: 'brecha de acceso', E: 'calidad del morir' };
+      html += `<strong>Calla · sin respuesta única</strong>Su grupo eligió <strong>${userCalla} · ${labels[userCalla]}</strong>. Defiendan su elección en la plenaria. Argumentos posibles para varias opciones — el diseño calla la <em>calidad del morir</em> (no tiene variables clínicas finas), la <em>brecha de acceso</em> (no caracteriza a quienes nunca llegaron al sistema y quedaron fuera incluso de DANE) y matices de la <em>necesidad real</em> (depende de supuestos sobre subregistro).`;
+    } else {
+      html += `<strong>Calla · sin respuesta</strong>Para la plenaria, elijan al menos un eslabón que el diseño deja en penumbra y argumenten por qué.`;
+    }
+    fb3.classList.add('visible');
+    fb3.classList.add(iluminaCorrect ? 'feedback-correct' : 'feedback-incorrect');
+    fb3.innerHTML = html;
+  }
+
+  // Pregunta 4 reflexiva
+  const arg = (document.getElementById('q4_argumento') || {}).value || '';
+  const fb4 = document.getElementById('fb-4');
+  if (fb4) {
+    fb4.classList.add('visible', 'feedback-reflexiva');
+    if (arg.trim().length > 30) {
+      fb4.innerHTML = `<strong>Argumento registrado</strong>Su defensa ante el comité de ética queda guardada con su grupo. Esta es la pregunta más densa de la estación: equilibra la responsabilidad de generar evidencia donde no la hay con la transparencia sobre los límites de los datos heredados. Llévenla a la plenaria con sus mejores frases.`;
+    } else if (arg.trim().length > 0) {
+      fb4.innerHTML = `<strong>Argumento muy breve</strong>Lo escrito queda registrado, pero les invitamos a desarrollar el argumento. Articular ante un comité de ética requiere más que una frase: requiere mostrar que <em>conocen las limitaciones</em> y han pensado cómo mitigarlas o reportarlas.`;
+    } else {
+      fb4.innerHTML = `<strong>Sin argumento registrado</strong>Vuelvan al cuadro y articulen una defensa. Pista: la respuesta no debería ser "porque no hay alternativa" — debería incluir cómo <em>reportar transparentemente</em> los límites en lugar de ocultarlos.`;
+    }
+  }
+
+  const summary = document.getElementById('quizSummary');
+  if (summary) {
+    summary.classList.add('visible');
+    summary.innerHTML = `
+      <div>Auto-evaluación completada (parte cerrada)</div>
+      <div class="score-big">${correctCount} / ${evaluables.length}</div>
+      <div style="font-size:13px; color:var(--gris);">La calificación cubre solo las preguntas con respuesta única. La pregunta 4 reflexiva y el bloque "calla" se evalúan en la plenaria.</div>
+    `;
+  }
+
+  const btn = document.getElementById('btnVerify');
+  if (btn) { btn.disabled = true; btn.textContent = '✓ Respuestas verificadas'; }
+}
+
+function collectQuizState() {
+  return {
+    verificado: quizVerified,
+    p1: { respuesta: quizState['1'] || null, correcta: 'C', acerto: quizState['1'] === 'C' },
+    p2: {
+      respuesta: quizState['2'] || null,
+      correcta: 'C',
+      acerto: quizState['2'] === 'C',
+      justificacion: (document.getElementById('q2_justify') || {}).value?.trim() || ''
+    },
+    p3_ilumina: { respuesta: quizState['3-ilumina'] || null, correcta: 'C', acerto: quizState['3-ilumina'] === 'C' },
+    p3_calla: { respuesta: quizState['3-calla'] || null, exploratoria: true },
+    p4_argumento_etica: {
+      texto: (document.getElementById('q4_argumento') || {}).value?.trim() || '',
+      reflexiva: true
+    }
+  };
+}
+
+// ============== INIT ==============
+window.addEventListener('DOMContentLoaded', () => {
+  buildStepNav();
+  updateCobertura();
+  updateIceberg();
+  initTeamFromStorage();
+
+  const stepEls = document.querySelectorAll('.step');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+        const n = parseInt(entry.target.dataset.step);
+        document.querySelectorAll('.step-dot').forEach((dot, i) => {
+          dot.classList.toggle('active', (i + 1) === n && entry.target.classList.contains('active'));
+        });
+      }
+    });
+  }, { threshold: [0.4] });
+
+  stepEls.forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>

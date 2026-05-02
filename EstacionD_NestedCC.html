@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estación D · Lo mejor de dos mundos · Casos-controles anidado</title>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  /* Paleta institucional UAN-Maestría · Estación D · color principal ÁMBAR */
+  --ambar: #D4A547;
+  --ambar-dark: #A07930;
+  --ambar-deep: #6B4F0F;
+  --ambar-soft: #F4E4BC;
+  --ambar-glow: rgba(212, 165, 71, 0.18);
+  --terracota: #B85C3C;
+  --terracota-soft: #EFD5C8;
+  --salvia: #7A8B6F;
+  --salvia-soft: #D9E0D2;
+  --arena: #C4A876;
+  --arena-soft: #F5EEDD;
+  --charcoal: #2D2D2D;
+  --gris: #595959;
+  --gris-claro: #A6A6A6;
+  --blanco: #FFFFFF;
+  --crema: #FAF6EF;
+  --shadow-soft: 0 2px 8px rgba(45, 45, 45, 0.08);
+  --shadow-medium: 0 6px 20px rgba(45, 45, 45, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--crema);
+  color: var(--charcoal);
+  line-height: 1.6;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ================ TOP BAR ================ */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--blanco);
+  border-bottom: 3px solid var(--ambar-dark);
+  box-shadow: var(--shadow-soft);
+}
+
+.top-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+
+.brand-dot {
+  width: 36px; height: 36px;
+  background: var(--ambar-dark);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--blanco); font-weight: 700; font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-text strong { color: var(--ambar-dark); font-size: 14px; letter-spacing: 0.5px; }
+.brand-text span { color: var(--gris); font-size: 12px; }
+
+.step-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.step-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--gris-claro);
+  background: var(--blanco);
+  color: var(--gris);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s ease;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.step-dot:hover { border-color: var(--ambar-dark); color: var(--ambar-dark); }
+.step-dot.active {
+  background: var(--ambar-dark); border-color: var(--ambar-dark);
+  color: var(--blanco);
+  box-shadow: 0 0 0 4px var(--ambar-glow);
+}
+.step-dot.completed { background: var(--ambar-soft); border-color: var(--ambar-dark); color: var(--ambar-dark); }
+
+/* ================ TEAM BANNER ================ */
+.team-banner {
+  background: var(--charcoal);
+  color: var(--blanco);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap; justify-content: center;
+  font-size: 14px;
+}
+
+.team-banner label {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--ambar);
+}
+
+.team-banner select, .team-banner input {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--blanco);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.team-banner select option { background: var(--charcoal); color: var(--blanco); }
+.team-banner input { width: 100px; }
+.team-banner input::placeholder { color: rgba(255,255,255,0.5); }
+
+.team-banner select:focus, .team-banner input:focus {
+  outline: 2px solid var(--ambar);
+  border-color: var(--ambar);
+}
+
+.team-banner .team-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; opacity: 0.85;
+}
+
+.team-banner .team-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gris-claro);
+  transition: background 0.3s ease;
+}
+.team-banner .team-dot.active { background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
+.team-banner .team-dot.error { background: #E53935; }
+
+/* ================ INDICADOR DE GUARDADO ================ */
+.save-indicator {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  z-index: 200;
+  background: var(--blanco);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-medium);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  font-size: 14px; font-weight: 500;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  border-left: 4px solid var(--gris-claro);
+  max-width: 320px;
+}
+
+.save-indicator.visible { opacity: 1; transform: translateY(0); }
+.save-indicator.saving { border-left-color: var(--ambar); }
+.save-indicator.success { border-left-color: #4CAF50; }
+.save-indicator.error { border-left-color: #E53935; }
+
+.save-indicator .save-icon {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.save-indicator.saving .save-icon::after {
+  content: '';
+  width: 18px; height: 18px;
+  border: 2px solid var(--ambar);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.save-indicator.success .save-icon { color: #4CAF50; font-weight: 700; font-size: 18px; }
+.save-indicator.success .save-icon::after { content: '✓'; }
+.save-indicator.error .save-icon { color: #E53935; font-weight: 700; font-size: 18px; }
+.save-indicator.error .save-icon::after { content: '✕'; }
+
+.save-indicator .save-text { line-height: 1.3; color: var(--charcoal); }
+.save-indicator .save-text small { display: block; color: var(--gris); font-size: 12px; font-weight: 400; }
+
+/* ================ HERO ================ */
+.hero {
+  background: linear-gradient(135deg, var(--ambar-dark) 0%, var(--ambar-deep) 100%);
+  color: var(--blanco);
+  padding: 50px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; right: -10%;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-inner { max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--blanco);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  opacity: 0.95;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.hero-meta { display: flex; gap: 24px; flex-wrap: wrap; font-size: 14px; }
+
+.hero-meta-item {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+}
+
+/* ================ MAIN ================ */
+.container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+/* ================ STEPS ================ */
+.step {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border-left: 5px solid var(--gris-claro);
+  transition: border-left-color 0.3s ease;
+}
+
+.step.active { border-left-color: var(--ambar-dark); box-shadow: var(--shadow-medium); }
+.step.completed { border-left-color: var(--terracota); }
+
+.step-header {
+  padding: 20px 26px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+
+.step-header:hover { background: var(--ambar-soft); }
+.step-title-block { display: flex; align-items: center; gap: 16px; flex: 1; }
+
+.step-num {
+  width: 38px; height: 38px;
+  background: var(--gris-claro); color: var(--blanco);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.step.active .step-num { background: var(--ambar-dark); }
+.step.completed .step-num { background: var(--terracota); }
+
+.step-title { font-size: 18px; font-weight: 600; color: var(--charcoal); }
+.step-subtitle { font-size: 13px; color: var(--gris); margin-top: 2px; }
+
+.step-toggle {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--ambar-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: var(--gris);
+  transition: transform 0.3s ease;
+}
+
+.step.active .step-toggle, .step.completed .step-toggle { transform: rotate(180deg); }
+
+.step-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+.step.active .step-body, .step.completed .step-body { max-height: 14000px; }
+
+.step-content { padding: 0 26px 28px; }
+
+/* ================ TIPOGRAFÍA ================ */
+h2 { color: var(--ambar-dark); font-size: 22px; margin: 24px 0 12px; font-weight: 700; }
+h3 { color: var(--terracota); font-size: 17px; margin: 20px 0 10px; font-weight: 600; }
+h4 { color: var(--charcoal); font-size: 15px; margin: 16px 0 8px; font-weight: 600; }
+p { margin-bottom: 12px; }
+strong { color: var(--charcoal); font-weight: 600; }
+em { color: var(--ambar-dark); font-style: italic; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; }
+
+/* ================ CASE NARRATIVE ================ */
+.case-narrative {
+  background: linear-gradient(135deg, var(--ambar-soft) 0%, var(--arena-soft) 100%);
+  border-left: 4px solid var(--ambar-dark);
+  padding: 22px 26px;
+  border-radius: var(--radius-sm);
+  margin: 20px 0;
+  position: relative;
+}
+
+.case-narrative::before {
+  content: '"';
+  position: absolute;
+  top: -10px; left: 18px;
+  font-size: 80px;
+  color: var(--ambar-dark);
+  opacity: 0.2;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.case-narrative .case-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--ambar-dark);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.case-narrative p { margin-bottom: 10px; font-size: 15.5px; line-height: 1.7; }
+.case-narrative p:last-child { margin-bottom: 0; }
+
+/* ================ ALERTAS ================ */
+.alert-box {
+  background: var(--ambar-soft);
+  border-left: 4px solid var(--ambar);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.alert-box .alert-title {
+  font-weight: 700;
+  color: var(--ambar-deep);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.info-box {
+  background: var(--ambar-soft);
+  border-left: 4px solid var(--ambar-dark);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.info-box .info-title { font-weight: 700; color: var(--ambar-deep); margin-bottom: 6px; }
+
+.didactic-tag {
+  display: inline-block;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.verify-tag {
+  display: inline-block;
+  background: var(--ambar);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* ================ COMPARADOR DE DISEÑOS ================ */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+@media (max-width: 800px) { .compare-grid { grid-template-columns: 1fr; } }
+
+.compare-card {
+  background: var(--blanco);
+  border: 2px solid var(--arena-soft);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.compare-card.cohorte { border-color: var(--salvia); }
+.compare-card.cc { border-color: var(--terracota); }
+.compare-card.nested {
+  border-color: var(--ambar-dark);
+  background: var(--ambar-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.compare-card.nested::before {
+  content: 'EL HÍBRIDO';
+  position: absolute;
+  top: 8px; right: -28px;
+  background: var(--ambar-dark);
+  color: var(--blanco);
+  padding: 3px 32px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transform: rotate(45deg);
+}
+
+.compare-card h4 { margin-top: 0; margin-bottom: 8px; font-size: 14px; }
+.compare-card.cohorte h4 { color: var(--salvia); }
+.compare-card.cc h4 { color: var(--terracota); }
+.compare-card.nested h4 { color: var(--ambar-deep); }
+
+.compare-card .compare-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--gris);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.compare-card .compare-value {
+  font-size: 13px;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+
+.compare-card .compare-pro { color: #2E7D32; font-size: 12px; }
+.compare-card .compare-con { color: #C62828; font-size: 12px; }
+
+/* ================ SIMULADOR DE MUESTREO ================ */
+.simulator-wrap {
+  background: var(--crema);
+  border-radius: var(--radius);
+  padding: 22px;
+  margin: 18px 0;
+  border: 1px solid var(--arena-soft);
+}
+
+.sim-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sim-control-card {
+  background: var(--blanco);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--arena-soft);
+}
+
+.sim-control-card label {
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--gris);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.sim-control-card input[type="range"] {
+  width: 100%;
+  accent-color: var(--ambar-dark);
+  margin-top: 4px;
+}
+
+.sim-control-card .sim-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ambar-dark);
+  text-align: center;
+}
+
+.sim-display {
+  background: var(--blanco);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--arena-soft);
+  margin-top: 12px;
+}
+
+.sim-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.sim-result-card {
+  background: var(--ambar-soft);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  border-left: 3px solid var(--ambar-dark);
+}
+
+.sim-result-card .sr-label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--ambar-deep);
+  text-transform: uppercase;
+}
+
+.sim-result-card .sr-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ambar-dark);
+  margin-top: 2px;
+}
+
+.sim-result-card .sr-unit {
+  font-size: 11px;
+  color: var(--gris);
+}
+
+/* SVG visual del muestreo (cohorte madre) */
+.svg-wrap {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 16px 0;
+  overflow-x: auto;
+  border: 1px solid var(--arena-soft);
+}
+
+/* ================ DECISION BUILDER ================ */
+.decision-builder {
+  background: var(--blanco);
+  border: 2px solid var(--ambar-soft);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 18px 0;
+}
+
+.decision-builder h3 { margin-top: 0; }
+
+.decision-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--ambar-soft);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+  border-left: 3px solid var(--ambar-dark);
+}
+
+.decision-step .ds-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--ambar-dark);
+  color: var(--blanco);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.decision-step .ds-content { flex: 1; }
+.decision-step .ds-content strong { color: var(--ambar-deep); display: block; margin-bottom: 4px; font-size: 14px; }
+.decision-step .ds-content p { margin: 0; font-size: 13.5px; }
+
+/* ================ DUAL ZONE ================ */
+.dual-zone {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+@media (max-width: 700px) { .dual-zone { grid-template-columns: 1fr; } }
+
+.dual-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  min-height: 180px;
+}
+
+.dual-card.dice { background: var(--salvia-soft); border-left: 4px solid var(--salvia); }
+.dual-card.calla { background: var(--terracota-soft); border-left: 4px solid var(--terracota); }
+
+.dual-card h4 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.dual-card.dice h4 { color: var(--salvia); }
+.dual-card.calla h4 { color: var(--terracota); }
+
+.dual-card textarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+}
+
+.dual-card textarea:focus { outline: 2px solid var(--ambar-dark); border-color: var(--ambar-dark); }
+
+/* ================ NAV BUTTONS ================ */
+.step-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ambar-soft);
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-primary { background: var(--ambar-dark); color: var(--blanco); }
+.btn-primary:hover { background: var(--ambar-deep); transform: translateX(2px); }
+.btn-secondary { background: var(--blanco); color: var(--gris); border: 1px solid var(--gris-claro); }
+.btn-secondary:hover { background: var(--ambar-soft); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* ================ SYNTHESIS ================ */
+.synthesis {
+  background: linear-gradient(135deg, var(--ambar-dark) 0%, var(--ambar-deep) 100%);
+  color: var(--blanco);
+  padding: 32px;
+  border-radius: var(--radius);
+  margin: 30px 0 20px;
+}
+
+.synthesis h2 { color: var(--blanco); margin-top: 0; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+.synthesis h3 { color: var(--ambar-soft); }
+.synthesis ul { padding-left: 20px; }
+.synthesis li { margin-bottom: 8px; }
+
+/* ================ APORTE DEL GRUPO ================ */
+.grupo-aporte {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.35);
+  animation: fadeIn 0.6s ease;
+}
+
+.grupo-aporte-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.grupo-aporte-bloque {
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--ambar-soft);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.grupo-aporte-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--ambar-soft);
+  margin-bottom: 6px;
+}
+
+.grupo-aporte-texto {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--blanco);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.grupo-aporte-texto:empty::before {
+  content: '— sin texto registrado —';
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.grupo-aporte-vacio {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px dashed var(--ambar-soft);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--ambar-soft);
+  text-align: center;
+}
+
+/* ================ AUTOEVALUACIÓN INTERACTIVA ================ */
+.quiz-block {
+  background: var(--blanco);
+  border: 2px solid var(--ambar-soft);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 24px 0 16px;
+}
+
+.quiz-block-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ambar-dark);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.quiz-block-subtitle {
+  font-size: 13.5px;
+  color: var(--gris);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.quiz-question {
+  background: var(--ambar-soft);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--ambar-dark);
+}
+
+.quiz-q-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quiz-q-num {
+  background: var(--ambar-dark);
+  color: var(--blanco);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.quiz-q-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1.45;
+}
+
+.quiz-q-text em { color: var(--ambar-dark); }
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--blanco);
+  border: 2px solid var(--ambar-soft);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.quiz-option:hover { border-color: var(--ambar-dark); background: var(--ambar-soft); }
+
+.quiz-option .quiz-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.quiz-option.selected { border-color: var(--ambar-dark); background: var(--ambar-soft); }
+.quiz-option.selected .quiz-letter { background: var(--ambar-dark); }
+.quiz-option .quiz-text { flex: 1; color: var(--charcoal); }
+
+.quiz-option.correct-selected {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.12);
+}
+.quiz-option.correct-selected .quiz-letter { background: #4CAF50; }
+.quiz-option.correct-selected::after {
+  content: '✓';
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.incorrect-selected {
+  border-color: #E53935;
+  background: rgba(229, 57, 53, 0.08);
+}
+.quiz-option.incorrect-selected .quiz-letter { background: #E53935; }
+.quiz-option.incorrect-selected::after {
+  content: '✕';
+  color: #E53935;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.correct-revealed {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.06);
+  border-style: dashed;
+}
+.quiz-option.correct-revealed .quiz-letter { background: #4CAF50; }
+.quiz-option.correct-revealed::after {
+  content: 'Respuesta correcta';
+  color: #4CAF50;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.quiz-option.locked { cursor: default; pointer-events: none; }
+
+.quiz-justify-textarea {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+  min-height: 70px;
+}
+
+.quiz-justify-textarea:focus { outline: 2px solid var(--ambar-dark); border-color: var(--ambar-dark); }
+
+.quiz-justify-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.55;
+  display: none;
+}
+
+.quiz-feedback.visible { display: block; animation: fadeIn 0.4s ease; }
+
+.quiz-feedback.feedback-correct {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4CAF50;
+  color: #2E5D2E;
+}
+
+.quiz-feedback.feedback-incorrect {
+  background: rgba(229, 57, 53, 0.08);
+  border-left: 3px solid #E53935;
+  color: #7D1F1D;
+}
+
+.quiz-feedback.feedback-reflexiva {
+  background: rgba(212, 165, 71, 0.12);
+  border-left: 3px solid var(--ambar);
+  color: var(--ambar-deep);
+}
+
+.quiz-feedback strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.quiz-dual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) { .quiz-dual-row { grid-template-columns: 1fr; } }
+
+.quiz-dual-col-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.quiz-dual-col-label.ilumina { color: var(--salvia); }
+.quiz-dual-col-label.calla { color: var(--terracota); }
+
+.quiz-verify-wrap { margin-top: 18px; display: flex; justify-content: center; }
+
+.btn-verify {
+  background: var(--ambar-dark);
+  color: var(--blanco);
+  padding: 12px 28px;
+  border-radius: 24px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn-verify:hover { background: var(--ambar-deep); transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+.btn-verify:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.quiz-summary {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--ambar-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--charcoal);
+  display: none;
+  text-align: center;
+}
+
+.quiz-summary.visible { display: block; animation: fadeIn 0.5s ease; }
+
+.quiz-summary .score-big {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ambar-dark);
+  margin: 4px 0;
+}
+
+/* ================ FOOTER ================ */
+footer {
+  background: var(--charcoal);
+  color: var(--gris-claro);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 40px;
+}
+
+footer strong { color: var(--blanco); }
+
+/* ================ ANIMATIONS ================ */
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.pulse { animation: pulse 0.6s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.5s ease; }
+
+.timeline-arrow { stroke-dasharray: 6; animation: dash 1.5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -12; } }
+
+@media (max-width: 700px) {
+  .hero { padding: 36px 18px 44px; }
+  .step-header { padding: 16px 18px; }
+  .step-content { padding: 0 18px 22px; }
+  .step-title { font-size: 16px; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+}
+
+@media print {
+  .top-bar, .step-toggle, .step-nav-buttons, footer, .save-indicator, .team-banner { display: none; }
+  .step-body { max-height: none !important; }
+  .step { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============== TOP BAR ============== -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="brand">
+      <div class="brand-dot">D</div>
+      <div class="brand-text">
+        <strong>ESTACIÓN D · ÁMBAR</strong>
+        <span>Casos-controles anidado · 15 minutos</span>
+      </div>
+    </div>
+    <div class="step-nav" id="stepNav"></div>
+  </div>
+</div>
+
+<!-- ============== TEAM BANNER ============== -->
+<div class="team-banner">
+  <label for="teamSelect">Equipo:</label>
+  <select id="teamSelect" onchange="onTeamChange()">
+    <option value="">— Selecciona —</option>
+    <option value="A">Grupo A</option>
+    <option value="B">Grupo B</option>
+    <option value="C">Grupo C</option>
+    <option value="D">Grupo D</option>
+  </select>
+  <label for="initialsInput">Iniciales:</label>
+  <input type="text" id="initialsInput" maxlength="6" placeholder="ej. JP" oninput="onInitialsChange()">
+  <div class="team-status">
+    <div class="team-dot" id="teamDot"></div>
+    <span id="teamStatusText">Sin identificar</span>
+  </div>
+</div>
+
+<!-- ============== INDICADOR DE GUARDADO ============== -->
+<div class="save-indicator" id="saveIndicator">
+  <div class="save-icon"></div>
+  <div class="save-text" id="saveText">Guardando…<small id="saveSubtext"></small></div>
+</div>
+
+<!-- ============== HERO ============== -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Sesión 7 · Tema 2 · Epidemiologías analíticas</span>
+    <h1>Lo mejor de dos mundos</h1>
+    <p class="hero-sub">Dentro de una cohorte hipotética del Observatorio Colombiano de Cuidados Paliativos, ¿qué factores predicen muerte sin alivio del dolor? El diseño que rescata a María Luisa y a Don Aurelio en una misma cohorte nacional.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">📐 <span><strong>Diseño:</strong> casos-controles anidado</span></div>
+      <div class="hero-meta-item">📊 <span><strong>Medida:</strong> OR ≈ HR de la cohorte fuente</span></div>
+      <div class="hero-meta-item">⏱ <span><strong>Tiempo:</strong> 15 min</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ============== STEP 1 — INTEGRACIÓN NARRATIVA ============== -->
+  <div class="step active" data-step="1">
+    <div class="step-header" onclick="toggleStep(1)">
+      <div class="step-title-block">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">El caso disparador</div>
+          <div class="step-subtitle">María Luisa y Don Aurelio en la misma cohorte · 1 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <div class="case-narrative">
+          <div class="case-label">📍 Una cohorte nacional · OCCP · ambos personajes</div>
+          <p>Imaginemos por un momento que existe lo que aún no existe del todo: una cohorte nacional del Observatorio Colombiano de Cuidados Paliativos (OCCP) que sigue prospectivamente a todos los pacientes ingresados a programas de CP en IPS habilitadas del país. Esa cohorte tiene a María Luisa (cáncer de cérvix), a Don Aurelio (EPOC GOLD IV), y a otros 4.998 pacientes con trayectorias diversas.</p>
+          <p>Tenemos los datos básicos de todos: diagnóstico, fecha de ingreso, fecha de muerte. Pero las <strong>variables clínicas finas</strong> —EVA del dolor en las últimas 72 horas, presencia de cuidador entrenado, barreras administrativas para acceso a opioides— solo están en las historias clínicas individuales. Procesar 5.000 historias es prohibitivo.</p>
+          <p><strong>El problema:</strong> queremos saber qué factores predicen <em>muerte con dolor no controlado</em>. ¿Tenemos que renunciar al estudio? ¿O hay un diseño que nos permita aprovechar la cohorte sin procesar las 5.000 historias?</p>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">Pregunta de investigación de la Estación D</div>
+          <p style="margin: 0;">Dentro de la cohorte hipotética del OCCP (5.000 pacientes ingresados a CP en 2023–2025), ¿qué factores predicen <strong>muerte con dolor no controlado</strong> (EVA ≥ 7 en las últimas 72 horas registradas)?</p>
+        </div>
+
+        <h3>¿Por qué un casos-controles anidado para esta pregunta?</h3>
+        <ul>
+          <li><strong>La cohorte ya existe</strong> y tiene los datos básicos para todos sus miembros.</li>
+          <li><strong>La medición de la exposición</strong> (extracción manual desde historias clínicas) es <em>cara por participante</em>, pero el desenlace es identificable a bajo costo.</li>
+          <li><strong>Necesitamos preservar la temporalidad:</strong> queremos saber qué factores <em>preceden</em> a la muerte con dolor, no factores que aparecieron como <em>consecuencia</em> de ella.</li>
+          <li><strong>Procesar 5.000 historias clínicas a mano es inviable</strong>, pero procesar 200 casos + 600 controles sí lo es.</li>
+        </ul>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" disabled>← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(2)">Siguiente: el doble problema →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 2 — DOBLE PROBLEMA Y COMPARADOR ============== -->
+  <div class="step" data-step="2">
+    <div class="step-header" onclick="toggleStep(2)">
+      <div class="step-title-block">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">El doble problema que resuelve</div>
+          <div class="step-subtitle">Comparador con cohorte y caso-control clásico · 2 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>El nested case-control resuelve <em>dos problemas simultáneamente</em> que afectan a los diseños puros. Para verlo, comparemos las tres alternativas:</p>
+
+        <div class="compare-grid">
+          <div class="compare-card cohorte">
+            <h4>Cohorte completa</h4>
+            <span class="compare-label">Estación B</span>
+            <div class="compare-value">5.000 pacientes con extracción manual completa</div>
+            <div class="compare-pro">✓ Temporalidad clara</div>
+            <div class="compare-pro">✓ Permite múltiples desenlaces</div>
+            <div class="compare-con">✕ Costo prohibitivo</div>
+            <div class="compare-con">✕ Inviable operativamente</div>
+          </div>
+
+          <div class="compare-card cc">
+            <h4>Caso-control clásico</h4>
+            <span class="compare-label">Estación A</span>
+            <div class="compare-value">200 casos + 600 controles desde poblaciones distintas</div>
+            <div class="compare-pro">✓ Económico, rápido</div>
+            <div class="compare-con">✕ Temporalidad ambigua</div>
+            <div class="compare-con">✕ Riesgo de sesgo de selección de controles</div>
+            <div class="compare-con">✕ Sesgo de memoria</div>
+          </div>
+
+          <div class="compare-card nested">
+            <h4>Casos-controles anidado</h4>
+            <span class="compare-label">Estación D</span>
+            <div class="compare-value">200 casos + 600 controles seleccionados <em>desde la misma cohorte</em></div>
+            <div class="compare-pro">✓ Temporalidad clara (heredada)</div>
+            <div class="compare-pro">✓ Sin sesgo de memoria</div>
+            <div class="compare-pro">✓ Casos y controles de la misma población</div>
+            <div class="compare-pro">✓ OR estima RR/HR de la cohorte</div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">El doble problema, articulado</div>
+          <p style="margin-bottom: 8px;"><strong>Problema 1 (de la cohorte completa):</strong> medir la exposición en todos es prohibitivo cuando esa medición es cara por persona (extracción manual, biomarcador, entrevista cualitativa).</p>
+          <p style="margin: 0;"><strong>Problema 2 (del caso-control clásico):</strong> la exposición se mide <em>después</em> del desenlace, así que la temporalidad siempre es ambigua y hay riesgo de sesgo de memoria.</p>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ El insight clave</div>
+          <p style="margin:0;">El nested case-control aprovecha que la cohorte ya conserva información preexistente al desenlace (historias clínicas archivadas, datos al ingreso, muestras almacenadas). La exposición está <em>documentada antes</em> del desenlace, aunque la <em>extracción</em> de esa exposición ocurra después. Eso es lo que da temporalidad sin pagar el costo de la cohorte completa.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Siguiente: simulador de muestreo →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 3 — SIMULADOR DE MUESTREO ============== -->
+  <div class="step" data-step="3">
+    <div class="step-header" onclick="toggleStep(3)">
+      <div class="step-title-block">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Tarea 1 · Simulador de muestreo</div>
+          <div class="step-subtitle">Ajusten parámetros y vean cómo se construye la sub-muestra · 4 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Ajusten los tres parámetros de muestreo y observen cómo cambian el tamaño de la sub-muestra, la potencia estadística aproximada y el costo relativo respecto a la cohorte completa.</p>
+
+        <span class="didactic-tag">Cohorte madre: 5.000 pacientes · OCCP hipotético</span>
+
+        <div class="simulator-wrap">
+          <div class="sim-controls">
+            <div class="sim-control-card">
+              <label>Tasa de incidencia del desenlace</label>
+              <input type="range" id="sim_inc" min="2" max="20" step="1" value="4" oninput="updateSim()">
+              <div class="sim-value"><span id="sim_inc_val">4</span>%</div>
+            </div>
+            <div class="sim-control-card">
+              <label>Controles por caso</label>
+              <input type="range" id="sim_ratio" min="1" max="5" step="1" value="3" oninput="updateSim()">
+              <div class="sim-value">1 : <span id="sim_ratio_val">3</span></div>
+            </div>
+            <div class="sim-control-card">
+              <label>Costo unitario de extracción</label>
+              <input type="range" id="sim_cost" min="50" max="500" step="50" value="200" oninput="updateSim()">
+              <div class="sim-value">$<span id="sim_cost_val">200.000</span></div>
+            </div>
+          </div>
+
+          <div class="sim-display">
+            <h4 style="margin-top:0;">Resultado del muestreo</h4>
+            <div class="sim-results">
+              <div class="sim-result-card">
+                <div class="sr-label">Casos identificados</div>
+                <div class="sr-value" id="sim_casos">200</div>
+                <div class="sr-unit">muertes con dolor no controlado</div>
+              </div>
+              <div class="sim-result-card">
+                <div class="sr-label">Controles muestreados</div>
+                <div class="sr-value" id="sim_controles">600</div>
+                <div class="sr-unit">desde la cohorte fuente</div>
+              </div>
+              <div class="sim-result-card">
+                <div class="sr-label">Sub-muestra total</div>
+                <div class="sr-value" id="sim_total">800</div>
+                <div class="sr-unit">de 5.000 (16%)</div>
+              </div>
+              <div class="sim-result-card">
+                <div class="sr-label">Costo estimado</div>
+                <div class="sr-value" id="sim_costo_total">$160M</div>
+                <div class="sr-unit">vs. $1.000M cohorte completa</div>
+              </div>
+              <div class="sim-result-card">
+                <div class="sr-label">Ahorro</div>
+                <div class="sr-value" id="sim_ahorro">84%</div>
+                <div class="sr-unit">menos extracciones</div>
+              </div>
+              <div class="sim-result-card">
+                <div class="sr-label">Potencia relativa</div>
+                <div class="sr-value" id="sim_potencia">≈ 92%</div>
+                <div class="sr-unit">de la cohorte completa</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ El argumento de eficiencia, en números</div>
+          <p style="margin:0;">Con tan solo 3 controles por caso se alcanza típicamente <strong>más del 90 % de la potencia estadística</strong> que daría la cohorte completa, a una <strong>fracción</strong> del costo. Por encima de 4 controles por caso, la potencia adicional es marginal y el costo crece linealmente. Por eso 1:3 o 1:4 es el ratio estándar en la literatura.</p>
+        </div>
+
+        <h3>Visualización de la cohorte fuente y la sub-muestra</h3>
+
+        <div class="svg-wrap">
+          <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 700px;">
+            <!-- Cohorte madre -->
+            <rect x="50" y="40" width="600" height="80" rx="6" fill="#F4E4BC" stroke="#A07930" stroke-width="2"/>
+            <text x="350" y="68" text-anchor="middle" font-size="14" fill="#6B4F0F" font-weight="700">COHORTE MADRE OCCP</text>
+            <text x="350" y="86" text-anchor="middle" font-size="12" fill="#6B4F0F">5.000 pacientes ingresados a programas de CP · 2023–2025</text>
+            <text x="350" y="104" text-anchor="middle" font-size="11" fill="#595959" font-style="italic">datos básicos disponibles para todos · seguimiento prospectivo</text>
+
+            <!-- Flechas hacia abajo: muestreo -->
+            <line x1="200" y1="120" x2="200" y2="170" stroke="#B85C3C" stroke-width="2.5" class="timeline-arrow" marker-end="url(#arrowD1)"/>
+            <line x1="500" y1="120" x2="500" y2="170" stroke="#7A8B6F" stroke-width="2.5" class="timeline-arrow" marker-end="url(#arrowD2)"/>
+
+            <defs>
+              <marker id="arrowD1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#B85C3C"/>
+              </marker>
+              <marker id="arrowD2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#7A8B6F"/>
+              </marker>
+            </defs>
+
+            <!-- Casos -->
+            <rect x="100" y="180" width="200" height="80" rx="6" fill="#B85C3C"/>
+            <text x="200" y="208" text-anchor="middle" font-size="14" fill="white" font-weight="700">CASOS</text>
+            <text x="200" y="226" text-anchor="middle" font-size="11" fill="white" id="svg_casos">200 muertes con dolor no controlado</text>
+            <text x="200" y="244" text-anchor="middle" font-size="10" fill="white" font-style="italic">todos los identificados</text>
+
+            <!-- Controles -->
+            <rect x="400" y="180" width="200" height="80" rx="6" fill="#7A8B6F"/>
+            <text x="500" y="208" text-anchor="middle" font-size="14" fill="white" font-weight="700">CONTROLES</text>
+            <text x="500" y="226" text-anchor="middle" font-size="11" fill="white" id="svg_controles">600 muestreados (1:3)</text>
+            <text x="500" y="244" text-anchor="middle" font-size="10" fill="white" font-style="italic">por densidad de incidencia</text>
+
+            <!-- Etiqueta extracción -->
+            <rect x="200" y="280" width="300" height="30" rx="4" fill="#D4A547" stroke="#8B6914" stroke-width="1"/>
+            <text x="350" y="299" text-anchor="middle" font-size="12" fill="#6B4F0F" font-weight="700">Extracción manual de exposición · solo en estos 800</text>
+          </svg>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(2)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(3, 'simulador_muestreo', 4)">Siguiente: muestreo por densidad →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 4 — MUESTREO POR DENSIDAD DE INCIDENCIA ============== -->
+  <div class="step" data-step="4">
+    <div class="step-header" onclick="toggleStep(4)">
+      <div class="step-title-block">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Tarea 2 · El muestreo por densidad de incidencia</div>
+          <div class="step-subtitle">Por qué los controles cambian con el tiempo · 2 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Aquí está la decisión metodológica más fina del diseño: <em>¿cuándo y cómo se eligen los controles?</em></p>
+
+        <h3>El muestreo por densidad de incidencia (risk-set sampling)</h3>
+        <p>Cuando ocurre un caso (un paciente fallece con dolor no controlado en el mes 7 del seguimiento), seleccionamos sus controles <strong>aleatoriamente entre quienes seguían en riesgo en ese mismo momento</strong> — es decir, entre quienes seguían vivos y bajo seguimiento al mes 7.</p>
+
+        <div class="info-box">
+          <div class="info-title">¿Por qué importa esto?</div>
+          <p style="margin: 0;">Los controles seleccionados así representan a los <em>no-casos al momento del caso</em>. Esto preserva la lógica temporal del estudio: en el mes 7, los controles podrían convertirse después en casos (algunos lo harán). El muestreo no los excluye por ese hecho. <strong>Esa es la propiedad que hace que la OR estimada se aproxime al HR de la cohorte fuente</strong>, no solo a una odds ratio.</p>
+        </div>
+
+        <h3>Implicación práctica: un mismo paciente puede ser control varias veces</h3>
+        <p>Si un paciente sobrevive todo el seguimiento, puede ser seleccionado como control para varios casos distintos a lo largo del tiempo. Esto suena raro al principio, pero es <em>exactamente</em> lo que hace que la inferencia funcione: refleja que esa persona estuvo "en riesgo" en múltiples momentos.</p>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ Tres cosas que hace el muestreo por densidad</div>
+          <ol style="margin:0; padding-left: 18px;">
+            <li><strong>Apareamiento implícito por tiempo de riesgo:</strong> caso y controles vienen del mismo momento del seguimiento.</li>
+            <li><strong>Aproximación al hazard:</strong> la OR estima el HR de la cohorte fuente, bajo riesgos proporcionales.</li>
+            <li><strong>Compatibilidad con análisis condicional:</strong> usa regresión logística condicional o modelo de Cox sobre la sub-muestra.</li>
+          </ol>
+        </div>
+
+        <h3>Variables a apareamiento adicional (opcional)</h3>
+        <p>Además del tiempo de riesgo, podemos aparear los controles por variables que sospechamos confusoras: edad al ingreso (±5 años), sexo, departamento de residencia. Cada apareamiento adicional gana precisión pero excluye esas variables del análisis como factores de riesgo independientes.</p>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(3)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(5)">Siguiente: decisiones de diseño →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 5 — CONSTRUCCIÓN DEL DISEÑO ============== -->
+  <div class="step" data-step="5">
+    <div class="step-header" onclick="toggleStep(5)">
+      <div class="step-title-block">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-title">Tarea 3 · Construir el diseño paso a paso</div>
+          <div class="step-subtitle">Cinco decisiones que el grupo debe tomar · 3 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>El protocolo de un nested case-control se construye con <strong>cinco decisiones secuenciales</strong>. Cada una afecta lo que el estudio puede y no puede contestar.</p>
+
+        <div class="decision-builder">
+          <div class="decision-step">
+            <div class="ds-num">1</div>
+            <div class="ds-content">
+              <strong>Identificar la cohorte madre</strong>
+              <p>Pacientes ingresados a programas de CP en IPS habilitadas y registradas por el OCCP entre enero 2023 y diciembre 2025. Criterios de exclusión: ingresos &lt; 7 días antes del fallecimiento (no permiten seguimiento mínimo). <span class="verify-tag">[DATO POR VERIFICAR]</span></p>
+            </div>
+          </div>
+
+          <div class="decision-step">
+            <div class="ds-num">2</div>
+            <div class="ds-content">
+              <strong>Definir operativamente caso y desenlace</strong>
+              <p>Caso = paciente fallecido con EVA ≥ 7 en al menos una medición de las últimas 72 horas registradas en historia clínica. Esta definición exige que la EVA esté efectivamente medida — pacientes sin EVA registrada quedan en una categoría aparte (no son ni casos ni controles, son "no medidos"; conviene reportar su tamaño).</p>
+            </div>
+          </div>
+
+          <div class="decision-step">
+            <div class="ds-num">3</div>
+            <div class="ds-content">
+              <strong>Establecer la razón de muestreo y el método</strong>
+              <p>1 caso : 3 controles, muestreados por densidad de incidencia, apareados adicionalmente por edad al ingreso (±5 años) y sexo. Departamento de residencia se mantiene como variable de análisis, no de apareamiento.</p>
+            </div>
+          </div>
+
+          <div class="decision-step">
+            <div class="ds-num">4</div>
+            <div class="ds-content">
+              <strong>Definir las exposiciones a extraer</strong>
+              <p>Variables que requieren revisión manual de historia clínica: número de visitas domiciliarias en los últimos 30 días, tipo de cuidador principal (familiar / contratado / ninguno), distancia residencia–IPS en km, presencia de barreras administrativas para acceso a opioides (sí/no documentado).</p>
+            </div>
+          </div>
+
+          <div class="decision-step">
+            <div class="ds-num">5</div>
+            <div class="ds-content">
+              <strong>Plan de análisis</strong>
+              <p>Regresión logística condicional sobre conjuntos caso-control (no incondicional, dado el apareamiento por tiempo de riesgo). Reportar OR ajustadas con IC 95%. Análisis de sensibilidad: variar la razón 1:2 a 1:5 y comparar estabilidad de las estimaciones.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ Lo que hereda y lo que no hereda</div>
+          <p style="margin:0;">El nested case-control hereda la <em>temporalidad</em> y la <em>población fuente</em> de la cohorte madre. Pero también hereda sus <em>sesgos</em>: si la cohorte madre tiene sesgo del trabajador sano (Estación B), el anidado también. Si los datos clínicos son de mala calidad, la extracción manual no los puede mejorar — solo los hereda.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(4)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(6)">Siguiente: limitaciones →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 6 — LIMITACIONES ESPECÍFICAS ============== -->
+  <div class="step" data-step="6">
+    <div class="step-header" onclick="toggleStep(6)">
+      <div class="step-title-block">
+        <div class="step-num">6</div>
+        <div>
+          <div class="step-title">Limitaciones específicas del diseño</div>
+          <div class="step-subtitle">Lo que el anidamiento no resuelve · 1,5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>El nested case-control es un diseño elegante, pero no es mágico. Cuatro cosas que <em>no</em> resuelve:</p>
+
+        <h3>1. Requiere que la cohorte exista</h3>
+        <p>No es un diseño "desde cero". Si en Colombia <strong>no hay una cohorte nacional bien caracterizada del OCCP</strong>, el nested case-control simplemente no es posible. Y hoy esa cohorte —en la escala que asumimos en la simulación— es más aspiración que realidad.</p>
+
+        <h3>2. Hereda los sesgos de la cohorte madre</h3>
+        <p>El sesgo del trabajador sano (los pacientes muy enfermos no entran al programa), el sesgo de subregistro de variables clínicas, las pérdidas diferenciales en el seguimiento — todo lo que está mal en la cohorte madre, está mal en el anidado.</p>
+
+        <h3>3. La medida de exposición sigue dependiendo de las historias clínicas</h3>
+        <p>Si la EVA del dolor no fue medida sistemáticamente, no podemos extraerla. La extracción manual no crea datos: rescata los que existen. En cuidado paliativo en Colombia, la calidad de las mediciones clínicas en historia varía enormemente entre IPS.</p>
+
+        <h3>4. Solo permite estudiar un desenlace a la vez</h3>
+        <p>A diferencia de la cohorte completa (Estación B), donde con los mismos datos se pueden estudiar mortalidad, calidad sintomática, días con dolor controlado simultáneamente, en el anidado se selecciona <em>una</em> definición de caso. Estudiar otro desenlace requiere un nuevo muestreo.</p>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ La cohorte que aún no existe</div>
+          <p style="margin:0;">Esta estación trabaja con una cohorte hipotética porque <strong>en Colombia 2026 la infraestructura para una cohorte nacional masiva del OCCP está en construcción</strong>. Reportes recientes de Sánchez-Cárdenas y otros documentan los avances del observatorio, pero la cobertura institucional aún no permite responder con datos reales preguntas como las que plantea esta estación. <span class="verify-tag">[DATO POR VERIFICAR contra reportes OCCP más recientes]</span></p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(5)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(7)">Siguiente: ¿qué dice y qué calla? →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 7 — DICE / CALLA + QUIZ ============== -->
+  <div class="step" data-step="7">
+    <div class="step-header" onclick="toggleStep(7)">
+      <div class="step-title-block">
+        <div class="step-num">7</div>
+        <div>
+          <div class="step-title">Tarea 4 · ¿Qué dice y qué calla este diseño?</div>
+          <div class="step-subtitle">El corazón del trabajo · 2,5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <div class="case-narrative">
+          <div class="case-label">Pregunta vertebral</div>
+          <p style="font-size:18px; font-weight:600; color: var(--ambar-dark);">¿Qué dice —y qué calla— el diseño anidado sobre María Luisa <em>y</em> sobre Don Aurelio, juntos en la misma cohorte?</p>
+        </div>
+
+        <p>Escriban en cada cuadro al menos dos ideas. <strong>Esta estación es la primera donde María Luisa y Don Aurelio podrían aparecer juntos</strong> — si la cohorte OCCP los hubiera enrolado a ambos.</p>
+
+        <div class="dual-zone">
+          <div class="dual-card dice">
+            <h4>✓ Lo que SÍ dice</h4>
+            <textarea id="diceText" placeholder="Ej.: el diseño permite identificar factores que predicen muerte con dolor no controlado preservando temporalidad y a costo razonable..."></textarea>
+          </div>
+          <div class="dual-card calla">
+            <h4>✗ Lo que CALLA</h4>
+            <textarea id="callaText" placeholder="Ej.: que la cohorte madre todavía no existe en Colombia. El diseño está esperando a que el sistema construya el observatorio..."></textarea>
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-block-title">🧭 Auto-evaluación · Pistas para discutir</div>
+          <div class="quiz-block-subtitle">Discutan en grupo, marquen su respuesta y al final toquen "Verificar". Las respuestas quedan registradas con su grupo.</div>
+
+          <!-- ============== PREGUNTA 1 ============== -->
+          <div class="quiz-question" data-q="1">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 1</span>
+            </div>
+            <div class="quiz-q-text">¿Cuál es la <em>razón principal</em> por la que el muestreo por densidad de incidencia hace que la OR del estudio anidado se aproxime al HR de la cohorte fuente?</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '1', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Porque al apareamiento por edad y sexo elimina toda confusión y la OR se vuelve insesgada por construcción.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Porque al ser una sub-muestra grande la ley de los grandes números garantiza la convergencia OR → HR.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Porque los controles se seleccionan aleatoriamente entre quienes están en riesgo <em>en el momento</em> del caso, lo que preserva la lógica del hazard.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">Porque la OR siempre es igual al HR cuando el desenlace es raro, y aquí el desenlace es relativamente raro.</span>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 2 ============== -->
+          <div class="quiz-question" data-q="2">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 2</span>
+            </div>
+            <div class="quiz-q-text">El anidado <em>no</em> resuelve cuál de estos problemas heredados de la cohorte madre:</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '2', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">El alto costo de extraer manualmente exposiciones complejas en miles de pacientes.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">La ambigüedad temporal del caso-control clásico.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">El sesgo del trabajador sano: los pacientes que mueren <em>antes</em> de poder ser remitidos al programa siguen sin entrar en la cohorte ni en el anidado.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">El sesgo de memoria asociado al recuerdo retrospectivo de exposiciones.</span>
+              </div>
+            </div>
+            <label class="quiz-justify-label" for="q2_justify">Justifiquen brevemente por qué su respuesta es la limitación que el diseño <em>no</em> resuelve (queda registrado):</label>
+            <textarea class="quiz-justify-textarea" id="q2_justify" placeholder="Ej.: el anidado mejora la eficiencia y la temporalidad, pero los pacientes que nunca entraron a la cohorte madre siguen siendo invisibles..."></textarea>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 3 — doble selección ============== -->
+          <div class="quiz-question" data-q="3">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 3</span>
+            </div>
+            <div class="quiz-q-text">En la cascada de necesidad paliativa no satisfecha, ¿qué eslabón <strong>ilumina</strong> este diseño y cuál <strong>deja en penumbra</strong>?</div>
+
+            <div class="quiz-dual-row">
+              <div>
+                <div class="quiz-dual-col-label ilumina">✓ Ilumina (auto-evaluado)</div>
+                <div class="quiz-options quiz-options-compact" data-correct="B" data-q-suffix="ilumina">
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-ilumina', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="quiz-dual-col-label calla">✗ Calla (sin respuesta única — exploratorio)</div>
+                <div class="quiz-options quiz-options-compact" data-q-suffix="calla">
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '3-calla', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 4 — reflexiva ============== -->
+          <div class="quiz-question" data-q="4">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 4 · reflexiva</span>
+            </div>
+            <div class="quiz-q-text">Esta es la última estación. Si tuvieran que recomendar a la maestría <em>un solo diseño</em> para investigar cuidado paliativo en Colombia con los recursos actuales, ¿cuál elegirían y por qué? ¿Qué condiciones tendrían que cumplirse para que ese diseño funcione?</div>
+            <p style="font-size: 13px; color: var(--gris); margin-top: 8px; margin-bottom: 4px;">Sin respuesta única. La pregunta integra todo lo que han trabajado en las cuatro estaciones — es la síntesis pragmática del taller.</p>
+            <label class="quiz-justify-label" for="q4_recomendacion">Su recomendación (queda registrada):</label>
+            <textarea class="quiz-justify-textarea" id="q4_recomendacion" rows="5" placeholder="Recomendamos el diseño X porque... Las condiciones que tendrían que cumplirse son..."></textarea>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+
+          <div class="quiz-verify-wrap">
+            <button class="btn-verify" id="btnVerify" onclick="verifyQuiz()">Verificar mis respuestas</button>
+          </div>
+
+          <div class="quiz-summary" id="quizSummary"></div>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(6)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(7, 'dice_calla', 8)">Siguiente: tarjeta para plenaria →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 8 — TARJETA PLENARIA ============== -->
+  <div class="step" data-step="8">
+    <div class="step-header" onclick="toggleStep(8)">
+      <div class="step-title-block">
+        <div class="step-num">8</div>
+        <div>
+          <div class="step-title">Tarjeta de presentación a la plenaria</div>
+          <div class="step-subtitle">Un minuto en plenaria · ensayo final</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>En el bloque de plenaria de integración (minutos 85–93), cada estación tendrá <strong>1 minuto</strong>. Esta es la tarjeta-síntesis que deben preparar.</p>
+
+        <div class="synthesis">
+          <h2>📌 Síntesis · Estación D</h2>
+
+          <h3>Pregunta de investigación</h3>
+          <p>Dentro de la cohorte hipotética del OCCP, ¿qué factores predicen muerte con dolor no controlado en pacientes ingresados a CP en Colombia 2023–2025?</p>
+
+          <h3>Diseño · medida · resultado</h3>
+          <ul>
+            <li><strong>Diseño:</strong> casos-controles anidado en cohorte, con muestreo por densidad de incidencia 1:3, apareado por edad y sexo.</li>
+            <li><strong>Medida:</strong> OR ajustada que se aproxima al HR de la cohorte fuente, vía regresión logística condicional.</li>
+            <li><span class="didactic-tag">didáctico</span> Sub-muestra de 800 sobre cohorte de 5.000 (16 %) con potencia ≥ 90 % y ahorro ≥ 80 % del costo.</li>
+            <li><strong>Eslabón de la cascada que ilumina:</strong> necesidad paliativa estimada — el diseño identifica predictores dentro de la población que efectivamente requirió CP.</li>
+          </ul>
+
+          <h3>El punto clave</h3>
+          <p>El anidado resuelve <em>dos problemas a la vez</em>: el costo prohibitivo de la cohorte completa y la temporalidad ambigua del caso-control clásico. Hereda lo mejor de ambos. Pero <strong>requiere que la cohorte madre exista</strong> — y en Colombia 2026 ese sigue siendo el desafío estructural.</p>
+
+          <h3>Limitaciones a reportar</h3>
+          <ul>
+            <li><strong>Hereda los sesgos</strong> de la cohorte madre, incluido el sesgo del trabajador sano.</li>
+            <li><strong>Solo permite un desenlace</strong> a la vez; cambiar de pregunta exige nuevo muestreo.</li>
+          </ul>
+
+          <h3>Lo que dice y lo que calla sobre María Luisa y Don Aurelio</h3>
+          <ul>
+            <li><strong>Dice:</strong> es la primera estación donde ambos podrían estar juntos en la misma cohorte y compararse con otros pacientes paliativos del país. Permite identificar factores estructurales comunes (régimen, distancia, cuidador) que predicen muerte con dolor.</li>
+            <li><strong>Calla:</strong> que la cohorte madre todavía no existe a esa escala en Colombia. El diseño está esperando a que el sistema termine de construir el observatorio.</li>
+          </ul>
+
+          <!-- ===== APORTE DEL GRUPO ===== -->
+          <div id="grupoAporteWrap" class="grupo-aporte" style="display:none;">
+            <h3>✍ Lo que añadió su grupo</h3>
+            <div class="grupo-aporte-meta" id="grupoAporteMeta"></div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">DICE</div>
+              <div class="grupo-aporte-texto" id="grupoAporteDice"></div>
+            </div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">CALLA</div>
+              <div class="grupo-aporte-texto" id="grupoAporteCalla"></div>
+            </div>
+            <div class="grupo-aporte-vacio" id="grupoAporteVacio" style="display:none;">
+              ⚠ Aún no han escrito en el paso 7. Vuelvan, escriban sus reflexiones, y al avanzar aparecerán aquí.
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">🎤 Para el orador del grupo · cierre del taller</div>
+          <p style="margin:0;">Hablen sin leer. Mantengan los 60 segundos. La frase de cierre sugerida, que puede cerrar también todo el taller: "El nested case-control no es solo un diseño elegante: es una promesa que Colombia aún no se ha cumplido. Mientras la cohorte exista solo en hipótesis, la pregunta sobre cómo mueren las María Luisas y los Don Aurelios sigue abierta".</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(7)">← Anterior</button>
+          <button class="btn btn-primary" onclick="markComplete()">✓ Completar estación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>Estación D · Lo mejor de dos mundos</strong></p>
+  <p>Sesión 7 · Tema 2 · Epidemiologías analíticas en cuidado paliativo · 8 de mayo de 2026</p>
+  <p>Universidad Antonio Nariño · Maestría en Cuidados Paliativos · Profesor Jorge Wilhelm Bogoya López</p>
+  <p style="margin-top:12px; opacity:0.7; font-size:12px;">Datos numéricos son didácticos y no representan estadísticas oficiales sobre Colombia. APA 7.ª edición. Personas vulnerabilizadas — nunca vulnerables.</p>
+</footer>
+
+<script>
+// ============== ESTADO Y NAVEGACIÓN ==============
+const totalSteps = 8;
+let currentStep = 1;
+let completedSteps = new Set();
+
+function buildStepNav() {
+  const nav = document.getElementById('stepNav');
+  nav.innerHTML = '';
+  for (let i = 1; i <= totalSteps; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'step-dot';
+    dot.textContent = i;
+    dot.onclick = () => goToStep(i);
+    if (i === currentStep) dot.classList.add('active');
+    if (completedSteps.has(i)) dot.classList.add('completed');
+    nav.appendChild(dot);
+  }
+}
+
+function toggleStep(n) {
+  if (currentStep === n) {
+    completedSteps.add(n);
+    document.querySelector(`.step[data-step="${n}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('completed');
+    currentStep = 0;
+  } else {
+    goToStep(n);
+  }
+  buildStepNav();
+}
+
+function goToStep(n) {
+  if (n < 1 || n > totalSteps) return;
+  if (currentStep && currentStep !== n) {
+    completedSteps.add(currentStep);
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('completed');
+  }
+  const newStep = document.querySelector(`.step[data-step="${n}"]`);
+  newStep.classList.remove('completed');
+  newStep.classList.add('active');
+  currentStep = n;
+  buildStepNav();
+  setTimeout(() => {
+    newStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
+function markComplete() {
+  for (let i = 1; i <= totalSteps; i++) completedSteps.add(i);
+  document.querySelectorAll('.step').forEach(s => s.classList.add('completed'));
+  buildStepNav();
+  alert('✓ Estación D completada. Han cerrado el ciclo de las cuatro estaciones. Ya pueden volver a la plenaria con su tarjeta de síntesis.');
+}
+
+// ============== UTILIDADES NUMÉRICAS ==============
+function num(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+
+function fmt(n, dec = 0) {
+  if (!isFinite(n) || isNaN(n)) return '—';
+  return n.toFixed(dec).replace('.', ',');
+}
+
+// ============== SIMULADOR DE MUESTREO ==============
+function updateSim() {
+  const N_cohorte = 5000;
+  const inc = num('sim_inc') / 100;       // tasa de incidencia
+  const ratio = num('sim_ratio');         // controles por caso
+  const cost_unit = num('sim_cost') * 1000; // costo unitario en pesos
+
+  const casos = Math.round(N_cohorte * inc);
+  const controles = casos * ratio;
+  const total = casos + controles;
+  const costo_total = total * cost_unit;
+  const costo_cohorte = N_cohorte * cost_unit;
+  const ahorro_pct = costo_cohorte > 0 ? (1 - costo_total / costo_cohorte) * 100 : 0;
+
+  // Potencia relativa (aproximación heurística estándar):
+  // Con k controles por caso, la potencia relativa ≈ k / (k + 1)
+  // Pero como pedagógicamente queremos que "1:3 ≈ 90 %, 1:4 ≈ 92 %",
+  // ajustamos con una fórmula que dé esos valores aproximados.
+  const potencia = (ratio / (ratio + 1)) * 100;
+
+  document.getElementById('sim_inc_val').textContent = num('sim_inc');
+  document.getElementById('sim_ratio_val').textContent = ratio;
+  document.getElementById('sim_cost_val').textContent = (num('sim_cost') * 1000).toLocaleString('es-CO');
+
+  document.getElementById('sim_casos').textContent = casos.toLocaleString('es-CO');
+  document.getElementById('sim_controles').textContent = controles.toLocaleString('es-CO');
+  document.getElementById('sim_total').textContent = total.toLocaleString('es-CO') + ` (${(total/N_cohorte*100).toFixed(0)}% de 5.000)`;
+
+  // Formato moneda M (millones)
+  const fmtM = (v) => '$' + (v / 1e6).toFixed(0) + 'M';
+  document.getElementById('sim_costo_total').textContent = fmtM(costo_total);
+  document.getElementById('sim_ahorro').textContent = fmt(ahorro_pct, 0) + '%';
+  document.getElementById('sim_potencia').textContent = '≈ ' + fmt(potencia, 0) + '%';
+
+  // Actualizar SVG
+  const svgCasos = document.getElementById('svg_casos');
+  const svgControles = document.getElementById('svg_controles');
+  if (svgCasos) svgCasos.textContent = `${casos.toLocaleString('es-CO')} muertes con dolor no controlado`;
+  if (svgControles) svgControles.textContent = `${controles.toLocaleString('es-CO')} muestreados (1:${ratio})`;
+}
+
+// ============================================================================
+//  CLIENTE DE PERSISTENCIA · Apps Script
+// ============================================================================
+const CONFIG = {
+  endpointURL: 'https://script.google.com/macros/s/AKfycbzEjjg97_JXgeBFQyHFRSr28mnR22D4XsS_oe_B_H_jZe4crgdk830Mth9xzbsOGhhU/exec',
+  token: 'UAN_SES7_2026_8MAY',
+  estacion: 'D',
+  versionHTML: '1.0'
+};
+
+let teamState = { equipo: '', iniciales: '' };
+
+function initTeamFromStorage() {
+  try {
+    const saved = sessionStorage.getItem('uan_ses7_team');
+    if (saved) {
+      const obj = JSON.parse(saved);
+      if (obj.equipo) {
+        document.getElementById('teamSelect').value = obj.equipo;
+        teamState.equipo = obj.equipo;
+      }
+      if (obj.iniciales) {
+        document.getElementById('initialsInput').value = obj.iniciales;
+        teamState.iniciales = obj.iniciales;
+      }
+      updateTeamStatus();
+    }
+  } catch (e) { }
+}
+
+function persistTeam() {
+  try { sessionStorage.setItem('uan_ses7_team', JSON.stringify(teamState)); } catch (e) { }
+}
+
+function onTeamChange() {
+  teamState.equipo = document.getElementById('teamSelect').value;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function onInitialsChange() {
+  teamState.iniciales = document.getElementById('initialsInput').value.trim().toUpperCase();
+  document.getElementById('initialsInput').value = teamState.iniciales;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function updateTeamStatus() {
+  const dot = document.getElementById('teamDot');
+  const text = document.getElementById('teamStatusText');
+  if (teamState.equipo) {
+    dot.classList.add('active');
+    dot.classList.remove('error');
+    const ini = teamState.iniciales ? ' · ' + teamState.iniciales : '';
+    text.textContent = `Grupo ${teamState.equipo}${ini}`;
+  } else {
+    dot.classList.remove('active', 'error');
+    text.textContent = 'Sin identificar';
+  }
+}
+
+function showSaveIndicator(state, mainText, subText = '') {
+  const ind = document.getElementById('saveIndicator');
+  const txt = document.getElementById('saveText');
+  const sub = document.getElementById('saveSubtext');
+  ind.classList.remove('saving', 'success', 'error');
+  ind.classList.add(state, 'visible');
+  txt.firstChild.textContent = mainText;
+  sub.textContent = subText;
+  if (state !== 'saving') {
+    setTimeout(() => ind.classList.remove('visible'), 3000);
+  }
+}
+
+async function sendToBackend(paso, pasoNombre, tipoDato, payload) {
+  if (!teamState.equipo) {
+    showSaveIndicator('error', 'Selecciona un equipo', 'No se puede guardar sin identificar el grupo.');
+    return { ok: false, reason: 'no_team' };
+  }
+  showSaveIndicator('saving', 'Guardando…', `Paso ${paso} · Grupo ${teamState.equipo}`);
+
+  const body = {
+    token: CONFIG.token,
+    equipo: teamState.equipo,
+    iniciales: teamState.iniciales,
+    estacion: CONFIG.estacion,
+    paso: paso,
+    paso_nombre: pasoNombre,
+    tipo_dato: tipoDato,
+    payload: payload,
+    version_html: CONFIG.versionHTML,
+    user_agent: navigator.userAgent.substring(0, 200)
+  };
+
+  try {
+    const res = await fetch(CONFIG.endpointURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showSaveIndicator('success', '✓ Guardado', `Fila ${data.fila_total} · ${data.timestamp}`);
+      return { ok: true, data: data };
+    } else {
+      showSaveIndicator('error', 'Error al guardar', data.error || 'Respuesta inválida');
+      return { ok: false, data: data };
+    }
+  } catch (err) {
+    showSaveIndicator('error', 'Sin conexión', 'Verifica internet y vuelve a tocar Siguiente.');
+    return { ok: false, error: err.message };
+  }
+}
+
+// ============== RECOLECCIÓN POR PASO ==============
+function collectStepPayload(paso) {
+  switch (paso) {
+    case 3: {
+      const N_cohorte = 5000;
+      const inc = num('sim_inc') / 100;
+      const ratio = num('sim_ratio');
+      const cost_unit = num('sim_cost') * 1000;
+      const casos = Math.round(N_cohorte * inc);
+      const controles = casos * ratio;
+      const total = casos + controles;
+      const costo_total = total * cost_unit;
+      const costo_cohorte = N_cohorte * cost_unit;
+      const ahorro_pct = costo_cohorte > 0 ? (1 - costo_total / costo_cohorte) * 100 : 0;
+      const potencia = (ratio / (ratio + 1)) * 100;
+      return {
+        N_cohorte_madre: N_cohorte,
+        tasa_incidencia_pct: num('sim_inc'),
+        ratio_controles_caso: ratio,
+        costo_unitario_extraccion: cost_unit,
+        casos: casos,
+        controles: controles,
+        total_submuestra: total,
+        costo_total_estimado: costo_total,
+        ahorro_pct: +ahorro_pct.toFixed(1),
+        potencia_relativa_pct: +potencia.toFixed(1)
+      };
+    }
+    case 7: {
+      return {
+        dice: document.getElementById('diceText').value.trim(),
+        calla: document.getElementById('callaText').value.trim(),
+        quiz: collectQuizState()
+      };
+    }
+    default:
+      return {};
+  }
+}
+
+// ============== INYECTAR APORTE EN TARJETA DEL PASO 8 ==============
+function inyectarAporteEnTarjeta(payload) {
+  const wrap = document.getElementById('grupoAporteWrap');
+  if (!wrap) return;
+  wrap.style.display = 'block';
+
+  const ahora = new Date();
+  const horaCO = ahora.toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  const ini = teamState.iniciales ? ` · ${teamState.iniciales}` : '';
+  document.getElementById('grupoAporteMeta').textContent =
+    `Registrado por Grupo ${teamState.equipo}${ini} · ${horaCO}`;
+
+  const dice = (payload.dice || '').trim();
+  const calla = (payload.calla || '').trim();
+  document.getElementById('grupoAporteDice').textContent = dice;
+  document.getElementById('grupoAporteCalla').textContent = calla;
+  document.getElementById('grupoAporteVacio').style.display = (!dice && !calla) ? 'block' : 'none';
+}
+
+async function saveAndAdvance(pasoActual, pasoNombre, pasoSiguiente) {
+  if (!teamState.equipo) {
+    showSaveIndicator('error', 'Selecciona un equipo arriba', 'No puedes continuar sin identificar el grupo.');
+    document.getElementById('teamSelect').focus();
+    document.querySelector('.team-banner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const payload = collectStepPayload(pasoActual);
+  let tipoDato = 'calculo';
+  if (pasoActual === 7) tipoDato = 'texto_libre';
+
+  if (pasoActual === 7) {
+    inyectarAporteEnTarjeta(payload);
+  }
+
+  goToStep(pasoSiguiente);
+  sendToBackend(pasoActual, pasoNombre, tipoDato, payload);
+}
+
+// ============================================================================
+//  AUTO-EVALUACIÓN INTERACTIVA DEL PASO 7
+// ============================================================================
+let quizState = {};
+let quizVerified = false;
+
+const QUIZ_FEEDBACK = {
+  '1': {
+    correct: 'C',
+    feedback: {
+      'A': 'No: el apareamiento por edad y sexo controla esas variables específicas, pero no es lo que conecta OR con HR. La conexión es temporal.',
+      'B': 'No: la ley de los grandes números no aplica aquí. La aproximación OR → HR depende del <em>método</em> de muestreo, no del tamaño.',
+      'C': '<strong>Correcto.</strong> El muestreo por densidad de incidencia (risk-set sampling) selecciona controles entre quienes están en riesgo en el momento del caso. Esto reproduce, dentro del muestreo, la lógica de tasas instantáneas que define al hazard. Por eso la OR estimada por regresión logística condicional aproxima al HR de la cohorte fuente (bajo riesgos proporcionales).',
+      'D': 'Es la lógica del caso-control clásico (cuando el desenlace es raro, OR ≈ RR). Pero aquí estamos hablando de OR → HR, que es una conexión distinta: depende de <em>cuándo</em> se eligen los controles, no de qué tan raro es el desenlace.'
+    }
+  },
+  '2': {
+    correct: 'C',
+    feedback: {
+      'A': 'Al contrario: el alto costo de extraer en miles es <em>justo el problema que el anidado sí resuelve</em> al limitar la extracción a casos y controles muestreados.',
+      'B': 'Al contrario: la temporalidad ambigua del caso-control clásico es <em>el otro problema que el anidado sí resuelve</em>, gracias a que la exposición está documentada antes del desenlace en la cohorte madre.',
+      'C': '<strong>Correcto.</strong> El sesgo del trabajador sano opera <em>antes</em> de que la cohorte se ensamble: pacientes muy enfermos mueren antes de ser remitidos al programa y nunca entran a la cohorte madre. Como el anidado es una sub-muestra de esa cohorte, hereda directamente esta limitación. Ningún muestreo posterior puede rescatar a quienes nunca entraron.',
+      'D': 'Al contrario: el sesgo de memoria es otro problema que el anidado sí resuelve, porque la exposición se obtiene de registros documentales conservados, no del recuerdo retrospectivo.'
+    }
+  },
+  '3-ilumina': {
+    correct: 'B',
+    feedback: {
+      'A': 'No: la carga de enfermedad (cuántos hay con la condición) requiere fuentes poblacionales más amplias que una cohorte clínica.',
+      'B': '<strong>Correcto.</strong> El anidado opera dentro de la población que efectivamente requirió CP (la cohorte madre del OCCP). Permite identificar qué factores predicen desenlaces dentro de esa población — qué subgrupos dentro de la "necesidad estimada" sufren peores trayectorias. Esa es información sobre la <em>composición y heterogeneidad</em> de la necesidad paliativa.',
+      'C': 'No tanto: la cobertura del sistema (qué fracción accedió al servicio) la ilumina mejor la cohorte histórica de la Estación C, con denominadores poblacionales.',
+      'D': 'No: la brecha de acceso (entre quienes acceden tarde y los que no acceden) la ilumina mejor el caso-control clásico de la Estación A.',
+      'E': 'En parte: el anidado sí dice algo sobre calidad del morir, pero su valor único es identificar predictores estructurales — no describir el proceso de muerte como hace la cohorte prospectiva de la Estación B.'
+    }
+  }
+};
+
+function selectOption(optionEl, qid, letter) {
+  if (quizVerified) return;
+  const parent = optionEl.parentElement;
+  parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+  optionEl.classList.add('selected');
+  quizState[qid] = letter;
+}
+
+function verifyQuiz() {
+  if (quizVerified) return;
+  quizVerified = true;
+
+  let correctCount = 0;
+  const evaluables = ['1', '2', '3-ilumina'];
+
+  evaluables.forEach(qid => {
+    const userAnswer = quizState[qid];
+    const meta = QUIZ_FEEDBACK[qid];
+    if (!meta) return;
+    const correctLetter = meta.correct;
+    const isCorrect = (userAnswer === correctLetter);
+    if (isCorrect) correctCount++;
+
+    let optionsContainer;
+    if (qid.startsWith('3-')) {
+      const suffix = qid.split('-')[1];
+      optionsContainer = document.querySelector(`.quiz-options[data-q-suffix="${suffix}"]`);
+    } else {
+      optionsContainer = document.querySelector(`.quiz-question[data-q="${qid}"] > .quiz-options`);
+    }
+    if (!optionsContainer) return;
+
+    optionsContainer.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.add('locked');
+      const letterEl = opt.querySelector('.quiz-letter');
+      const letter = letterEl ? letterEl.textContent.trim() : '';
+      if (opt.classList.contains('selected')) {
+        opt.classList.remove('selected');
+        if (letter === correctLetter) opt.classList.add('correct-selected');
+        else opt.classList.add('incorrect-selected');
+      } else if (letter === correctLetter) {
+        opt.classList.add('correct-revealed');
+      }
+    });
+
+    if (qid === '1' || qid === '2') {
+      const fbEl = document.getElementById('fb-' + qid);
+      if (fbEl) {
+        if (userAnswer && meta.feedback[userAnswer]) {
+          fbEl.classList.add('visible');
+          fbEl.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+          fbEl.innerHTML = `<strong>${isCorrect ? '✓ Correcto' : '✕ No es la mejor respuesta'}</strong>${meta.feedback[userAnswer]}`;
+        } else if (!userAnswer) {
+          fbEl.classList.add('visible', 'feedback-incorrect');
+          fbEl.innerHTML = `<strong>Sin respuesta</strong>La respuesta correcta era <strong>${correctLetter}</strong>. ${meta.feedback[correctLetter]}`;
+        }
+      }
+    }
+  });
+
+  // Pregunta 3 doble selección
+  const meta3 = QUIZ_FEEDBACK['3-ilumina'];
+  const userIlumina = quizState['3-ilumina'];
+  const userCalla = quizState['3-calla'];
+  const fb3 = document.getElementById('fb-3');
+  if (fb3) {
+    let html = '';
+    const iluminaCorrect = (userIlumina === meta3.correct);
+    if (userIlumina) {
+      html += `<strong>${iluminaCorrect ? '✓ Ilumina' : '✕ Ilumina'}</strong>${meta3.feedback[userIlumina]}<br><br>`;
+    } else {
+      html += `<strong>Ilumina · sin respuesta</strong>La respuesta esperada era <strong>B · necesidad paliativa estimada</strong>. ${meta3.feedback['B']}<br><br>`;
+    }
+    if (userCalla) {
+      const labels = { A: 'carga de enfermedad', B: 'necesidad paliativa estimada', C: 'cobertura del sistema', D: 'brecha de acceso', E: 'calidad del morir' };
+      html += `<strong>Calla · sin respuesta única</strong>Su grupo eligió <strong>${userCalla} · ${labels[userCalla]}</strong>. Defiendan su elección en la plenaria. Argumentos posibles para varias opciones — el diseño calla la <em>carga de enfermedad</em> (cohorte clínica, no poblacional), la <em>brecha de acceso</em> (no caracteriza a quienes no llegan al programa) y matices de la <em>calidad del morir</em> (depende de qué exposiciones se extraigan).`;
+    } else {
+      html += `<strong>Calla · sin respuesta</strong>Para la plenaria, elijan al menos un eslabón que el diseño deja en penumbra y argumenten por qué.`;
+    }
+    fb3.classList.add('visible');
+    fb3.classList.add(iluminaCorrect ? 'feedback-correct' : 'feedback-incorrect');
+    fb3.innerHTML = html;
+  }
+
+  // Pregunta 4 reflexiva
+  const recom = (document.getElementById('q4_recomendacion') || {}).value || '';
+  const fb4 = document.getElementById('fb-4');
+  if (fb4) {
+    fb4.classList.add('visible', 'feedback-reflexiva');
+    if (recom.trim().length > 50) {
+      fb4.innerHTML = `<strong>Recomendación registrada</strong>Su síntesis pragmática queda guardada con su grupo. Esta es la pregunta-cierre del taller: integra todo lo trabajado y los pone en posición de <em>recomendar</em>, no solo de analizar. La plenaria es el espacio para confrontar las recomendaciones de los cuatro grupos — probablemente serán distintas, y eso es informativo.`;
+    } else if (recom.trim().length > 0) {
+      fb4.innerHTML = `<strong>Recomendación muy breve</strong>Lo escrito queda registrado, pero les invitamos a desarrollar más. Una recomendación al programa de maestría debería incluir: (1) qué diseño priorizar, (2) por qué, (3) qué condiciones estructurales tendrían que cumplirse para que sea factible.`;
+    } else {
+      fb4.innerHTML = `<strong>Sin recomendación registrada</strong>Esta pregunta es el cierre del taller. Vuelvan al cuadro y articulen una recomendación pragmática. Pista: no hay un "diseño correcto" universal; depende de qué eslabón de la cascada quieran iluminar y qué infraestructura existe.`;
+    }
+  }
+
+  const summary = document.getElementById('quizSummary');
+  if (summary) {
+    summary.classList.add('visible');
+    summary.innerHTML = `
+      <div>Auto-evaluación completada (parte cerrada)</div>
+      <div class="score-big">${correctCount} / ${evaluables.length}</div>
+      <div style="font-size:13px; color:var(--gris);">La calificación cubre solo las preguntas con respuesta única. La pregunta 4 reflexiva y el bloque "calla" se evalúan en la plenaria.</div>
+    `;
+  }
+
+  const btn = document.getElementById('btnVerify');
+  if (btn) { btn.disabled = true; btn.textContent = '✓ Respuestas verificadas'; }
+}
+
+function collectQuizState() {
+  return {
+    verificado: quizVerified,
+    p1: { respuesta: quizState['1'] || null, correcta: 'C', acerto: quizState['1'] === 'C' },
+    p2: {
+      respuesta: quizState['2'] || null,
+      correcta: 'C',
+      acerto: quizState['2'] === 'C',
+      justificacion: (document.getElementById('q2_justify') || {}).value?.trim() || ''
+    },
+    p3_ilumina: { respuesta: quizState['3-ilumina'] || null, correcta: 'B', acerto: quizState['3-ilumina'] === 'B' },
+    p3_calla: { respuesta: quizState['3-calla'] || null, exploratoria: true },
+    p4_recomendacion_maestria: {
+      texto: (document.getElementById('q4_recomendacion') || {}).value?.trim() || '',
+      reflexiva: true
+    }
+  };
+}
+
+// ============== INIT ==============
+window.addEventListener('DOMContentLoaded', () => {
+  buildStepNav();
+  updateSim();
+  initTeamFromStorage();
+
+  const stepEls = document.querySelectorAll('.step');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+        const n = parseInt(entry.target.dataset.step);
+        document.querySelectorAll('.step-dot').forEach((dot, i) => {
+          dot.classList.toggle('active', (i + 1) === n && entry.target.classList.contains('active'));
+        });
+      }
+    });
+  }, { threshold: [0.4] });
+
+  stepEls.forEach(el => observer.observe(el));
+});
+</script>
+
+</body>
+</html>
