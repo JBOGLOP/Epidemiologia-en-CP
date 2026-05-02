@@ -129,14 +129,6 @@ Cada estación ilumina **un eslabón distinto** de la cascada. El primer eslabó
 
 ## Marco metodológico
 
-### Estándares no negociables del curso
-
-- 🎯 **Cero datos inventados.** Toda cifra proviene de fuentes verificables (DANE, OCCP, Lancet Commission, INCB) o está rotulada explícitamente como `[DATO POR VERIFICAR]` o `didáctico`.
-- 📚 **APA 7.ª edición** en todas las citaciones.
-- 🇨🇴 **Español académico colombiano**, tono cálido sin sacrificar rigor.
-- ⚖️ **Atribución correcta de la falacia OR vs RR** a Cummings (2009), no a Rothman ni Knol.
-- 🔍 **Distinción clara entre confusión y modificación de efecto** en todas las estaciones.
-
 ### Fuentes primarias utilizadas
 - DANE · Estadísticas Vitales (microdatos públicos)
 - Sánchez-Cárdenas et al. · Reportes del Observatorio Colombiano de Cuidados Paliativos (OCCP)
@@ -146,54 +138,6 @@ Cada estación ilumina **un eslabón distinto** de la cascada. El primer eslabó
 - International Narcotics Control Board (INCB)
 - Woodward, M. (2014). *Epidemiology: Study design and data analysis*. CRC Press.
 - Cummings, P. (2009). Methods for estimating adjusted risk ratios. *Stata Journal*, 9(2), 175–196.
-
----
-
-## Arquitectura técnica
-
-```
-┌─────────────────────┐     POST       ┌──────────────────┐
-│  Estaciones HTML    │ ─────────────▶ │   Apps Script    │
-│  (4 estaciones)     │                │   (Code.gs)      │
-└─────────────────────┘                └────────┬─────────┘
-                                                │
-                                                ▼
-                                       ┌──────────────────┐
-                                       │  Google Sheets   │
-                                       │ actividad_       │
-                                       │ analitics        │
-                                       └────────┬─────────┘
-                                                │
-                                                ▼
-                                       ┌──────────────────┐
-                                       │  Dashboard.gs    │
-                                       │  (extracción)    │
-                                       └────────┬─────────┘
-                                                │
-                                                ▼ GET
-┌─────────────────────┐                ┌──────────────────┐
-│  Dashboard_Vivo     │ ◀───────────── │  Hojas Dashboard │
-│  (proyección)       │                │  _Resumen        │
-└─────────────────────┘                │  _Quiz           │
-                                       │  _Trayectoria    │
-                                       └──────────────────┘
-```
-
-### Stack tecnológico
-- 🌐 **Frontend:** HTML5 + CSS3 + JavaScript vanilla (sin frameworks)
-- 📊 **Visualización:** Chart.js 4.4.0, MathJax 3.2.2, SVG nativo, IntersectionObserver API
-- ☁️ **Backend:** Google Apps Script (web app pública con token de validación)
-- 💾 **Almacenamiento:** Google Sheets como base de datos NoSQL ligera con JSON anidado
-- 🚀 **Hosting:** GitHub Pages (este repositorio)
-
-### Características funcionales
-
-✅ Auto-evaluación con retroalimentación pedagógica para todos los distractores
-✅ Registro en tiempo real de respuestas con identificación por equipo
-✅ Dashboard de proyección con polling cada 20 segundos
-✅ Trigger automático horario para refresco de dashboards
-✅ Validación por token compartido `UAN_SES7_2026_8MAY`
-✅ Sin dependencias de terceros más allá de los CDN públicos especificados
 
 ---
 
@@ -233,7 +177,7 @@ Woodward, M. (2014). *Epidemiology: Study design and data analysis* (3rd ed.). C
 ## Créditos
 
 **Diseño pedagógico, contenido y dirección académica**
-Profesor Jorge Wilhelm Bogoya López
+Profesor Jorge Bogoya López
 Maestría en Cuidados Paliativos · Facultad de Enfermería
 Universidad Antonio Nariño · Bogotá, Colombia
 
