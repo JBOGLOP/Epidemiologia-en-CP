@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estación A · El caso que no fue · Casos y controles clásico</title>
+
+<!-- MathJax para fórmulas -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<style>
+:root {
+  /* Paleta institucional UAN-Maestría */
+  --terracota: #B85C3C;
+  --terracota-soft: #EFD5C8;
+  --terracota-glow: rgba(184, 92, 60, 0.15);
+  --arena: #E8DCC4;
+  --arena-soft: #F5EEDD;
+  --salvia: #7A8B6F;
+  --salvia-soft: #D9E0D2;
+  --ambar: #D4A547;
+  --ambar-soft: #F4E4BC;
+  --charcoal: #2D2D2D;
+  --gris: #595959;
+  --gris-claro: #A6A6A6;
+  --blanco: #FFFFFF;
+  --crema: #FAF6EF;
+  --shadow-soft: 0 2px 8px rgba(45, 45, 45, 0.08);
+  --shadow-medium: 0 6px 20px rgba(45, 45, 45, 0.12);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: var(--crema);
+  color: var(--charcoal);
+  line-height: 1.6;
+  font-size: 16px;
+  min-height: 100vh;
+}
+
+/* ================ HEADER FIJO CON NAV ================ */
+.top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--blanco);
+  border-bottom: 3px solid var(--terracota);
+  box-shadow: var(--shadow-soft);
+}
+
+.top-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.brand-dot {
+  width: 36px;
+  height: 36px;
+  background: var(--terracota);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blanco);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brand-text strong { color: var(--terracota); font-size: 14px; letter-spacing: 0.5px; }
+.brand-text span { color: var(--gris); font-size: 12px; }
+
+.step-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.step-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--gris-claro);
+  background: var(--blanco);
+  color: var(--gris);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-dot:hover { border-color: var(--terracota); color: var(--terracota); }
+.step-dot.active {
+  background: var(--terracota);
+  border-color: var(--terracota);
+  color: var(--blanco);
+  box-shadow: 0 0 0 4px var(--terracota-glow);
+}
+.step-dot.completed {
+  background: var(--terracota-soft);
+  border-color: var(--terracota);
+  color: var(--terracota);
+}
+
+/* ================ HERO ================ */
+.hero {
+  background: linear-gradient(135deg, var(--terracota) 0%, #9C4830 100%);
+  color: var(--blanco);
+  padding: 50px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--blanco);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  opacity: 0.95;
+  max-width: 720px;
+  margin-bottom: 24px;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.hero-meta-item strong { font-weight: 600; }
+
+/* ================ MAIN CONTAINER ================ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* ================ STEPS / ACCORDION ================ */
+.step {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  margin-bottom: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border-left: 5px solid var(--gris-claro);
+  transition: border-left-color 0.3s ease;
+}
+
+.step.active { border-left-color: var(--terracota); box-shadow: var(--shadow-medium); }
+.step.completed { border-left-color: var(--salvia); }
+
+.step-header {
+  padding: 20px 26px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  user-select: none;
+}
+
+.step-header:hover { background: var(--arena-soft); }
+
+.step-title-block { display: flex; align-items: center; gap: 16px; flex: 1; }
+
+.step-num {
+  width: 38px;
+  height: 38px;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.step.active .step-num { background: var(--terracota); }
+.step.completed .step-num { background: var(--salvia); }
+
+.step-title { font-size: 18px; font-weight: 600; color: var(--charcoal); }
+.step-subtitle { font-size: 13px; color: var(--gris); margin-top: 2px; }
+
+.step-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--arena);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--gris);
+  transition: transform 0.3s ease;
+}
+
+.step.active .step-toggle, .step.completed .step-toggle { transform: rotate(180deg); }
+
+.step-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.step.active .step-body, .step.completed .step-body { max-height: 8000px; }
+
+.step-content { padding: 0 26px 28px; }
+
+/* ================ TIPOGRAFÍA ================ */
+h2 { color: var(--terracota); font-size: 22px; margin: 24px 0 12px; font-weight: 700; }
+h3 { color: var(--salvia); font-size: 17px; margin: 20px 0 10px; font-weight: 600; }
+h4 { color: var(--charcoal); font-size: 15px; margin: 16px 0 8px; font-weight: 600; }
+p { margin-bottom: 12px; }
+strong { color: var(--charcoal); font-weight: 600; }
+em { color: var(--terracota); font-style: italic; }
+
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { margin-bottom: 6px; }
+
+/* ================ CAJAS ESPECIALES ================ */
+.case-narrative {
+  background: linear-gradient(135deg, var(--terracota-soft) 0%, var(--arena-soft) 100%);
+  border-left: 4px solid var(--terracota);
+  padding: 22px 26px;
+  border-radius: var(--radius-sm);
+  margin: 20px 0;
+  position: relative;
+}
+
+.case-narrative::before {
+  content: '"';
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  font-size: 80px;
+  color: var(--terracota);
+  opacity: 0.2;
+  line-height: 1;
+  font-family: Georgia, serif;
+}
+
+.case-narrative .case-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--terracota);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.case-narrative p { margin-bottom: 10px; font-size: 15.5px; line-height: 1.7; }
+.case-narrative p:last-child { margin-bottom: 0; }
+
+.alert-box {
+  background: var(--ambar-soft);
+  border-left: 4px solid var(--ambar);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.alert-box .alert-title {
+  font-weight: 700;
+  color: #8B6914;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-box {
+  background: var(--salvia-soft);
+  border-left: 4px solid var(--salvia);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  margin: 16px 0;
+  font-size: 14.5px;
+}
+
+.info-box .info-title {
+  font-weight: 700;
+  color: #4A5A3F;
+  margin-bottom: 6px;
+}
+
+.didactic-tag {
+  display: inline-block;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.verify-tag {
+  display: inline-block;
+  background: var(--ambar);
+  color: var(--blanco);
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* ================ TABLA 2x2 INTERACTIVA ================ */
+.table2x2-wrap {
+  background: var(--crema);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin: 20px 0;
+}
+
+table.table2x2 {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  margin: 0 auto;
+  max-width: 580px;
+}
+
+table.table2x2 th, table.table2x2 td {
+  padding: 14px;
+  text-align: center;
+  font-size: 15px;
+}
+
+table.table2x2 th.corner {
+  background: transparent;
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 400;
+  font-style: italic;
+}
+
+table.table2x2 th.col-header {
+  background: var(--terracota);
+  color: var(--blanco);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 13.5px;
+}
+
+table.table2x2 th.row-header {
+  background: var(--salvia);
+  color: var(--blanco);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  padding-left: 16px;
+  font-weight: 600;
+  font-size: 13.5px;
+}
+
+table.table2x2 td.cell {
+  background: var(--blanco);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--arena);
+  position: relative;
+}
+
+table.table2x2 td.cell input {
+  width: 60px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--terracota);
+  font-family: inherit;
+}
+
+table.table2x2 td.cell input:focus {
+  outline: none;
+  background: var(--terracota-soft);
+  border-radius: 4px;
+}
+
+table.table2x2 td.cell .cell-letter {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-size: 11px;
+  color: var(--gris-claro);
+  font-style: italic;
+  font-weight: 700;
+}
+
+table.table2x2 td.total-cell {
+  background: var(--arena-soft);
+  border: 2px solid var(--arena);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  color: var(--charcoal);
+  font-size: 16px;
+}
+
+table.table2x2 .total-row th, table.table2x2 .total-row td {
+  border-top: 3px solid var(--terracota);
+  padding-top: 16px;
+}
+
+/* Botones de preset */
+.preset-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.preset-btn {
+  background: var(--blanco);
+  border: 2px solid var(--terracota);
+  color: var(--terracota);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-btn:hover { background: var(--terracota); color: var(--blanco); }
+.preset-btn.active { background: var(--terracota); color: var(--blanco); }
+
+/* ================ RESULTADO OR ================ */
+.or-result {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin: 20px 0;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  border: 2px dashed var(--terracota);
+}
+
+.or-formula {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: var(--gris);
+  margin-bottom: 14px;
+  background: var(--arena-soft);
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.or-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--terracota);
+  line-height: 1.2;
+  margin: 8px 0;
+}
+
+.or-label {
+  font-size: 14px;
+  color: var(--gris);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+
+.or-interpretation {
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--salvia-soft);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  font-size: 14.5px;
+  color: var(--charcoal);
+}
+
+.or-interpretation strong { color: var(--salvia); }
+
+/* ================ SVG TIMELINE ================ */
+.timeline-svg-wrap {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 16px 0;
+  overflow-x: auto;
+  border: 1px solid var(--arena);
+}
+
+/* ================ TARJETAS DE SESGOS ================ */
+.bias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.bias-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px;
+  border-top: 4px solid var(--terracota);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.bias-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-medium);
+}
+
+.bias-card.expanded { background: var(--terracota-soft); border-top-width: 6px; }
+
+.bias-card h4 {
+  color: var(--terracota);
+  margin-top: 0;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bias-card .bias-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--terracota);
+  color: var(--blanco);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.bias-card .bias-detail {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--arena);
+  font-size: 13.5px;
+}
+
+.bias-card.expanded .bias-detail { display: block; }
+
+.bias-card .bias-summary { font-size: 13.5px; color: var(--gris); }
+
+/* ================ ZONA DE REFLEXIÓN (qué dice / qué calla) ================ */
+.dual-zone {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 20px 0;
+}
+
+@media (max-width: 700px) { .dual-zone { grid-template-columns: 1fr; } }
+
+.dual-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  min-height: 180px;
+}
+
+.dual-card.dice {
+  background: var(--salvia-soft);
+  border-left: 4px solid var(--salvia);
+}
+
+.dual-card.calla {
+  background: var(--terracota-soft);
+  border-left: 4px solid var(--terracota);
+}
+
+.dual-card h4 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.dual-card.dice h4 { color: var(--salvia); }
+.dual-card.calla h4 { color: var(--terracota); }
+
+.dual-card textarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+}
+
+.dual-card textarea:focus { outline: 2px solid var(--terracota); border-color: var(--terracota); }
+
+/* ================ NAVEGACIÓN ENTRE PASOS ================ */
+.step-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--arena);
+}
+
+.btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--terracota);
+  color: var(--blanco);
+}
+
+.btn-primary:hover { background: #9C4830; transform: translateX(2px); }
+
+.btn-secondary {
+  background: var(--blanco);
+  color: var(--gris);
+  border: 1px solid var(--gris-claro);
+}
+
+.btn-secondary:hover { background: var(--arena-soft); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* ================ SÍNTESIS FINAL ================ */
+.synthesis {
+  background: linear-gradient(135deg, var(--salvia) 0%, #5C6E54 100%);
+  color: var(--blanco);
+  padding: 32px;
+  border-radius: var(--radius);
+  margin: 30px 0 20px;
+}
+
+.synthesis h2 { color: var(--blanco); margin-top: 0; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; }
+
+.synthesis ul { padding-left: 20px; }
+.synthesis li { margin-bottom: 8px; }
+
+/* ================ FOOTER ================ */
+footer {
+  background: var(--charcoal);
+  color: var(--gris-claro);
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  margin-top: 40px;
+}
+
+footer strong { color: var(--blanco); }
+
+/* ================ RESPONSIVE ================ */
+@media (max-width: 700px) {
+  .hero { padding: 36px 18px 44px; }
+  .step-header { padding: 16px 18px; }
+  .step-content { padding: 0 18px 22px; }
+  .step-title { font-size: 16px; }
+  .step-num { width: 32px; height: 32px; font-size: 14px; }
+  table.table2x2 td.cell input { width: 50px; font-size: 16px; }
+  .or-value { font-size: 36px; }
+}
+
+/* ================ ANIMACIONES ================ */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.pulse { animation: pulse 0.6s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.5s ease; }
+
+/* SVG arrow animations */
+.timeline-arrow {
+  stroke-dasharray: 6;
+  animation: dash 1.5s linear infinite;
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: -12; }
+}
+
+/* Print styles */
+@media print {
+  .top-bar, .step-toggle, .step-nav-buttons, footer, .save-indicator, .team-banner { display: none; }
+  .step-body { max-height: none !important; }
+  .step { break-inside: avoid; box-shadow: none; border: 1px solid #ccc; }
+}
+
+/* ================ IDENTIFICACIÓN DE EQUIPO (banner superior) ================ */
+.team-banner {
+  background: var(--charcoal);
+  color: var(--blanco);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.team-banner label {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: var(--ambar);
+}
+
+.team-banner select, .team-banner input {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: var(--blanco);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.team-banner select option { background: var(--charcoal); color: var(--blanco); }
+
+.team-banner input { width: 100px; }
+
+.team-banner input::placeholder { color: rgba(255,255,255,0.5); }
+
+.team-banner select:focus, .team-banner input:focus {
+  outline: 2px solid var(--ambar);
+  border-color: var(--ambar);
+}
+
+.team-banner .team-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.team-banner .team-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--gris-claro);
+  transition: background 0.3s ease;
+}
+.team-banner .team-dot.active { background: #4CAF50; box-shadow: 0 0 8px #4CAF50; }
+.team-banner .team-dot.error { background: #E53935; }
+
+/* ================ INDICADOR FLOTANTE DE GUARDADO ================ */
+.save-indicator {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  background: var(--blanco);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-medium);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  border-left: 4px solid var(--gris-claro);
+  max-width: 320px;
+}
+
+.save-indicator.visible { opacity: 1; transform: translateY(0); }
+.save-indicator.saving { border-left-color: var(--ambar); }
+.save-indicator.success { border-left-color: #4CAF50; }
+.save-indicator.error { border-left-color: #E53935; }
+
+.save-indicator .save-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.save-indicator.saving .save-icon::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ambar);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.save-indicator.success .save-icon { color: #4CAF50; font-weight: 700; font-size: 18px; }
+.save-indicator.success .save-icon::after { content: '✓'; }
+.save-indicator.error .save-icon { color: #E53935; font-weight: 700; font-size: 18px; }
+.save-indicator.error .save-icon::after { content: '✕'; }
+
+.save-indicator .save-text { line-height: 1.3; color: var(--charcoal); }
+.save-indicator .save-text small { display: block; color: var(--gris); font-size: 12px; font-weight: 400; }
+
+/* Bloqueo del avance hasta seleccionar equipo */
+.step-content.locked-by-team {
+  position: relative;
+}
+.lock-team-msg {
+  background: var(--ambar-soft);
+  border: 2px dashed var(--ambar);
+  padding: 16px 20px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 14px;
+  color: #8B6914;
+  margin: 20px 0;
+}
+
+/* ================ APORTE DEL GRUPO EN TARJETA DE PLENARIA ================ */
+.grupo-aporte {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.35);
+  animation: fadeIn 0.6s ease;
+}
+
+.grupo-aporte-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+.grupo-aporte-bloque {
+  background: rgba(255, 255, 255, 0.08);
+  border-left: 3px solid var(--ambar);
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.grupo-aporte-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--ambar);
+  margin-bottom: 6px;
+}
+
+.grupo-aporte-texto {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--blanco);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.grupo-aporte-texto:empty::before {
+  content: '— sin texto registrado —';
+  color: rgba(255, 255, 255, 0.4);
+  font-style: italic;
+}
+
+.grupo-aporte-vacio {
+  background: rgba(212, 165, 71, 0.2);
+  border: 1px dashed var(--ambar);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  color: var(--ambar-soft);
+  text-align: center;
+}
+
+/* ================ AUTOEVALUACIÓN INTERACTIVA (paso 6) ================ */
+.quiz-block {
+  background: var(--blanco);
+  border: 2px solid var(--terracota-soft);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 24px 0 16px;
+}
+
+.quiz-block-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--terracota);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.quiz-block-subtitle {
+  font-size: 13.5px;
+  color: var(--gris);
+  margin-bottom: 18px;
+  font-style: italic;
+}
+
+.quiz-question {
+  background: var(--arena-soft);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--terracota);
+}
+
+.quiz-question.locked { opacity: 0.95; }
+
+.quiz-q-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.quiz-q-num {
+  background: var(--terracota);
+  color: var(--blanco);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.quiz-q-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--charcoal);
+  line-height: 1.45;
+}
+
+.quiz-q-text em { color: var(--terracota); }
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quiz-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--blanco);
+  border: 2px solid var(--arena);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.quiz-option:hover { border-color: var(--terracota); background: var(--terracota-soft); }
+
+.quiz-option .quiz-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--gris-claro);
+  color: var(--blanco);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.quiz-option.selected {
+  border-color: var(--terracota);
+  background: var(--terracota-soft);
+}
+
+.quiz-option.selected .quiz-letter {
+  background: var(--terracota);
+}
+
+.quiz-option .quiz-text {
+  flex: 1;
+  color: var(--charcoal);
+}
+
+/* Estados post-verificación */
+.quiz-option.correct-selected {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.12);
+}
+.quiz-option.correct-selected .quiz-letter {
+  background: #4CAF50;
+}
+.quiz-option.correct-selected::after {
+  content: '✓';
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.incorrect-selected {
+  border-color: #E53935;
+  background: rgba(229, 57, 53, 0.08);
+}
+.quiz-option.incorrect-selected .quiz-letter {
+  background: #E53935;
+}
+.quiz-option.incorrect-selected::after {
+  content: '✕';
+  color: #E53935;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: auto;
+}
+
+.quiz-option.correct-revealed {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.06);
+  border-style: dashed;
+}
+.quiz-option.correct-revealed .quiz-letter {
+  background: #4CAF50;
+}
+.quiz-option.correct-revealed::after {
+  content: 'Respuesta correcta';
+  color: #4CAF50;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.quiz-option.locked { cursor: default; pointer-events: none; }
+
+.quiz-justify-textarea {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--gris-claro);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  background: var(--blanco);
+  resize: vertical;
+  min-height: 70px;
+}
+
+.quiz-justify-textarea:focus { outline: 2px solid var(--terracota); border-color: var(--terracota); }
+
+.quiz-justify-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+/* Bloque de retroalimentación post-verificación */
+.quiz-feedback {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13.5px;
+  line-height: 1.55;
+  display: none;
+}
+
+.quiz-feedback.visible { display: block; animation: fadeIn 0.4s ease; }
+
+.quiz-feedback.feedback-correct {
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4CAF50;
+  color: #2E5D2E;
+}
+
+.quiz-feedback.feedback-incorrect {
+  background: rgba(229, 57, 53, 0.08);
+  border-left: 3px solid #E53935;
+  color: #7D1F1D;
+}
+
+.quiz-feedback strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Pregunta 4 con dos selectores */
+.quiz-dual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) { .quiz-dual-row { grid-template-columns: 1fr; } }
+
+.quiz-dual-col-label {
+  font-size: 12px;
+  color: var(--gris);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.quiz-dual-col-label.ilumina { color: var(--salvia); }
+.quiz-dual-col-label.calla { color: var(--terracota); }
+
+/* Botón verificar */
+.quiz-verify-wrap {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-verify {
+  background: var(--terracota);
+  color: var(--blanco);
+  padding: 12px 28px;
+  border-radius: 24px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn-verify:hover { background: #9C4830; transform: translateY(-1px); box-shadow: var(--shadow-medium); }
+.btn-verify:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.quiz-summary {
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--salvia-soft);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--charcoal);
+  display: none;
+  text-align: center;
+}
+
+.quiz-summary.visible { display: block; animation: fadeIn 0.5s ease; }
+
+.quiz-summary .score-big {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--salvia);
+  margin: 4px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ============== TOP BAR FIJA ============== -->
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <div class="brand">
+      <div class="brand-dot">A</div>
+      <div class="brand-text">
+        <strong>ESTACIÓN A · TERRACOTA</strong>
+        <span>Casos y controles clásico · 15 minutos</span>
+      </div>
+    </div>
+    <div class="step-nav" id="stepNav">
+      <!-- Generado por JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ============== TEAM BANNER (debajo de top-bar) ============== -->
+<div class="team-banner">
+  <label for="teamSelect">Equipo:</label>
+  <select id="teamSelect" onchange="onTeamChange()">
+    <option value="">— Selecciona —</option>
+    <option value="A">Grupo A</option>
+    <option value="B">Grupo B</option>
+    <option value="C">Grupo C</option>
+    <option value="D">Grupo D</option>
+  </select>
+  <label for="initialsInput">Iniciales:</label>
+  <input type="text" id="initialsInput" maxlength="6" placeholder="ej. JP" oninput="onInitialsChange()">
+  <div class="team-status">
+    <div class="team-dot" id="teamDot"></div>
+    <span id="teamStatusText">Sin identificar</span>
+  </div>
+</div>
+
+<!-- ============== INDICADOR FLOTANTE DE GUARDADO ============== -->
+<div class="save-indicator" id="saveIndicator">
+  <div class="save-icon"></div>
+  <div class="save-text" id="saveText">Guardando…<small id="saveSubtext"></small></div>
+</div>
+
+<!-- ============== HERO ============== -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Sesión 7 · Tema 2 · Epidemiologías analíticas</span>
+    <h1>El caso que no fue</h1>
+    <p class="hero-sub">¿Qué factores se asocian con admisión tardía a cuidados paliativos en pacientes con cáncer avanzado en Bogotá? Una investigación que María Luisa nunca pudo protagonizar.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">📐 <span><strong>Diseño:</strong> casos y controles clásico</span></div>
+      <div class="hero-meta-item">📊 <span><strong>Medida:</strong> Odds Ratio (OR)</span></div>
+      <div class="hero-meta-item">⏱ <span><strong>Tiempo:</strong> 15 min</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== CONTENIDO ============== -->
+<div class="container">
+
+  <!-- ============== STEP 1 — CASO DISPARADOR ============== -->
+  <div class="step active" data-step="1">
+    <div class="step-header" onclick="toggleStep(1)">
+      <div class="step-title-block">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">El caso disparador</div>
+          <div class="step-subtitle">María Luisa y la pregunta que el sistema nunca hizo · 2 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <div class="case-narrative">
+          <div class="case-label">📍 María Luisa · Tolima rural · cáncer de cérvix</div>
+          <p>María Luisa tenía 54 años cuando empezó el sangrado. Dos años después, cuando el dolor ya era una compañía permanente en su vientre, una vecina la llevó a la cabecera municipal. La citología llegó tarde. El diagnóstico llegó tarde. La remisión a Ibagué llegó tarde. Murió en su casa, sin RIPS confirmado, sin opioides, sin contacto formal con un equipo de cuidado paliativo.</p>
+          <p><strong>La pregunta que su muerte deja abierta:</strong> ¿qué hizo que María Luisa llegara tarde —si llegó— al cuidado paliativo?</p>
+        </div>
+
+        <h3>De la pregunta humana a la pregunta epidemiológica</h3>
+        <p>Para responder con datos, necesitamos transformar esa pregunta en una pregunta epidemiológica formal:</p>
+
+        <div class="info-box">
+          <div class="info-title">Pregunta de investigación de la Estación A</div>
+          <p style="margin: 0;">¿Qué factores se asocian con <strong>admisión tardía</strong> (primer contacto con cuidados paliativos &lt; 30 días antes del fallecimiento) en pacientes con cáncer avanzado fallecidos en hospitales de tercer nivel de Bogotá durante 2024?</p>
+        </div>
+
+        <h3>¿Por qué un caso-control para esta pregunta?</h3>
+        <ul>
+          <li><strong>El desenlace ya ocurrió</strong> (la admisión tardía o no tardía es un hecho consumado al fallecer).</li>
+          <li><strong>El desenlace no es raro a nivel poblacional</strong>, pero es <em>operativamente accesible</em> a través de registros hospitalarios.</li>
+          <li><strong>Queremos explorar múltiples factores simultáneamente</strong> (régimen de afiliación, distancia, cuidador, nivel educativo).</li>
+          <li><strong>No tenemos tiempo ni presupuesto</strong> para una cohorte prospectiva de varios años.</li>
+        </ul>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" disabled>← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(2)">Siguiente: el diseño →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 2 — LÓGICA TEMPORAL ============== -->
+  <div class="step" data-step="2">
+    <div class="step-header" onclick="toggleStep(2)">
+      <div class="step-title-block">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">La lógica temporal del diseño</div>
+          <div class="step-subtitle">Por qué miramos hacia atrás · 1 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>El estudio de casos y controles parte del <strong>presente</strong> (estado del desenlace conocido) y mira hacia atrás, hacia la exposición. La unidad de muestreo es el <em>estado del desenlace</em>, no la exposición.</p>
+
+        <div class="timeline-svg-wrap">
+          <svg viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-width: 700px;">
+            <!-- Eje del tiempo -->
+            <line x1="60" y1="200" x2="640" y2="200" stroke="#595959" stroke-width="2"/>
+            <polygon points="640,200 632,196 632,204" fill="#595959"/>
+
+            <!-- Etiquetas eje -->
+            <text x="60" y="225" font-size="12" fill="#595959" font-style="italic">Pasado</text>
+            <text x="600" y="225" font-size="12" fill="#595959" font-style="italic">Presente</text>
+
+            <!-- Punto de partida (presente) -->
+            <circle cx="580" cy="200" r="10" fill="#B85C3C"/>
+            <text x="580" y="180" text-anchor="middle" font-size="12" fill="#B85C3C" font-weight="700">INICIO</text>
+            <text x="580" y="166" text-anchor="middle" font-size="10" fill="#595959">del estudio</text>
+
+            <!-- Casos -->
+            <rect x="500" y="40" width="120" height="50" rx="6" fill="#B85C3C"/>
+            <text x="560" y="62" text-anchor="middle" font-size="13" fill="white" font-weight="700">CASOS</text>
+            <text x="560" y="80" text-anchor="middle" font-size="11" fill="white">admisión tardía</text>
+
+            <!-- Controles -->
+            <rect x="500" y="110" width="120" height="50" rx="6" fill="#7A8B6F"/>
+            <text x="560" y="132" text-anchor="middle" font-size="13" fill="white" font-weight="700">CONTROLES</text>
+            <text x="560" y="150" text-anchor="middle" font-size="11" fill="white">admisión oportuna</text>
+
+            <!-- Flechas hacia atrás (animadas) -->
+            <path d="M 500 65 Q 300 65, 100 100" stroke="#B85C3C" stroke-width="2" fill="none" class="timeline-arrow" marker-end="url(#arrowR)"/>
+            <path d="M 500 135 Q 300 135, 100 110" stroke="#7A8B6F" stroke-width="2" fill="none" class="timeline-arrow" marker-end="url(#arrowG)"/>
+
+            <defs>
+              <marker id="arrowR" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#B85C3C"/>
+              </marker>
+              <marker id="arrowG" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                <polygon points="0,0 8,5 0,10" fill="#7A8B6F"/>
+              </marker>
+            </defs>
+
+            <!-- Caja de exposición -->
+            <rect x="40" y="80" width="140" height="50" rx="6" fill="white" stroke="#D4A547" stroke-width="2" stroke-dasharray="4"/>
+            <text x="110" y="102" text-anchor="middle" font-size="12" fill="#8B6914" font-weight="700">EXPOSICIÓN</text>
+            <text x="110" y="118" text-anchor="middle" font-size="10" fill="#595959">¿qué tenían antes?</text>
+
+            <!-- Etiqueta de dirección -->
+            <text x="350" y="35" text-anchor="middle" font-size="13" fill="#B85C3C" font-weight="700" font-style="italic">El análisis va del desenlace hacia la exposición</text>
+          </svg>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ Implicación crítica</div>
+          <p style="margin:0;">Como el desenlace ya ocurrió cuando empieza el estudio, <strong>la temporalidad exposición → desenlace no se observa: se infiere</strong>. Esta es la fragilidad fundamental del diseño y la razón por la que las cohortes son superiores para inferencia causal.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(1)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Siguiente: selección de controles →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 3 — SELECCIÓN DE CONTROLES ============== -->
+  <div class="step" data-step="3">
+    <div class="step-header" onclick="toggleStep(3)">
+      <div class="step-title-block">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Tarea 1 · Selección de controles</div>
+          <div class="step-subtitle">El nudo del diseño · 3 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>El gran reto del caso-control no es identificar a los casos —están definidos por el desenlace— sino <strong>elegir controles que representen a la población de la cual surgieron los casos</strong>. Una mala elección de controles distorsiona la OR independientemente de cualquier cálculo posterior.</p>
+
+        <h3>Tres opciones de controles para esta investigación</h3>
+
+        <div class="bias-grid">
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">A</span> Controles hospitalarios</h4>
+            <div class="bias-summary">Pacientes con cáncer fallecidos en los mismos hospitales con admisión oportuna a CP.</div>
+            <div class="bias-detail">
+              <p><strong>Ventaja:</strong> accesibles, comparables en la cadena administrativa de remisión.</p>
+              <p><strong>Riesgo:</strong> sesgo de Berkson. Quienes llegaron al hospital ya están filtrados por el sistema. La asociación entre régimen de afiliación y admisión tardía puede aparecer atenuada porque los más excluidos no están ni siquiera en el grupo control.</p>
+              <p><strong>Veredicto:</strong> opción factible pero hay que rotular el sesgo.</p>
+            </div>
+          </div>
+
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">B</span> Controles poblacionales</h4>
+            <div class="bias-summary">Pacientes con cáncer avanzado fallecidos en Bogotá identificados desde estadísticas vitales DANE.</div>
+            <div class="bias-detail">
+              <p><strong>Ventaja:</strong> representan a la población real. Sin sesgo de Berkson.</p>
+              <p><strong>Riesgo:</strong> dificultad operativa enorme: localizar familias, obtener consentimiento, recuperar historias clínicas dispersas. Sesgo de respuesta diferencial probable.</p>
+              <p><strong>Veredicto:</strong> control ideal en teoría, casi imposible en práctica.</p>
+            </div>
+          </div>
+
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">C</span> Controles vecinos / amigos</h4>
+            <div class="bias-summary">Pacientes con cáncer avanzado fallecidos en el mismo barrio o red social del caso.</div>
+            <div class="bias-detail">
+              <p><strong>Ventaja:</strong> sobreapareados por contexto social y geográfico (control implícito de variables de territorio).</p>
+              <p><strong>Riesgo:</strong> sobreapareamiento; pueden compartir tantas exposiciones que la asociación se diluye. Además, cargar emocionalmente a las familias dolientes para reclutar.</p>
+              <p><strong>Veredicto:</strong> útil para ciertos estudios pero complejo en CP.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-title">Decisión metodológica de la Estación</div>
+          <p style="margin:0;">Trabajaremos con la <strong>opción A (controles hospitalarios)</strong> porque es lo que harían en la práctica con los recursos típicos de un proyecto de maestría — pero <strong>con el sesgo de Berkson explícitamente nombrado y discutido al final</strong>.</p>
+        </div>
+
+        <h3>Apareamiento (matching)</h3>
+        <p>Los controles se aparearán con los casos por dos variables potencialmente confusoras:</p>
+        <ul>
+          <li><strong>Tipo de cáncer</strong> (estratos: tumores sólidos sintomáticos vs. neoplasias hematológicas).</li>
+          <li><strong>Edad al fallecer</strong> (±5 años).</li>
+        </ul>
+        <p>El apareamiento aumenta la precisión, pero implica que <em>no podremos evaluar el efecto de la edad ni del tipo de cáncer como factores de riesgo independientes</em>. Esa es la negociación.</p>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(2)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(4)">Siguiente: cálculo de OR →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 4 — TABLA 2x2 + CÁLCULO OR ============== -->
+  <div class="step" data-step="4">
+    <div class="step-header" onclick="toggleStep(4)">
+      <div class="step-title-block">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Tarea 2 · Cálculo e interpretación de la OR</div>
+          <div class="step-subtitle">Tabla 2×2 interactiva · 5 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Trabajen con la siguiente tabla 2×2. Los valores están <strong>editables</strong>: pueden modificarlos para explorar cómo cambia la OR. La tabla parte de un <em>escenario didáctico plausible</em> para Bogotá.</p>
+
+        <span class="didactic-tag">Datos didácticos · no estadísticas reales</span>
+
+        <h3>Exposición de interés: régimen de afiliación al SGSSS</h3>
+
+        <div class="preset-buttons">
+          <button class="preset-btn active" onclick="applyPreset('base', this)">Escenario base</button>
+          <button class="preset-btn" onclick="applyPreset('null', this)">Sin asociación (OR ≈ 1)</button>
+          <button class="preset-btn" onclick="applyPreset('strong', this)">Asociación fuerte</button>
+          <button class="preset-btn" onclick="applyPreset('inverse', this)">Asociación inversa</button>
+        </div>
+
+        <div class="table2x2-wrap">
+          <table class="table2x2">
+            <thead>
+              <tr>
+                <th class="corner">Exposición ↓ · Desenlace →</th>
+                <th class="col-header">Casos<br><span style="font-weight:400;font-size:11px;">admisión tardía</span></th>
+                <th class="col-header">Controles<br><span style="font-weight:400;font-size:11px;">admisión oportuna</span></th>
+                <th class="corner">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th class="row-header">Régimen subsidiado<br><span style="font-weight:400;font-size:11px;">expuestos</span></th>
+                <td class="cell"><span class="cell-letter">a</span><input type="number" id="cellA" value="60" min="0" oninput="updateOR()"></td>
+                <td class="cell"><span class="cell-letter">b</span><input type="number" id="cellB" value="40" min="0" oninput="updateOR()"></td>
+                <td class="total-cell" id="totalE">100</td>
+              </tr>
+              <tr>
+                <th class="row-header">Régimen contributivo<br><span style="font-weight:400;font-size:11px;">no expuestos</span></th>
+                <td class="cell"><span class="cell-letter">c</span><input type="number" id="cellC" value="40" min="0" oninput="updateOR()"></td>
+                <td class="cell"><span class="cell-letter">d</span><input type="number" id="cellD" value="60" min="0" oninput="updateOR()"></td>
+                <td class="total-cell" id="totalNE">100</td>
+              </tr>
+              <tr class="total-row">
+                <th class="row-header" style="background:#A6A6A6;">Total</th>
+                <td class="total-cell" id="totalCases">100</td>
+                <td class="total-cell" id="totalControls">100</td>
+                <td class="total-cell" id="totalAll">200</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="or-result">
+          <div class="or-formula">OR = (a · d) / (b · c) = (<span id="formA">60</span> × <span id="formD">60</span>) / (<span id="formB">40</span> × <span id="formC">40</span>)</div>
+          <div class="or-label">Odds Ratio</div>
+          <div class="or-value" id="orValue">2,25</div>
+
+          <div class="or-interpretation">
+            <strong>Interpretación esperada:</strong>
+            <p style="margin: 6px 0 0;" id="orInterpretation">Las personas en régimen subsidiado tienen <strong>2,25 veces la odds</strong> de admisión tardía a cuidados paliativos en comparación con personas en régimen contributivo. Esta es una asociación de magnitud moderada-fuerte y dirección consistente con la hipótesis de que las barreras del régimen subsidiado retrasan el acceso al alivio.</p>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">⚠ Trampa frecuente</div>
+          <p style="margin:0;"><strong>La OR no es un riesgo relativo.</strong> Decir "tienen 2,25 veces más riesgo" es incorrecto. La OR es una razón de odds, no de riesgos. Cuando el desenlace es raro, OR ≈ RR; cuando el desenlace es frecuente, la OR <em>sobreestima</em> al RR. En este estudio con desenlace al 50 %, esa sobreestimación importa. Esto se discute a fondo en la plenaria.</p>
+        </div>
+
+        <h3>Intervalo de confianza al 95 %</h3>
+        <p>Aproximación de Woolf en escala logarítmica:</p>
+        <p style="text-align:center;">$$ \text{IC}_{95\%} = \exp\left( \ln(\text{OR}) \pm 1{,}96 \times \sqrt{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \frac{1}{d}} \right) $$</p>
+        <div class="info-box">
+          <div class="info-title">Resultado del cálculo</div>
+          <p style="margin:0;">Para los valores actuales: <strong id="ciValue">IC₉₅% : 1,29 – 3,93</strong>. Como el intervalo no incluye el 1, la asociación es estadísticamente significativa al 5 %.</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(3)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(4, 'tabla_2x2_OR', 5)">Siguiente: sesgos →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 5 — SESGOS TÍPICOS ============== -->
+  <div class="step" data-step="5">
+    <div class="step-header" onclick="toggleStep(5)">
+      <div class="step-title-block">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-title">Anatomía de los sesgos del diseño</div>
+          <div class="step-subtitle">Toquen las tarjetas para expandir · 2 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Cuatro sesgos sistemáticamente acechan al diseño de casos y controles. Identifíquenlos antes de pasar a la reflexión.</p>
+
+        <div class="bias-grid">
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">1</span> Sesgo de Berkson</h4>
+            <div class="bias-summary">El que más importa en estudios paliativos hospitalarios.</div>
+            <div class="bias-detail">
+              <p>Cuando casos y controles provienen del mismo hospital, ambos están filtrados por las probabilidades de hospitalización. Si esas probabilidades dependen tanto de la exposición como del desenlace, la asociación queda distorsionada.</p>
+              <p><strong>En esta estación:</strong> los pacientes en régimen subsidiado que <em>nunca</em> llegaron a un hospital de tercer nivel no están ni en casos ni en controles. La OR de 2,25 podría ser una <em>subestimación</em> del impacto real del régimen sobre el acceso a CP.</p>
+            </div>
+          </div>
+
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">2</span> Sesgo de Neyman</h4>
+            <div class="bias-summary">Sesgo de prevalencia-incidencia.</div>
+            <div class="bias-detail">
+              <p>Cuando los "casos" son personas que sobrevivieron lo suficiente para entrar al estudio, las exposiciones asociadas con muerte rápida quedan invisibilizadas.</p>
+              <p><strong>En esta estación:</strong> si el caso se define como "fallecido en hospital con primer contacto con CP", quienes murieron antes de llegar al hospital no aparecen — y suelen ser los más vulnerabilizados.</p>
+            </div>
+          </div>
+
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">3</span> Sesgo de memoria</h4>
+            <div class="bias-summary">Recuerdo diferencial entre casos y controles.</div>
+            <div class="bias-detail">
+              <p>Si la exposición se mide entrevistando familias, las familias de casos suelen recordar eventos pasados con más detalle (han hecho la "autopsia narrativa" del fallecimiento).</p>
+              <p><strong>En esta estación:</strong> si preguntamos a familias por la presencia de cuidador, las familias de casos pueden recordarlo distinto que las de controles. Mitigación: usar registros documentales en lugar de recuerdo.</p>
+            </div>
+          </div>
+
+          <div class="bias-card" onclick="toggleBias(this)">
+            <h4><span class="bias-icon">4</span> Causalidad inversa</h4>
+            <div class="bias-summary">¿La exposición precedió al desenlace?</div>
+            <div class="bias-detail">
+              <p>El diseño no observa la temporalidad: la infiere. Si una variable expositiva pudo haber sido modificada por el proceso de enfermedad, hay riesgo de causalidad inversa.</p>
+              <p><strong>En esta estación:</strong> el régimen de afiliación es estable y precede a la enfermedad — bajo riesgo de causalidad inversa. Pero la "presencia de cuidador" sí podría ser efecto de la enfermedad, no causa de la admisión tardía.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(4)">← Anterior</button>
+          <button class="btn btn-primary" onclick="goToStep(6)">Siguiente: ¿qué dice y qué calla? →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 6 — QUÉ DICE / QUÉ CALLA ============== -->
+  <div class="step" data-step="6">
+    <div class="step-header" onclick="toggleStep(6)">
+      <div class="step-title-block">
+        <div class="step-num">6</div>
+        <div>
+          <div class="step-title">Tarea 3 · ¿Qué dice y qué calla este diseño?</div>
+          <div class="step-subtitle">El corazón del trabajo · 2 min</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>Volvamos a la pregunta vertebral del curso aplicada al diseño que acabamos de trabajar:</p>
+
+        <div class="case-narrative">
+          <div class="case-label">Pregunta vertebral</div>
+          <p style="font-size:18px; font-weight:600; color: var(--terracota);">¿Qué dice —y qué calla— el diseño de casos y controles clásico sobre María Luisa?</p>
+        </div>
+
+        <p>Escriban en cada cuadro al menos dos ideas. Son los apuntes que llevarán a la plenaria.</p>
+
+        <div class="dual-zone">
+          <div class="dual-card dice">
+            <h4>✓ Lo que SÍ dice</h4>
+            <textarea id="diceText" placeholder="Ej.: que existe una asociación entre régimen subsidiado y admisión tardía en quienes llegaron al hospital de tercer nivel..."></textarea>
+          </div>
+          <div class="dual-card calla">
+            <h4>✗ Lo que CALLA</h4>
+            <textarea id="callaText" placeholder="Ej.: que María Luisa no aparece en este estudio porque nunca llegó al hospital. Las personas más excluidas son invisibles al diseño..."></textarea>
+          </div>
+        </div>
+
+        <div class="quiz-block">
+          <div class="quiz-block-title">🧭 Auto-evaluación · Pistas para discutir</div>
+          <div class="quiz-block-subtitle">Discutan en grupo, marquen su respuesta y al final toquen "Verificar". Las respuestas quedan registradas con su grupo.</div>
+
+          <!-- ============== PREGUNTA 1 ============== -->
+          <div class="quiz-question" data-q="1">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 1</span>
+            </div>
+            <div class="quiz-q-text">¿Qué tipo de personas <em>nunca</em> aparecen en un estudio caso-control hospitalario sobre admisión tardía a CP?</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '1', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Las personas con cáncer avanzado que llegaron oportunamente a cuidados paliativos en hospitales de tercer nivel.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Los familiares de los pacientes hospitalizados que rechazaron participar en la entrevista.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Las personas más vulnerabilizadas que murieron en sus casas o en niveles inferiores de atención sin nunca llegar al hospital de tercer nivel.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '1', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">Los pacientes hospitalizados con diagnósticos distintos al cáncer.</span>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-1"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 2 (selección + textarea) ============== -->
+          <div class="quiz-question" data-q="2">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 2</span>
+            </div>
+            <div class="quiz-q-text">La OR de 2,25 que calcularon ¿sobreestima o subestima el efecto real del régimen subsidiado sobre la admisión tardía?</div>
+            <div class="quiz-options" data-correct="B">
+              <div class="quiz-option" onclick="selectOption(this, '2', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Sobreestima — porque la OR siempre es mayor que el RR cuando el desenlace es frecuente (falacia de la enfermedad común).</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Subestima — porque las personas más vulnerabilizadas no llegaron al hospital y por tanto no son ni casos ni controles (sesgo de Berkson).</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Ni sobreestima ni subestima — la OR es una medida insesgada por construcción.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '2', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">No es posible saberlo sin comparar con un estudio de cohorte.</span>
+              </div>
+            </div>
+            <label class="quiz-justify-label" for="q2_justify">Justifiquen su respuesta en una o dos frases (queda registrado):</label>
+            <textarea class="quiz-justify-textarea" id="q2_justify" placeholder="Ej.: aunque la OR puede inflarse cuando el desenlace es frecuente, en este estudio el problema mayor es el filtro hospitalario..."></textarea>
+            <div class="quiz-feedback" id="fb-2"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 3 ============== -->
+          <div class="quiz-question" data-q="3">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 3</span>
+            </div>
+            <div class="quiz-q-text">Si quisieran rescatar a María Luisa para el análisis (recordemos: falleció en casa, sin RIPS confirmado, en Tolima rural), ¿qué diseño usarían?</div>
+            <div class="quiz-options" data-correct="C">
+              <div class="quiz-option" onclick="selectOption(this, '3', 'A')">
+                <span class="quiz-letter">A</span>
+                <span class="quiz-text">Otro caso-control hospitalario, esta vez en hospitales de Tolima en lugar de Bogotá.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '3', 'B')">
+                <span class="quiz-letter">B</span>
+                <span class="quiz-text">Una cohorte prospectiva en hospitales de tercer nivel.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '3', 'C')">
+                <span class="quiz-letter">C</span>
+                <span class="quiz-text">Una cohorte histórica reconstruida desde fuentes poblacionales (Estadísticas Vitales DANE + RIPS departamental), que permita identificar a quienes nunca llegaron al sistema.</span>
+              </div>
+              <div class="quiz-option" onclick="selectOption(this, '3', 'D')">
+                <span class="quiz-letter">D</span>
+                <span class="quiz-text">Un estudio descriptivo transversal de los hospitales de Ibagué.</span>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-3"></div>
+          </div>
+
+          <!-- ============== PREGUNTA 4 (doble selección) ============== -->
+          <div class="quiz-question" data-q="4">
+            <div class="quiz-q-header">
+              <span class="quiz-q-num">PREGUNTA 4</span>
+            </div>
+            <div class="quiz-q-text">En la cascada de necesidad paliativa no satisfecha, ¿qué eslabón <strong>ilumina</strong> este diseño y cuál <strong>deja en penumbra</strong>?</div>
+
+            <div class="quiz-dual-row">
+              <div>
+                <div class="quiz-dual-col-label ilumina">✓ Ilumina (auto-evaluado)</div>
+                <div class="quiz-options quiz-options-compact" data-correct="D" data-q-suffix="ilumina">
+                  <div class="quiz-option" onclick="selectOption(this, '4-ilumina', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-ilumina', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-ilumina', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-ilumina', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-ilumina', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="quiz-dual-col-label calla">✗ Calla (sin respuesta única — exploratorio)</div>
+                <div class="quiz-options quiz-options-compact" data-q-suffix="calla">
+                  <div class="quiz-option" onclick="selectOption(this, '4-calla', 'A')">
+                    <span class="quiz-letter">A</span><span class="quiz-text">Carga de enfermedad</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-calla', 'B')">
+                    <span class="quiz-letter">B</span><span class="quiz-text">Necesidad paliativa estimada</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-calla', 'C')">
+                    <span class="quiz-letter">C</span><span class="quiz-text">Cobertura del sistema</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-calla', 'D')">
+                    <span class="quiz-letter">D</span><span class="quiz-text">Brecha de acceso</span>
+                  </div>
+                  <div class="quiz-option" onclick="selectOption(this, '4-calla', 'E')">
+                    <span class="quiz-letter">E</span><span class="quiz-text">Calidad del morir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="quiz-feedback" id="fb-4"></div>
+          </div>
+
+          <!-- ============== BOTÓN VERIFICAR ============== -->
+          <div class="quiz-verify-wrap">
+            <button class="btn-verify" id="btnVerify" onclick="verifyQuiz()">Verificar mis respuestas</button>
+          </div>
+
+          <div class="quiz-summary" id="quizSummary"></div>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(5)">← Anterior</button>
+          <button class="btn btn-primary" onclick="saveAndAdvance(6, 'dice_calla', 7)">Siguiente: tarjeta para plenaria →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============== STEP 7 — TARJETA PLENARIA ============== -->
+  <div class="step" data-step="7">
+    <div class="step-header" onclick="toggleStep(7)">
+      <div class="step-title-block">
+        <div class="step-num">7</div>
+        <div>
+          <div class="step-title">Tarjeta de presentación a la plenaria</div>
+          <div class="step-subtitle">Un minuto en plenaria · ensayo final</div>
+        </div>
+      </div>
+      <div class="step-toggle">▼</div>
+    </div>
+    <div class="step-body">
+      <div class="step-content">
+
+        <p>En el bloque de plenaria de integración (minutos 85–93 de la sesión), cada estación tendrá <strong>1 minuto</strong> para presentar al resto de la clase. Esta es la tarjeta-síntesis que deben preparar.</p>
+
+        <div class="synthesis">
+          <h2>📌 Síntesis · Estación A</h2>
+
+          <h3 style="color:var(--ambar-soft);">Pregunta de investigación</h3>
+          <p>Qué factores se asocian con admisión tardía a cuidados paliativos en pacientes con cáncer avanzado fallecidos en hospitales de tercer nivel de Bogotá durante 2024.</p>
+
+          <h3 style="color:var(--ambar-soft);">Diseño · medida · resultado</h3>
+          <ul>
+            <li><strong>Diseño:</strong> casos y controles clásico, controles hospitalarios apareados por tipo de cáncer y edad.</li>
+            <li><strong>Medida natural:</strong> Odds Ratio. <span class="didactic-tag">didáctico</span> En el escenario base, OR = 2,25 (IC₉₅% 1,29 – 3,93).</li>
+            <li><strong>Eslabón de la cascada que ilumina:</strong> brecha de acceso.</li>
+          </ul>
+
+          <h3 style="color:var(--ambar-soft);">Sesgos clave a vigilar</h3>
+          <ul>
+            <li><strong>Berkson:</strong> ambos grupos son hospitalarios, los más excluidos no están.</li>
+            <li><strong>Neyman:</strong> los que murieron rápido antes de llegar a CP no son casos.</li>
+          </ul>
+
+          <h3 style="color:var(--ambar-soft);">Lo que dice y lo que calla sobre María Luisa</h3>
+          <ul>
+            <li><strong>Dice:</strong> dentro del sistema, hay diferencias por régimen en el momento del primer contacto con CP.</li>
+            <li><strong>Calla:</strong> a María Luisa misma. Ella nunca entró al estudio porque nunca llegó al hospital. Su muerte permanece estadísticamente invisible.</li>
+          </ul>
+
+          <!-- ===== APORTE DEL GRUPO (se rellena al avanzar desde paso 6) ===== -->
+          <div id="grupoAporteWrap" class="grupo-aporte" style="display:none;">
+            <h3 style="color:var(--ambar-soft);">✍ Lo que añadió su grupo</h3>
+            <div class="grupo-aporte-meta" id="grupoAporteMeta"></div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">DICE</div>
+              <div class="grupo-aporte-texto" id="grupoAporteDice"></div>
+            </div>
+            <div class="grupo-aporte-bloque">
+              <div class="grupo-aporte-label">CALLA</div>
+              <div class="grupo-aporte-texto" id="grupoAporteCalla"></div>
+            </div>
+            <div class="grupo-aporte-vacio" id="grupoAporteVacio" style="display:none;">
+              ⚠ Aún no han escrito en el paso 6. Vuelvan, escriban sus reflexiones, y al avanzar aparecerán aquí.
+            </div>
+          </div>
+        </div>
+
+        <div class="alert-box">
+          <div class="alert-title">🎤 Para el orador del grupo</div>
+          <p style="margin:0;">Hablen sin leer. Mantengan los 60 segundos. La frase de cierre es lo más importante: "Este diseño nos dice mucho sobre quienes llegaron, y casi nada sobre quienes no".</p>
+        </div>
+
+        <div class="step-nav-buttons">
+          <button class="btn btn-secondary" onclick="goToStep(6)">← Anterior</button>
+          <button class="btn btn-primary" onclick="markComplete()">✓ Completar estación</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>Estación A · El caso que no fue</strong></p>
+  <p>Sesión 7 · Tema 2 · Epidemiologías analíticas en cuidado paliativo · 8 de mayo de 2026</p>
+  <p>Universidad Antonio Nariño · Maestría en Cuidados Paliativos · Profesor Jorge Wilhelm Bogoya López</p>
+  <p style="margin-top:12px; opacity:0.7; font-size:12px;">Datos de las tablas 2×2 son didácticos y no representan estadísticas oficiales sobre Colombia. APA 7.ª edición. Personas vulnerabilizadas — nunca vulnerables.</p>
+</footer>
+
+<script>
+// ============== ESTADO Y NAVEGACIÓN ==============
+const totalSteps = 7;
+let currentStep = 1;
+let completedSteps = new Set();
+
+function buildStepNav() {
+  const nav = document.getElementById('stepNav');
+  nav.innerHTML = '';
+  for (let i = 1; i <= totalSteps; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'step-dot';
+    dot.textContent = i;
+    dot.onclick = () => goToStep(i);
+    if (i === currentStep) dot.classList.add('active');
+    if (completedSteps.has(i)) dot.classList.add('completed');
+    nav.appendChild(dot);
+  }
+}
+
+function toggleStep(n) {
+  // Si ya está abierto, lo cerramos cambiando a otro; si no, lo abrimos
+  if (currentStep === n) {
+    // Cerrarlo: lo dejamos sin "active" pero como completed
+    completedSteps.add(n);
+    document.querySelector(`.step[data-step="${n}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${n}"]`).classList.add('completed');
+    currentStep = 0;
+  } else {
+    goToStep(n);
+  }
+  buildStepNav();
+}
+
+function goToStep(n) {
+  if (n < 1 || n > totalSteps) return;
+  // Marcar el actual como completado
+  if (currentStep && currentStep !== n) {
+    completedSteps.add(currentStep);
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.remove('active');
+    document.querySelector(`.step[data-step="${currentStep}"]`).classList.add('completed');
+  }
+  // Activar el nuevo
+  const newStep = document.querySelector(`.step[data-step="${n}"]`);
+  newStep.classList.remove('completed');
+  newStep.classList.add('active');
+  currentStep = n;
+  buildStepNav();
+
+  // Scroll suave al header del paso
+  setTimeout(() => {
+    newStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 150);
+}
+
+function markComplete() {
+  for (let i = 1; i <= totalSteps; i++) completedSteps.add(i);
+  document.querySelectorAll('.step').forEach(s => s.classList.add('completed'));
+  buildStepNav();
+  alert('✓ Estación A completada. Ya pueden volver a la plenaria con su tarjeta de síntesis.');
+}
+
+// ============== TARJETAS DE SESGO ==============
+function toggleBias(card) {
+  card.classList.toggle('expanded');
+}
+
+// ============== TABLA 2×2 INTERACTIVA ==============
+function num(id) {
+  const v = parseFloat(document.getElementById(id).value);
+  return isNaN(v) ? 0 : v;
+}
+
+function fmt(n, decimals = 2) {
+  if (!isFinite(n) || isNaN(n)) return '—';
+  return n.toFixed(decimals).replace('.', ',');
+}
+
+function updateOR() {
+  const a = num('cellA');
+  const b = num('cellB');
+  const c = num('cellC');
+  const d = num('cellD');
+
+  // Totales
+  document.getElementById('totalE').textContent = a + b;
+  document.getElementById('totalNE').textContent = c + d;
+  document.getElementById('totalCases').textContent = a + c;
+  document.getElementById('totalControls').textContent = b + d;
+  document.getElementById('totalAll').textContent = a + b + c + d;
+
+  // Fórmula visible
+  document.getElementById('formA').textContent = a;
+  document.getElementById('formB').textContent = b;
+  document.getElementById('formC').textContent = c;
+  document.getElementById('formD').textContent = d;
+
+  // OR
+  const orVal = (b * c === 0) ? NaN : (a * d) / (b * c);
+  const orDisplay = document.getElementById('orValue');
+  orDisplay.textContent = fmt(orVal);
+  orDisplay.classList.remove('pulse');
+  void orDisplay.offsetWidth; // reset animation
+  orDisplay.classList.add('pulse');
+
+  // IC 95%
+  const valid = (a > 0 && b > 0 && c > 0 && d > 0);
+  let ciTxt = 'IC₉₅% no calculable (alguna celda es cero)';
+  if (valid && isFinite(orVal) && orVal > 0) {
+    const lnOR = Math.log(orVal);
+    const se = Math.sqrt(1/a + 1/b + 1/c + 1/d);
+    const lo = Math.exp(lnOR - 1.96 * se);
+    const hi = Math.exp(lnOR + 1.96 * se);
+    ciTxt = `IC₉₅% : ${fmt(lo)} – ${fmt(hi)}`;
+  }
+  document.getElementById('ciValue').textContent = ciTxt;
+
+  // Interpretación dinámica
+  let interp = '';
+  if (!isFinite(orVal) || isNaN(orVal)) {
+    interp = 'No es posible calcular la OR con los valores actuales (revise las celdas).';
+  } else if (orVal > 1.2) {
+    interp = `Las personas en régimen subsidiado tienen <strong>${fmt(orVal)} veces la odds</strong> de admisión tardía a CP en comparación con personas en régimen contributivo. Hay asociación positiva: el subsidiado se asocia con tardanza.`;
+  } else if (orVal < 0.83) {
+    interp = `OR menor a 1: en estos datos, el régimen subsidiado se asocia con <strong>menor</strong> odds de admisión tardía. ¿Es plausible esto en el contexto colombiano? ¿O hay algún sesgo invertiendo la relación?`;
+  } else {
+    interp = `OR cercana a 1: en estos datos no hay evidencia clara de asociación entre régimen y admisión tardía.`;
+  }
+  document.getElementById('orInterpretation').innerHTML = interp;
+}
+
+// ============== PRESETS ==============
+function applyPreset(type, btn) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  let a, b, c, d;
+  switch(type) {
+    case 'base':
+      a = 60; b = 40; c = 40; d = 60; break;
+    case 'null':
+      a = 50; b = 50; c = 50; d = 50; break;
+    case 'strong':
+      a = 75; b = 25; c = 25; d = 75; break;
+    case 'inverse':
+      a = 35; b = 65; c = 65; d = 35; break;
+    default:
+      return;
+  }
+  document.getElementById('cellA').value = a;
+  document.getElementById('cellB').value = b;
+  document.getElementById('cellC').value = c;
+  document.getElementById('cellD').value = d;
+  updateOR();
+}
+
+// ============== INTERSECTION OBSERVER PARA NAV ==============
+window.addEventListener('DOMContentLoaded', () => {
+  buildStepNav();
+  updateOR();
+  initTeamFromStorage();
+
+  // Observer: marcar el step más visible como activo en el nav
+  const stepEls = document.querySelectorAll('.step');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+        const n = parseInt(entry.target.dataset.step);
+        // Resaltar dot activo sin alterar el estado de pasos
+        document.querySelectorAll('.step-dot').forEach((dot, i) => {
+          dot.classList.toggle('active', (i + 1) === n && entry.target.classList.contains('active'));
+        });
+      }
+    });
+  }, { threshold: [0.4] });
+
+  stepEls.forEach(el => observer.observe(el));
+});
+
+// ============================================================================
+//  CLIENTE DE PERSISTENCIA · Apps Script
+// ============================================================================
+const CONFIG = {
+  endpointURL: 'https://script.google.com/macros/s/AKfycbzEjjg97_JXgeBFQyHFRSr28mnR22D4XsS_oe_B_H_jZe4crgdk830Mth9xzbsOGhhU/exec',
+  token: 'UAN_SES7_2026_8MAY',
+  estacion: 'A',
+  versionHTML: '1.0'
+};
+
+let teamState = { equipo: '', iniciales: '' };
+
+function initTeamFromStorage() {
+  // Restaurar selección desde sessionStorage si existe (sobrevive a F5 pero no a cierre del navegador)
+  try {
+    const saved = sessionStorage.getItem('uan_ses7_team');
+    if (saved) {
+      const obj = JSON.parse(saved);
+      if (obj.equipo) {
+        document.getElementById('teamSelect').value = obj.equipo;
+        teamState.equipo = obj.equipo;
+      }
+      if (obj.iniciales) {
+        document.getElementById('initialsInput').value = obj.iniciales;
+        teamState.iniciales = obj.iniciales;
+      }
+      updateTeamStatus();
+    }
+  } catch (e) { /* sessionStorage puede estar deshabilitado en algunos navegadores */ }
+}
+
+function persistTeam() {
+  try {
+    sessionStorage.setItem('uan_ses7_team', JSON.stringify(teamState));
+  } catch (e) { /* silently */ }
+}
+
+function onTeamChange() {
+  teamState.equipo = document.getElementById('teamSelect').value;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function onInitialsChange() {
+  teamState.iniciales = document.getElementById('initialsInput').value.trim().toUpperCase();
+  document.getElementById('initialsInput').value = teamState.iniciales;
+  updateTeamStatus();
+  persistTeam();
+}
+
+function updateTeamStatus() {
+  const dot = document.getElementById('teamDot');
+  const text = document.getElementById('teamStatusText');
+  if (teamState.equipo) {
+    dot.classList.add('active');
+    dot.classList.remove('error');
+    const labelMap = { A: 'Terracota', B: 'Salvia', C: 'Arena', D: 'Ámbar' };
+    const ini = teamState.iniciales ? ' · ' + teamState.iniciales : '';
+    text.textContent = `Grupo ${teamState.equipo} (${labelMap[teamState.equipo]})${ini}`;
+  } else {
+    dot.classList.remove('active', 'error');
+    text.textContent = 'Sin identificar';
+  }
+}
+
+// ============== INDICADOR DE GUARDADO ==============
+function showSaveIndicator(state, mainText, subText = '') {
+  const ind = document.getElementById('saveIndicator');
+  const txt = document.getElementById('saveText');
+  const sub = document.getElementById('saveSubtext');
+  ind.classList.remove('saving', 'success', 'error');
+  ind.classList.add(state, 'visible');
+  txt.firstChild.textContent = mainText;
+  sub.textContent = subText;
+
+  if (state !== 'saving') {
+    setTimeout(() => ind.classList.remove('visible'), 3000);
+  }
+}
+
+// ============== ENVÍO DE DATOS ==============
+async function sendToBackend(paso, pasoNombre, tipoDato, payload) {
+  if (!teamState.equipo) {
+    showSaveIndicator('error', 'Selecciona un equipo', 'No se puede guardar sin identificar el grupo.');
+    return { ok: false, reason: 'no_team' };
+  }
+
+  showSaveIndicator('saving', 'Guardando…', `Paso ${paso} · Grupo ${teamState.equipo}`);
+
+  const body = {
+    token: CONFIG.token,
+    equipo: teamState.equipo,
+    iniciales: teamState.iniciales,
+    estacion: CONFIG.estacion,
+    paso: paso,
+    paso_nombre: pasoNombre,
+    tipo_dato: tipoDato,
+    payload: payload,
+    version_html: CONFIG.versionHTML,
+    user_agent: navigator.userAgent.substring(0, 200)
+  };
+
+  try {
+    const res = await fetch(CONFIG.endpointURL, {
+      method: 'POST',
+      // CRÍTICO: Apps Script no admite preflight CORS con application/json.
+      // Usamos text/plain y el servidor parsea el body como JSON.
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body),
+      redirect: 'follow'
+    });
+
+    const data = await res.json();
+    if (data.ok) {
+      showSaveIndicator('success', '✓ Guardado', `Fila ${data.fila_total} · ${data.timestamp}`);
+      return { ok: true, data: data };
+    } else {
+      showSaveIndicator('error', 'Error al guardar', data.error || 'Respuesta inválida');
+      console.warn('Backend rechazó:', data);
+      return { ok: false, data: data };
+    }
+  } catch (err) {
+    showSaveIndicator('error', 'Sin conexión', 'Verifica internet y vuelve a tocar Siguiente.');
+    console.error('Error de red:', err);
+    return { ok: false, error: err.message };
+  }
+}
+
+// ============== RECOLECCIÓN DE DATOS POR PASO ==============
+function collectStepPayload(paso) {
+  switch (paso) {
+    case 4: {
+      // Tabla 2×2 — leer celdas y resultado
+      const a = num('cellA'), b = num('cellB'), c = num('cellC'), d = num('cellD');
+      const orVal = (b * c === 0) ? null : (a * d) / (b * c);
+      // Preset activo
+      let preset = 'custom';
+      const activeBtn = document.querySelector('.preset-btn.active');
+      if (activeBtn) preset = activeBtn.textContent.trim();
+      // IC95 (recalculo simple para incluir en payload)
+      let ic = null;
+      if (a > 0 && b > 0 && c > 0 && d > 0 && orVal && isFinite(orVal)) {
+        const lnOR = Math.log(orVal);
+        const se = Math.sqrt(1/a + 1/b + 1/c + 1/d);
+        ic = [
+          +Math.exp(lnOR - 1.96 * se).toFixed(3),
+          +Math.exp(lnOR + 1.96 * se).toFixed(3)
+        ];
+      }
+      return {
+        preset, a, b, c, d,
+        OR: orVal !== null && isFinite(orVal) ? +orVal.toFixed(3) : null,
+        IC95: ic
+      };
+    }
+    case 6: {
+      // Qué dice / qué calla + estado del quiz
+      return {
+        dice: document.getElementById('diceText').value.trim(),
+        calla: document.getElementById('callaText').value.trim(),
+        quiz: collectQuizState()
+      };
+    }
+    default:
+      return {};
+  }
+}
+
+// ============== GUARDAR Y AVANZAR ==============
+async function saveAndAdvance(pasoActual, pasoNombre, pasoSiguiente) {
+  if (!teamState.equipo) {
+    // Bloquear avance hasta que el equipo esté identificado
+    showSaveIndicator('error', 'Selecciona un equipo arriba', 'No puedes continuar sin identificar el grupo.');
+    document.getElementById('teamSelect').focus();
+    document.querySelector('.team-banner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  const payload = collectStepPayload(pasoActual);
+  const tipoDato = (pasoActual === 4) ? 'calculo' : 'texto_libre';
+
+  // Si venimos del paso 6 (qué dice / qué calla), inyectar el texto en la tarjeta del paso 7
+  if (pasoActual === 6) {
+    inyectarAporteEnTarjeta(payload);
+  }
+
+  // Avanzar inmediatamente; el guardado ocurre en paralelo (UX más fluida).
+  goToStep(pasoSiguiente);
+
+  // Disparar el guardado sin bloquear la UI
+  sendToBackend(pasoActual, pasoNombre, tipoDato, payload);
+}
+
+// ============== INYECTAR APORTE DEL GRUPO EN LA TARJETA DEL PASO 7 ==============
+function inyectarAporteEnTarjeta(payload) {
+  const wrap = document.getElementById('grupoAporteWrap');
+  const meta = document.getElementById('grupoAporteMeta');
+  const diceEl = document.getElementById('grupoAporteDice');
+  const callaEl = document.getElementById('grupoAporteCalla');
+  const vacioEl = document.getElementById('grupoAporteVacio');
+
+  if (!wrap) return;
+
+  // Mostrar el bloque (estaba oculto inicialmente)
+  wrap.style.display = 'block';
+
+  // Metadatos: equipo + iniciales + timestamp
+  const ahora = new Date();
+  const horaCO = ahora.toLocaleString('es-CO', {
+    timeZone: 'America/Bogota',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  const labelMap = { A: 'Terracota', B: 'Salvia', C: 'Arena', D: 'Ámbar' };
+  const colorEquipo = labelMap[teamState.equipo] || teamState.equipo;
+  const ini = teamState.iniciales ? ` · ${teamState.iniciales}` : '';
+  meta.textContent = `Registrado por Grupo ${teamState.equipo} (${colorEquipo})${ini} · ${horaCO}`;
+
+  // Contenido
+  const dice = (payload.dice || '').trim();
+  const calla = (payload.calla || '').trim();
+
+  diceEl.textContent = dice;
+  callaEl.textContent = calla;
+
+  // Aviso si ambos campos vienen vacíos
+  if (!dice && !calla) {
+    vacioEl.style.display = 'block';
+  } else {
+    vacioEl.style.display = 'none';
+  }
+}
+
+// ============================================================================
+//  AUTO-EVALUACIÓN INTERACTIVA DEL PASO 6 (Pistas para discutir)
+// ============================================================================
+
+// Estado del quiz: { '1': 'C', '2': 'B', '3': 'C', '4-ilumina': 'D', '4-calla': 'A' }
+let quizState = {};
+let quizVerified = false;
+
+const QUIZ_FEEDBACK = {
+  '1': {
+    correct: 'C',
+    feedback: {
+      'A': 'No: las personas que llegaron oportunamente sí están en el estudio — son los <strong>controles</strong> del diseño.',
+      'B': 'En parte: los rechazos son una pérdida, pero no son la <em>población invisible</em> de fondo. La pregunta apunta a quienes nunca tuvieron la oportunidad de rechazar.',
+      'C': '<strong>Correcto.</strong> El sesgo de Berkson opera porque tanto casos como controles son hospitalarios. Las personas más vulnerabilizadas que murieron en casa o en niveles inferiores nunca entran al marco muestral. Por eso la OR de 2,25 probablemente <em>subestima</em> el efecto real del régimen subsidiado.',
+      'D': 'No: por criterios de elegibilidad, el estudio se restringe a pacientes con cáncer avanzado.'
+    }
+  },
+  '2': {
+    correct: 'B',
+    feedback: {
+      'A': 'Es una respuesta tentadora porque la falacia de la enfermedad común es real, pero aquí no es el problema dominante: el filtro hospitalario es más severo que la inflación de la OR.',
+      'B': '<strong>Correcto.</strong> El sesgo de Berkson <em>atenúa</em> la asociación porque los más excluidos no llegan al hospital — ni como casos ni como controles. La OR observada (2,25) capta solo la diferencia entre quienes llegaron, no la diferencia real entre las poblaciones del subsidiado y el contributivo.',
+      'C': 'No: la OR <em>tiene</em> sesgos por construcción cuando los controles no representan la población de origen.',
+      'D': 'Discutible: aunque las cohortes ayudan, el problema aquí no es la magnitud sino la <em>fuente</em> del sesgo (la selección hospitalaria).'
+    }
+  },
+  '3': {
+    correct: 'C',
+    feedback: {
+      'A': 'Cambiaría la geografía pero no el problema: seguiría faltando quien no llegó al hospital.',
+      'B': 'Una cohorte prospectiva en hospitales repetiría el mismo filtro de Berkson.',
+      'C': '<strong>Correcto.</strong> Una cohorte histórica desde fuentes poblacionales (Estadísticas Vitales DANE + RIPS departamental) puede identificar a quienes nunca llegaron al sistema o llegaron tardíamente, porque parte del registro de la <em>muerte</em>, no de la <em>admisión hospitalaria</em>. Es exactamente el diseño de la Estación C.',
+      'D': 'Un transversal describe estado actual, pero no permite analizar trayectorias ni inferir causalidad.'
+    }
+  },
+  '4-ilumina': {
+    correct: 'D',
+    feedback: {
+      'A': 'No: la carga de enfermedad pide estimar cuántas personas hay con la condición, lo que requiere fuentes poblacionales.',
+      'B': 'No: la necesidad estimada combina carga + fracción que requiere CP, también poblacional.',
+      'C': 'No: cobertura mide qué fracción del total accedió, lo cual exige numerador y denominador poblacionales.',
+      'D': '<strong>Correcto.</strong> El diseño caso-control hospitalario está optimizado para detectar <em>diferencias entre quienes accedieron y quienes accedieron tarde</em> — esa es la brecha de acceso. No puede medir cuántos quedaron por fuera, pero sí puede caracterizar quiénes son los que llegan tarde.',
+      'E': 'No: la calidad del morir requiere observar el proceso de muerte, lo cual no captura el caso-control.'
+    }
+  }
+};
+
+function selectOption(optionEl, qid, letter) {
+  if (quizVerified) return; // Bloqueado tras verificar
+
+  // Limpiar selección previa en este grupo de opciones
+  const parent = optionEl.parentElement;
+  parent.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+  optionEl.classList.add('selected');
+
+  quizState[qid] = letter;
+}
+
+function verifyQuiz() {
+  if (quizVerified) return;
+  quizVerified = true;
+
+  let correctCount = 0;
+  let answeredCount = 0;
+  const evaluables = ['1', '2', '3', '4-ilumina'];
+
+  evaluables.forEach(qid => {
+    const userAnswer = quizState[qid];
+    const meta = QUIZ_FEEDBACK[qid];
+    if (!meta) return;
+
+    answeredCount++;
+    const correctLetter = meta.correct;
+    const isCorrect = (userAnswer === correctLetter);
+    if (isCorrect) correctCount++;
+
+    // Encontrar el contenedor de opciones — selector específico según qid
+    let optionsContainer;
+    if (qid.startsWith('4-')) {
+      const suffix = qid.split('-')[1];
+      optionsContainer = document.querySelector(`.quiz-options[data-q-suffix="${suffix}"]`);
+    } else {
+      optionsContainer = document.querySelector(`.quiz-question[data-q="${qid}"] > .quiz-options`);
+    }
+    if (!optionsContainer) return;
+
+    // Marcar visualmente cada opción
+    optionsContainer.querySelectorAll('.quiz-option').forEach(opt => {
+      opt.classList.add('locked');
+      const letterEl = opt.querySelector('.quiz-letter');
+      const letter = letterEl ? letterEl.textContent.trim() : '';
+
+      if (opt.classList.contains('selected')) {
+        opt.classList.remove('selected');
+        if (letter === correctLetter) {
+          opt.classList.add('correct-selected');
+        } else {
+          opt.classList.add('incorrect-selected');
+        }
+      } else if (letter === correctLetter) {
+        opt.classList.add('correct-revealed');
+      }
+    });
+
+    // Mostrar retroalimentación de la opción seleccionada (o aviso si no respondió)
+    // Buscar el bloque de feedback correcto
+    let fbId;
+    if (qid.startsWith('4-')) {
+      fbId = 'fb-4';
+    } else {
+      fbId = 'fb-' + qid;
+    }
+    const fbEl = document.getElementById(fbId);
+    if (fbEl && qid !== '4-ilumina') {
+      // Para preguntas 1, 2, 3 — mostrar feedback simple
+      if (userAnswer && meta.feedback[userAnswer]) {
+        fbEl.classList.add('visible');
+        fbEl.classList.add(isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+        fbEl.innerHTML = `<strong>${isCorrect ? '✓ Correcto' : '✕ No es la mejor respuesta'}</strong>${meta.feedback[userAnswer]}`;
+      } else if (!userAnswer) {
+        fbEl.classList.add('visible', 'feedback-incorrect');
+        fbEl.innerHTML = `<strong>Sin respuesta</strong>La respuesta correcta era <strong>${correctLetter}</strong>. ${meta.feedback[correctLetter]}`;
+      }
+    }
+  });
+
+  // Pregunta 4 tiene feedback combinado (ilumina + calla)
+  const meta4 = QUIZ_FEEDBACK['4-ilumina'];
+  const userIlumina = quizState['4-ilumina'];
+  const userCalla = quizState['4-calla'];
+  const fb4 = document.getElementById('fb-4');
+  if (fb4) {
+    let html = '';
+    const iluminaCorrect = (userIlumina === meta4.correct);
+    if (userIlumina) {
+      html += `<strong>${iluminaCorrect ? '✓ Ilumina' : '✕ Ilumina'}</strong>${meta4.feedback[userIlumina]}<br><br>`;
+    } else {
+      html += `<strong>Ilumina · sin respuesta</strong>La respuesta esperada era <strong>D · brecha de acceso</strong>. ${meta4.feedback['D']}<br><br>`;
+    }
+    if (userCalla) {
+      const labels = { A: 'carga de enfermedad', B: 'necesidad paliativa estimada', C: 'cobertura del sistema', D: 'brecha de acceso', E: 'calidad del morir' };
+      html += `<strong>Calla · sin respuesta única</strong>Su grupo eligió <strong>${userCalla} · ${labels[userCalla]}</strong>. Esta parte es exploratoria: defiendan su elección en la plenaria. Argumentos posibles para varias opciones —el diseño calla la <em>carga real</em> (no llega a quienes nunca consultaron), la <em>cobertura poblacional</em> (no tiene denominador) y la <em>calidad del morir</em> (no observa el proceso final).`;
+    } else {
+      html += `<strong>Calla · sin respuesta</strong>Para la plenaria, elijan al menos un eslabón que el diseño deja en penumbra y argumenten por qué.`;
+    }
+    fb4.classList.add('visible');
+    fb4.classList.add(iluminaCorrect ? 'feedback-correct' : 'feedback-incorrect');
+    fb4.innerHTML = html;
+  }
+
+  // Resumen
+  const summary = document.getElementById('quizSummary');
+  if (summary) {
+    summary.classList.add('visible');
+    summary.innerHTML = `
+      <div>Auto-evaluación completada (parte cerrada)</div>
+      <div class="score-big">${correctCount} / ${evaluables.length}</div>
+      <div style="font-size:13px; color:var(--gris);">La calificación es solo orientativa. Lo importante es la justificación que llevarán a la plenaria.</div>
+    `;
+  }
+
+  // Bloquear el botón
+  const btn = document.getElementById('btnVerify');
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '✓ Respuestas verificadas';
+  }
+}
+
+function collectQuizState() {
+  const userIlumina = quizState['4-ilumina'];
+  const userCalla = quizState['4-calla'];
+
+  return {
+    verificado: quizVerified,
+    p1: { respuesta: quizState['1'] || null, correcta: 'C', acerto: quizState['1'] === 'C' },
+    p2: {
+      respuesta: quizState['2'] || null,
+      correcta: 'B',
+      acerto: quizState['2'] === 'B',
+      justificacion: (document.getElementById('q2_justify') || {}).value?.trim() || ''
+    },
+    p3: { respuesta: quizState['3'] || null, correcta: 'C', acerto: quizState['3'] === 'C' },
+    p4_ilumina: { respuesta: userIlumina || null, correcta: 'D', acerto: userIlumina === 'D' },
+    p4_calla: { respuesta: userCalla || null, exploratoria: true }
+  };
+}
+</script>
+
+</body>
+</html>
