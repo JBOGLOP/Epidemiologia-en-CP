@@ -91,7 +91,7 @@ Comparador de tres alternativas (cohorte completa / caso-control clásico / nest
 
 | Recurso | URL | Audiencia |
 |---|---|---|
-| 📐 Estación A | [estacionA_v2.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA.html) | Estudiantes |
+| 📐 Estación A | [estacionA.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA.html) | Estudiantes |
 | 📊 Estación B | [estacionB_Cohorte.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionB_Cohorte.html) | Estudiantes |
 | 🗂️ Estación C | [estacionC_CohorteHistorica.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionC_CohorteHistorica.html) | Estudiantes |
 | 🎯 Estación D | [estacionD_NestedCC.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionD_NestedCC.html) | Estudiantes |
