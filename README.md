@@ -1,194 +1,261 @@
-# Sesión 6 · Epidemiología descriptiva en cuidados paliativos
+# Epidemiología del Cuidado Paliativo · Sesión 7
 
-**Curso:** Epidemiología del Cuidado Paliativo (37542002)
-**Programa:** Maestría en Cuidados Paliativos
-**Facultad de Enfermería · Universidad Antonio Nariño (UAN)**
-**Docente:** Jorge Wilhelm Bogoya López
-**Fecha de la sesión presencial:** viernes 24 de abril de 2026 · 10:00 a.m.
-**Modalidad:** Journal Club · tres subgrupos paralelos
+> **Epidemiologías analíticas en cuidado paliativo: ¿qué dice y qué calla cada diseño sobre las personas que necesitan cuidados paliativos?**
 
-🌐 **Sitio web de la actividad:** <https://jboglop.github.io/Epidemiologia-en-CP/>
+[![Universidad Antonio Nariño](https://img.shields.io/badge/UAN-Maestr%C3%ADa%20en%20Cuidados%20Paliativos-B85C3C)](https://www.uan.edu.co)
+[![Sesión](https://img.shields.io/badge/Sesi%C3%B3n-7-7A8B6F)](#)
+[![Fecha](https://img.shields.io/badge/Fecha-8%20mayo%202026-D4A547)](#)
+[![Modalidad](https://img.shields.io/badge/Modalidad-Aprendizaje%20Activo-8B7B5C)](#)
+
+Repositorio del material didáctico interactivo para la sesión 7 del curso **Epidemiología del Cuidado Paliativo** (cód. 37542002) de la Maestría en Cuidados Paliativos de la Universidad Antonio Nariño. Profesor: **Jorge Wilhelm Bogoya López**.
 
 ---
 
-## 📍 Sobre esta actividad
+## Tabla de contenidos
 
-Esta asignación forma parte de la **Unidad 3, Tema 1** del curso y se ancla en la pregunta vertebral del semestre:
+- [Pregunta vertebral del curso](#pregunta-vertebral-del-curso)
+- [Estructura de la sesión](#estructura-de-la-sesión)
+- [Las cuatro estaciones](#las-cuatro-estaciones)
+- [Acceso al material en vivo](#acceso-al-material-en-vivo)
+- [Anclajes narrativos](#anclajes-narrativos)
+- [La cascada de necesidad paliativa no satisfecha](#la-cascada-de-necesidad-paliativa-no-satisfecha)
+- [Marco metodológico](#marco-metodológico)
+- [Arquitectura técnica](#arquitectura-técnica)
+- [Asignación post-sesión](#asignación-post-sesión)
+- [Referencias](#referencias)
+- [Créditos](#créditos)
+- [Licencia](#licencia)
+
+---
+
+## Pregunta vertebral del curso
 
 > *¿Qué dice —y qué calla— el panorama epidemiológico sobre las personas que necesitan cuidados paliativos?*
 
-Trabajamos tres diseños epidemiológicos descriptivos aplicados a cuidados paliativos:
+En esta sesión, la pregunta se refina al diseño analítico:
 
-1. **Reporte y serie de casos**
-2. **Estudio transversal de prevalencia**
-3. **Estudio ecológico**
+> *¿Qué dice —y qué calla— el diseño analítico sobre las personas que necesitan cuidados paliativos?*
 
-Los tres comparten una característica fundamental: **ninguno establece causalidad**, pero los tres se utilizan cotidianamente en la literatura, con frecuencia de manera sobreinterpretada. Identificar esos excesos interpretativos es la competencia nuclear de la sesión, y un insumo directo para las tesis y publicaciones de los estudiantes.
+Cada diseño epidemiológico es como una linterna: alumbra una zona específica de la cascada de necesidad paliativa y deja otras en penumbra. La sesión enseña a leer ambas: lo iluminado y lo silenciado.
 
 ---
 
-## 📂 Contenido de este repositorio
+## Estructura de la sesión
 
-🌐 **Accede a los materiales directamente en línea:**
-### 👉 <https://jboglop.github.io/Epidemiologia-en-CP/>
+**Duración total:** 120 minutos · **Modelo:** aprendizaje activo · **Instructor talk:** ≤ 30 % del tiempo total
 
-| Archivo | Descripción |
-|---|---|
-| [`Paquete_Estudiante_Sesion_6.html`](./Paquete_Estudiante_Sesion_6.html) | Documento principal de la sesión: cronograma, asignación de grupos, artículos del Journal Club, guía CASP unificada, indicación del compromiso escrito y rúbrica. **Ver en línea:** [abrir paquete](https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html). |
-| [`Presentacion_Sesion_6.html`](./Presentacion_Sesion_6.html) | 🆕 **Presentación de la sesión presencial del viernes 24 de abril** · material que acompaña los tres bloques del Journal Club. **Ver en línea:** [abrir presentación](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html). |
-| [`05-_diseño_investigacion.pdf`](./05-_diseño_investigacion.pdf) | Lectura conceptual común · Capítulo sobre diseños de investigación. |
-| [`06_DESSCRIPTIVOS.pdf`](./06_DESSCRIPTIVOS.pdf) | Lectura conceptual común · Capítulo sobre estudios descriptivos. |
-| `README.md` | Este documento. |
-
-> **Cómo usar el repositorio:**
-> - **Antes de la sesión:** abre el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html> y lee los dos PDFs de base conceptual.
-> - **Durante la sesión del viernes 24 de abril:** la presentación [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html) guía el desarrollo de los tres bloques del Journal Club.
-> - **Opción offline:** descarga los archivos al inicio de la semana. Los `.html` se abren en cualquier navegador sin conexión; los PDFs son la lectura conceptual común para todos los subgrupos.
-
----
-
-## 🎯 Resultados de aprendizaje
-
-Al finalizar la actividad, cada estudiante será capaz de:
-
-- Diferenciar las preguntas de investigación que cada diseño descriptivo puede y no puede responder.
-- Aplicar la guía CASP a un artículo real publicado sobre cuidados paliativos.
-- Identificar afirmaciones sobreinterpretadas (por ejemplo, inferencias causales a partir de diseños descriptivos).
-- Traducir los hallazgos a las **personas vulnerabilizadas** detrás de las cifras, recuperando el principio de *epidemiología con rostro humano*.
-
----
-
-## 🗓️ Cronograma
-
-| Fecha | Hito | Qué hacer |
+| Bloque | Minutos | Actividad |
 |---|---|---|
-| **Sáb 18 abr** | Publicación del paquete | Identificas tu grupo y tu artículo asignado (ver tabla abajo). |
-| **18 al 22 abr** | Lectura conceptual + lectura crítica | Lees los dos PDFs de este repositorio como base conceptual y aplicas la guía CASP a tu artículo asignado. |
-| **Mié 22 abr · 11:59 pm** | Entrega del compromiso escrito | Texto individual de 200–250 palabras siguiendo la indicación de la actividad. **40% de la nota.** |
-| **Vie 24 abr · 10:00 a.m.** | 🎤 **Sesión presencial de Journal Club** | 120 minutos · tres bloques paralelos guiados por [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html). |
+| 🎯 Apertura y caso disparador | 0–20 | María Luisa y Don Aurelio · pregunta vertebral |
+| 🔬 Aprendizaje activo en estaciones | 20–80 | Cuatro estaciones rotativas, 15 min cada una |
+| 🤝 Plenaria de integración | 85–110 | Tarjetas de presentación, tabla colectiva, decisiones de diseño |
+| 🌅 Cierre | 110–120 | Síntesis y asignación post-sesión |
 
 ---
 
-## 👥 Asignación oficial de grupos y artículos
+## Las cuatro estaciones
 
-| Grupo | Integrantes | Artículo asignado | Diseño |
-|---|---|---|---|
-| **Grupo 1** | Malkys Reales · Ana Milena Vega Herazo · Pedro Manrique Martinez · Ruben Dario Rodriguez Buenahora | Pastrana & De Lima (2022) · *Palliative care in Latin America: Are we making any progress?* | 🔴 **Estudio ecológico** |
-| **Grupo 2** | Juan Sebastián Martínez Collazos · Brianda Vanessa Renis Zurita · Nohora Montero Garcia | Arenas Ochoa et al. (2021) · *Prevalence and characteristics of patients with heart failure needing palliative care* | 🟡 **Transversal de prevalencia** |
-| **Grupo 3** | Henry Mauricio Rodriguez Valencia · Allan Josué Maradiaga Moncada · Carlos Arturo Ramirez Rojas | Castiblanco-Delgado et al. (2022) · *Intravenous lidocaine in cancer-related neuropathic pain: Case series* | 🟢 **Reporte/Serie de casos** |
+Cada estación está implementada como una página HTML autocontenida con paso a paso interactivo, calculadoras editables, auto-evaluación con retroalimentación pedagógica y registro automático de respuestas en Google Sheets.
 
-> **Criterio de asignación:** el artículo de mayor carga analítica (el ecológico, con 17 países, índice ALCP y correlación de Spearman) se asigna al grupo con más integrantes para distribuir mejor la lectura colectiva. Los correos institucionales están en el foro de Moodle (no en este repositorio público).
+### 🟥 [Estación A · El caso que no fue](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA_v2.html)
+**Diseño:** Casos y controles clásico · **Color:** terracota
 
----
+> *¿Qué factores se asocian con admisión tardía a cuidados paliativos en pacientes con cáncer en Bogotá?*
 
-## 📚 Lecturas de la sesión
+Tabla 2×2 interactiva con cuatro presets, cálculo de OR e IC95 (Woolf), exploración de cuatro sesgos (Berkson, Neyman, memoria, causalidad inversa). **Eslabón que ilumina:** brecha de acceso. **Anclaje narrativo:** María Luisa, ausente del estudio.
 
-### Lectura conceptual común (para todos los grupos)
+### 🟩 [Estación B · El tiempo que sigue](https://jboglop.github.io/Epidemiologia-en-CP/EstacionB_Cohorte.html)
+**Diseño:** Cohorte prospectiva · **Color:** salvia
 
-Los dos PDFs disponibles en este repositorio:
+> *¿Cuál es la supervivencia tras inicio de cuidados paliativos domiciliarios en pacientes con EPOC GOLD IV en La Guajira?*
 
-- **`05-_diseño_investigacion.pdf`** — marco general de diseños de investigación.
-- **`06_DESSCRIPTIVOS.pdf`** — estudios descriptivos con foco en cuidados paliativos.
+Calculadora de cohorte (incidencia acumulada, densidad de incidencia, RR, RDI, HR conceptual), comparador animado RR vs RDI. Pregunta reflexiva: carta a Don Aurelio. **Eslabón que ilumina:** calidad del morir. **Anclaje narrativo:** Don Aurelio, contrafáctico.
 
-### Lectura crítica por grupo
+### 🟨 [Estación C · El pasado reconstruido](https://jboglop.github.io/Epidemiologia-en-CP/EstacionC_CohorteHistorica.html)
+**Diseño:** Cohorte histórica · **Color:** arena
 
-Cada subgrupo analiza su artículo asignado (enlaces completos dentro del [paquete del estudiante](https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html)) usando la guía CASP unificada de ocho preguntas.
+> *¿Qué proporción de pacientes con EPOC avanzada en Boyacá entre 2019 y 2024 accedió a opioides en su último año de vida?*
 
----
+Cruce de cuatro fuentes administrativas (RIPS, DANE, INCB, BDUA), calculadora de cobertura cruda, iceberg interactivo del subregistro con análisis de sensibilidad. Pregunta reflexiva: defensa ante un comité de ética. **Eslabón que ilumina:** cobertura del sistema. **Anclaje narrativo:** María Luisa reconstruida.
 
-## ✅ Checklist de preparación
+### 🟧 [Estación D · Lo mejor de dos mundos](https://jboglop.github.io/Epidemiologia-en-CP/EstacionD_NestedCC.html)
+**Diseño:** Casos-controles anidado en cohorte · **Color:** ámbar
 
-Antes del miércoles 22 de abril a las 11:59 pm, asegúrate de haber completado:
+> *Dentro de la cohorte hipotética del OCCP, ¿qué factores predicen muerte con dolor no controlado en pacientes en cuidados paliativos en Colombia 2023–2025?*
 
-- [ ] Identificar tu artículo asignado en la tabla de arriba.
-- [ ] Abrir el paquete del estudiante en <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html> (o descargar los archivos del repositorio).
-- [ ] Leer los dos PDFs de lectura conceptual común.
-- [ ] Leer tu artículo asignado **al menos dos veces**, respondiendo por escrito las ocho preguntas de la guía CASP.
-- [ ] Coordinar con tu subgrupo cómo van a presentar los cinco minutos de apertura del bloque.
-- [ ] Redactar el compromiso escrito (200–250 palabras) y subirlo a Moodle.
-
-Para el viernes 24 de abril:
-
-- [ ] Revisar la [presentación de la sesión](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html) para anticipar la estructura de los bloques.
+Comparador de tres alternativas (cohorte completa / caso-control clásico / nested), simulador interactivo de muestreo por densidad de incidencia con cálculo de potencia, costo y ahorro relativo. Pregunta reflexiva: recomendación a la maestría sobre el diseño prioritario para investigación paliativa colombiana. **Eslabón que ilumina:** necesidad paliativa estimada. **Anclaje narrativo:** María Luisa y Don Aurelio integrados.
 
 ---
 
-## ✍️ Compromiso escrito (40%)
+## Acceso al material en vivo
 
-Texto individual de **200 a 250 palabras** que articule tres cuestiones:
-
-1. **¿Qué puede concluir** el estudio a partir de su diseño descriptivo?
-2. **¿Qué no puede concluir** (qué afirmaciones serían sobreinterpretación)?
-3. **¿Cómo se aplica —o no— al contexto colombiano** y a las personas vulnerabilizadas que atendemos?
-
-**Formato:**
-- Extensión: 200–250 palabras (se penaliza por fuera del rango).
-- Citación: APA 7ª edición.
-- Datos: cero datos inventados. Si hay cifras sin verificar, marcar `[DATO POR VERIFICAR]`.
-- Lenguaje: uso consistente de *personas vulnerabilizadas* (no *vulnerables*).
-
-**Entrega:** subir a Moodle antes del **miércoles 22 de abril · 11:59 pm**.
-
----
-
-## 🎤 Sesión presencial · Journal Club
-
-**Viernes 24 de abril · 10:00 a.m. · 120 minutos · guiada por [`Presentacion_Sesion_6.html`](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html)**
-
-Tres bloques paralelos, uno por artículo. Cada bloque sigue la estructura:
-
-| Tiempo | Momento | Qué ocurre |
+| Recurso | URL | Audiencia |
 |---|---|---|
-| 5 min | Presentación | El subgrupo presenta el análisis del artículo con la guía CASP. *No se leen las respuestas*: se presenta como si se quisiera convencer a colegas de otro hospital. |
-| 8–10 min | Preguntas cruzadas | Cada uno de los otros dos subgrupos formula al menos **dos preguntas críticas** al subgrupo presentador: una sobre el método y otra sobre la aplicabilidad al contexto colombiano. |
-| 5 min | Síntesis | El subgrupo presentador escribe en el tablero **una frase única** (máximo 25 palabras) que resuma qué puede y qué no puede concluir el estudio. |
+| 📐 Estación A | [estacionA_v2.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA_v2.html) | Estudiantes |
+| 📊 Estación B | [estacionB_Cohorte.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionB_Cohorte.html) | Estudiantes |
+| 🗂️ Estación C | [estacionC_CohorteHistorica.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionC_CohorteHistorica.html) | Estudiantes |
+| 🎯 Estación D | [estacionD_NestedCC.html](https://jboglop.github.io/Epidemiologia-en-CP/EstacionD_NestedCC.html) | Estudiantes |
+| 🎤 Presentación maestra | [Presentacion_Maestra_Sesion7.html](https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Maestra_Sesion7.html) | Docente · plenaria |
+| 📡 Dashboard en vivo | [Dashboard_Vivo.html](https://jboglop.github.io/Epidemiologia-en-CP/Dashboard_Vivo.html) | Docente · proyección |
+
+> 💡 Las cuatro estaciones son autocontenidas y funcionan en cualquier navegador moderno. Pueden abrirse desde dispositivos móviles, tabletas o computadores.
 
 ---
 
-## 📊 Evaluación
+## Anclajes narrativos
 
-| Componente | Peso |
+Toda la sesión está organizada alrededor de dos personajes anónimos que representan trayectorias reales de personas vulnerabilizadas en Colombia:
+
+### 👤 María Luisa
+Mujer rural del Tolima, diagnosticada con cáncer de cérvix en estadio avanzado, fallecida en su casa sin contacto formal con el sistema de cuidados paliativos. Su muerte no quedó registrada en RIPS. **Aparece en las estaciones A (como ausencia) y C (como reconstrucción posible).**
+
+### 👤 Don Aurelio
+Hombre wayúu de La Guajira con EPOC GOLD IV, sin acceso a programas de cuidados paliativos en su departamento (zero servicios disponibles). **Aparece en las estaciones B (como contrafáctico) y D (integrado a cohorte hipotética).**
+
+Estos anclajes encarnan el principio pedagógico central del curso: **personas vulnerabilizadas, no vulnerables** — la vulnerabilidad es estructuralmente producida, no una característica inherente.
+
+---
+
+## La cascada de necesidad paliativa no satisfecha
+
+```
+[1] Carga de enfermedad → [2] Necesidad estimada → [3] Cobertura → [4] Brecha → [5] Calidad del morir
+       (no iluminada)         (Estación D)         (Estación C)    (Estación A)    (Estación B)
+```
+
+Cada estación ilumina **un eslabón distinto** de la cascada. El primer eslabón —carga de enfermedad— queda deliberadamente sin estación dedicada porque requiere diseños transversales poblacionales fuera del alcance analítico de la sesión. Esa ausencia es honestidad metodológica, no descuido.
+
+---
+
+## Marco metodológico
+
+### Estándares no negociables del curso
+
+- 🎯 **Cero datos inventados.** Toda cifra proviene de fuentes verificables (DANE, OCCP, Lancet Commission, INCB) o está rotulada explícitamente como `[DATO POR VERIFICAR]` o `didáctico`.
+- 📚 **APA 7.ª edición** en todas las citaciones.
+- 🇨🇴 **Español académico colombiano**, tono cálido sin sacrificar rigor.
+- ⚖️ **Atribución correcta de la falacia OR vs RR** a Cummings (2009), no a Rothman ni Knol.
+- 🔍 **Distinción clara entre confusión y modificación de efecto** en todas las estaciones.
+
+### Fuentes primarias utilizadas
+- DANE · Estadísticas Vitales (microdatos públicos)
+- Sánchez-Cárdenas et al. · Reportes del Observatorio Colombiano de Cuidados Paliativos (OCCP)
+- Pastrana et al. · Estudios sobre opioides y desarrollo paliativo en América Latina
+- Knaul et al. · Lancet Commission on Global Access to Palliative Care and Pain Relief
+- Worldwide Hospice Palliative Care Alliance (WHPCA)
+- International Narcotics Control Board (INCB)
+- Woodward, M. (2014). *Epidemiology: Study design and data analysis*. CRC Press.
+- Cummings, P. (2009). Methods for estimating adjusted risk ratios. *Stata Journal*, 9(2), 175–196.
+
+---
+
+## Arquitectura técnica
+
+```
+┌─────────────────────┐     POST       ┌──────────────────┐
+│  Estaciones HTML    │ ─────────────▶ │   Apps Script    │
+│  (4 estaciones)     │                │   (Code.gs)      │
+└─────────────────────┘                └────────┬─────────┘
+                                                │
+                                                ▼
+                                       ┌──────────────────┐
+                                       │  Google Sheets   │
+                                       │ actividad_       │
+                                       │ analitics        │
+                                       └────────┬─────────┘
+                                                │
+                                                ▼
+                                       ┌──────────────────┐
+                                       │  Dashboard.gs    │
+                                       │  (extracción)    │
+                                       └────────┬─────────┘
+                                                │
+                                                ▼ GET
+┌─────────────────────┐                ┌──────────────────┐
+│  Dashboard_Vivo     │ ◀───────────── │  Hojas Dashboard │
+│  (proyección)       │                │  _Resumen        │
+└─────────────────────┘                │  _Quiz           │
+                                       │  _Trayectoria    │
+                                       └──────────────────┘
+```
+
+### Stack tecnológico
+- 🌐 **Frontend:** HTML5 + CSS3 + JavaScript vanilla (sin frameworks)
+- 📊 **Visualización:** Chart.js 4.4.0, MathJax 3.2.2, SVG nativo, IntersectionObserver API
+- ☁️ **Backend:** Google Apps Script (web app pública con token de validación)
+- 💾 **Almacenamiento:** Google Sheets como base de datos NoSQL ligera con JSON anidado
+- 🚀 **Hosting:** GitHub Pages (este repositorio)
+
+### Características funcionales
+
+✅ Auto-evaluación con retroalimentación pedagógica para todos los distractores
+✅ Registro en tiempo real de respuestas con identificación por equipo
+✅ Dashboard de proyección con polling cada 20 segundos
+✅ Trigger automático horario para refresco de dashboards
+✅ Validación por token compartido `UAN_SES7_2026_8MAY`
+✅ Sin dependencias de terceros más allá de los CDN públicos especificados
+
+---
+
+## Asignación post-sesión
+
+### "Tu María Luisa metodológica"
+
+Cada estudiante vuelve a su caso `Tu María Luisa` del semestre y decide cuál de los cuatro diseños analíticos sería el más apropiado para responder la pregunta más urgente que ese caso plantea, justificando con tres argumentos metodológicos sustentados.
+
+| Criterio | Especificación |
 |---|---|
-| Compromiso escrito individual | **40%** |
-| Presentación del subgrupo | **30%** |
-| Participación crítica en los otros dos bloques | **20%** |
-| Síntesis final (la frase única en el tablero) | **10%** |
-
-**Criterios transversales valorados positivamente:**
-- Autenticidad y territorialidad del análisis.
-- Precisión conceptual sobre los límites de cada diseño descriptivo.
-- Recuperación explícita del rostro humano detrás de las cifras.
-- Uso riguroso de terminología (*personas vulnerabilizadas*) y citación APA 7ª.
+| 📝 Extensión | 200–300 palabras |
+| 📅 Fecha de entrega | Antes del 22 de mayo de 2026 (Sesión 8) |
+| 📐 Formato | Word o PDF, APA 7.ª edición |
+| 📊 Evaluación | Coherencia entre caso, pregunta y diseño elegido |
 
 ---
 
-## 🔑 Principios no negociables del curso
+## Referencias
 
-- **Terminología:** *personas vulnerabilizadas*, nunca *vulnerables*.
-- **Datos:** cero datos inventados; lo no verificado va marcado `[DATO POR VERIFICAR]`.
-- **Citación:** APA 7ª edición, exclusivamente.
-- **Fondo > forma:** una entrega breve, territorialmente precisa y auténtica pesa más que una extensa, bien estructurada y probablemente asistida por IA.
+> **Selección curada del marco bibliográfico.** Para la lista completa, consultar el documento `Guia_Docente_Sesion7.docx`.
 
----
+Cummings, P. (2009). Methods for estimating adjusted risk ratios. *Stata Journal*, 9(2), 175–196. https://doi.org/10.1177/1536867X0900900201
 
-## 🔗 Enlaces clave
+Knaul, F. M., Farmer, P. E., Krakauer, E. L., et al. (2018). Alleviating the access abyss in palliative care and pain relief — an imperative of universal health coverage: the Lancet Commission report. *The Lancet*, 391(10128), 1391–1454.
 
-- 🌐 **Sitio web del paquete:** <https://jboglop.github.io/Epidemiologia-en-CP/Paquete_Estudiante_Sesion_6.html>
-- 🎤 **Presentación de la sesión presencial:** <https://jboglop.github.io/Epidemiologia-en-CP/Presentacion_Sesion_6.html>
-- 📁 **Repositorio fuente:** <https://github.com/JBOGLOP/Epidemiologia-en-CP>
-- 🎓 **Aula Moodle:** foro de la sesión 6 (correos de los grupos y entrega del compromiso escrito).
+Pastrana, T., De Lima, L., Sánchez-Cárdenas, M., Van Steijn, D., & Garralda, E. (2021). Atlas of palliative care in Latin America. IAHPC Press.
 
----
+Rothman, K. J., Greenland, S., & Lash, T. L. (2008). *Modern epidemiology* (3rd ed.). Lippincott Williams & Wilkins.
 
-## 📬 Contacto
+Sánchez-Cárdenas, M. A., Moreno-Olarte, J. C., Ortiz-Bonilla, C., et al. (Reportes del Observatorio Colombiano de Cuidados Paliativos · OCCP). Universidad de la Sabana.
 
-**Docente:** Jorge Wilhelm Bogoya López
-Facultad de Enfermería · Universidad Antonio Nariño
-Maestría en Cuidados Paliativos · Bogotá, Colombia
-
-Para dudas académicas: foro de la sesión en Moodle.
-Para asuntos individuales: correo institucional del docente.
+Woodward, M. (2014). *Epidemiology: Study design and data analysis* (3rd ed.). CRC Press.
 
 ---
 
-*Documento vivo. Versionado en GitHub. Última actualización: 24 de abril de 2026.*
+## Créditos
+
+**Diseño pedagógico, contenido y dirección académica**
+Profesor Jorge Wilhelm Bogoya López
+Maestría en Cuidados Paliativos · Facultad de Enfermería
+Universidad Antonio Nariño · Bogotá, Colombia
+
+**Implementación técnica**
+Construido iterativamente con Anthropic Claude (Claude Opus 4.7) durante el primer semestre de 2026.
+
+---
+
+## Licencia
+
+📚 **Material académico de uso educativo.** Las cuatro estaciones, la presentación maestra y el dashboard pueden reutilizarse en contextos académicos siempre que se respete la atribución al profesor Bogoya López y a la Universidad Antonio Nariño.
+
+🚫 **No autorizado** el uso comercial, la modificación sin atribución, o la redistribución sin permiso explícito del autor.
+
+📊 **Datos numéricos rotulados como `didáctico`** son ilustrativos y no representan estadísticas oficiales sobre Colombia. Las cifras marcadas como `[DATO POR VERIFICAR]` requieren confirmación contra fuentes primarias antes de su uso fuera de este contexto pedagógico.
+
+---
+
+> *"Ningún diseño cuenta toda la historia. Por eso necesitamos varios. Y por eso necesitamos preguntar siempre qué silencia el que escogimos."*
+>
+> — Frase de cierre · Sesión 7
+
+---
+
+📍 **Universidad Antonio Nariño** · Maestría en Cuidados Paliativos · Sesión 7 · 8 de mayo de 2026
