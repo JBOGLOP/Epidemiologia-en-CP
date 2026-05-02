@@ -57,7 +57,7 @@ Cada diseño epidemiológico es como una linterna: alumbra una zona específica 
 
 Cada estación está implementada como una página HTML autocontenida con paso a paso interactivo, calculadoras editables, auto-evaluación con retroalimentación pedagógica y registro automático de respuestas en Google Sheets.
 
-### 🟥 [Estación A · El caso que no fue](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA_v2.html)
+### 🟥 [Estación A · El caso que no fue](https://jboglop.github.io/Epidemiologia-en-CP/EstacionA.html)
 **Diseño:** Casos y controles clásico · **Color:** terracota
 
 > *¿Qué factores se asocian con admisión tardía a cuidados paliativos en pacientes con cáncer en Bogotá?*
