@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sesión 8 · Epidemiología Experimental en Cuidados Paliativos</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --terracota: #B85C3A;
+  --terracota-dark: #8B3E22;
+  --arena: #F5EDE3;
+  --arena-light: #FAF7F2;
+  --salvia: #6B8F71;
+  --salvia-dark: #4A6B4F;
+  --ambar: #D4A03C;
+  --ambar-light: #F0D98C;
+  --gris-texto: #2C2C2C;
+  --gris-suave: #6B6B6B;
+  --rojo-alerta: #C0392B;
+  --azul-dato: #2E6B9E;
+  --blanco: #FFFFFF;
+  --sombra: 0 4px 20px rgba(0,0,0,0.08);
+  --sombra-hover: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --trans: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--arena-light);
+  color: var(--gris-texto);
+  line-height: 1.6;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* ─── NAVIGATION BAR ─── */
+.nav-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--terracota);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.nav-bar .nav-title {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  color: var(--arena);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.nav-bar .nav-info {
+  font-size: 12px;
+  color: rgba(245,237,227,0.7);
+  font-weight: 300;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(245,237,227,0.4);
+  background: transparent;
+  color: var(--arena);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--trans);
+}
+
+.nav-btn:hover { background: rgba(245,237,227,0.15); border-color: var(--arena); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+.slide-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--arena);
+  min-width: 52px;
+  text-align: center;
+}
+
+/* ─── PROGRESS BAR ─── */
+.progress-bar {
+  position: fixed;
+  top: 56px; left: 0; right: 0;
+  height: 3px;
+  background: rgba(184,92,58,0.2);
+  z-index: 99;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--ambar);
+  transition: width 0.5s ease;
+}
+
+/* ─── SLIDE CONTAINER ─── */
+.slides-wrapper {
+  position: fixed;
+  top: 59px; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 40px 48px 32px;
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.slide.exit-left {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* ─── SLIDE TYPOGRAPHY ─── */
+.slide-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--terracota);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.slide h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  color: var(--terracota-dark);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.slide h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  color: var(--terracota);
+  line-height: 1.25;
+  margin-bottom: 14px;
+}
+
+.slide h3 {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--salvia-dark);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.slide p, .slide li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--gris-texto);
+  max-width: 900px;
+}
+
+.slide p { margin-bottom: 12px; }
+
+/* ─── SPECIAL ELEMENTS ─── */
+.pregunta-vertebral {
+  background: linear-gradient(135deg, var(--terracota) 0%, var(--terracota-dark) 100%);
+  color: var(--arena);
+  padding: 24px 28px;
+  border-radius: var(--radius);
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 16px 0;
+  box-shadow: var(--sombra);
+}
+
+.cascada-tag {
+  display: inline-block;
+  background: var(--ambar);
+  color: var(--gris-texto);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-right: 6px;
+}
+
+.dato-verificar {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(212,160,60,0.08),
+    rgba(212,160,60,0.08) 4px,
+    transparent 4px,
+    transparent 8px
+  );
+  border-left: 4px solid var(--ambar);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--gris-suave);
+  margin: 12px 0;
+}
+
+.dato-verificar::before {
+  content: '⚠ DATO POR VERIFICAR';
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ambar);
+  margin-bottom: 4px;
+  letter-spacing: 0.1em;
+}
+
+.hallazgo-vacio {
+  background: rgba(192,57,43,0.06);
+  border-left: 4px solid var(--rojo-alerta);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  margin: 12px 0;
+}
+
+.hallazgo-vacio::before {
+  content: '🔍 HALLAZGO: AUSENCIA COMO EVIDENCIA';
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--rojo-alerta);
+  margin-bottom: 6px;
+  letter-spacing: 0.08em;
+}
+
+.persona-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  box-shadow: var(--sombra);
+  margin: 8px 0;
+  border-left: 5px solid;
+  transition: var(--trans);
+  cursor: default;
+}
+
+.persona-card:hover { box-shadow: var(--sombra-hover); transform: translateY(-2px); }
+
+.persona-card.maria-luisa { border-color: var(--terracota); }
+.persona-card.don-aurelio { border-color: var(--salvia); }
+
+.persona-card .nombre {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.persona-card.maria-luisa .nombre { color: var(--terracota); }
+.persona-card.don-aurelio .nombre { color: var(--salvia-dark); }
+
+.persona-card .detalle { font-size: 13px; color: var(--gris-suave); }
+
+/* ─── GRID LAYOUTS ─── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+@media (max-width: 800px) {
+  .two-col, .three-col { grid-template-columns: 1fr; }
+  .slide { padding: 28px 20px 24px; }
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--sombra);
+  transition: var(--trans);
+}
+
+.card:hover { box-shadow: var(--sombra-hover); transform: translateY(-2px); }
+
+.card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.card-label.terracota { color: var(--terracota); }
+.card-label.salvia { color: var(--salvia-dark); }
+.card-label.ambar { color: var(--ambar); }
+.card-label.azul { color: var(--azul-dato); }
+
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--gris-texto);
+}
+
+.card-body { font-size: 13px; color: var(--gris-suave); line-height: 1.6; }
+
+.card-stat {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--terracota);
+  margin-bottom: 4px;
+}
+
+/* ─── INTERACTIVE ELEMENTS ─── */
+.accordion {
+  margin: 10px 0;
+}
+
+.accordion-item {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  box-shadow: var(--sombra);
+  overflow: hidden;
+}
+
+.accordion-header {
+  padding: 14px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 14px;
+  transition: var(--trans);
+  user-select: none;
+}
+
+.accordion-header:hover { background: rgba(107,143,113,0.06); }
+
+.accordion-header .icon {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+  color: var(--salvia);
+}
+
+.accordion-item.open .accordion-header .icon { transform: rotate(45deg); }
+
+.accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 20px;
+  font-size: 13px;
+  color: var(--gris-suave);
+  line-height: 1.7;
+}
+
+.accordion-item.open .accordion-body {
+  max-height: 500px;
+  padding: 0 20px 16px;
+}
+
+/* ─── TABLE ─── */
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 12px 0;
+  font-size: 13px;
+  background: var(--blanco);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--sombra);
+}
+
+.data-table thead { background: var(--terracota); color: var(--arena); }
+.data-table th {
+  padding: 12px 14px;
+  font-weight: 600;
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(107,143,113,0.04); }
+
+/* ─── QUIZ ─── */
+.quiz-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 18px;
+  margin: 6px 0;
+  background: var(--blanco);
+  border: 2px solid rgba(0,0,0,0.08);
+  border-radius: var(--radius);
+  font-size: 14px;
+  cursor: pointer;
+  transition: var(--trans);
+  font-family: 'Inter Tight', sans-serif;
+}
+
+.quiz-option:hover { border-color: var(--salvia); background: rgba(107,143,113,0.04); }
+.quiz-option.correct { border-color: var(--salvia); background: rgba(107,143,113,0.12); }
+.quiz-option.incorrect { border-color: var(--rojo-alerta); background: rgba(192,57,43,0.06); }
+.quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+
+.quiz-feedback {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 13px;
+  display: none;
+}
+
+.quiz-feedback.show { display: block; }
+.quiz-feedback.correct-fb { background: rgba(107,143,113,0.12); color: var(--salvia-dark); }
+.quiz-feedback.incorrect-fb { background: rgba(192,57,43,0.08); color: var(--rojo-alerta); }
+
+/* ─── FICHA PICO ─── */
+.ficha-campo {
+  display: flex;
+  gap: 12px;
+  margin: 6px 0;
+  align-items: flex-start;
+}
+
+.ficha-numero {
+  width: 28px; height: 28px;
+  min-width: 28px;
+  background: var(--terracota);
+  color: var(--arena);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.ficha-texto { font-size: 13px; color: var(--gris-texto); }
+.ficha-texto strong { color: var(--terracota-dark); }
+
+/* ─── TIMELINE ─── */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  margin: 16px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px; top: 0; bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--terracota), var(--salvia), var(--ambar));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -24px; top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--blanco);
+  border: 3px solid var(--terracota);
+}
+
+.timeline-item:nth-child(2)::before { border-color: var(--salvia); }
+.timeline-item:nth-child(3)::before { border-color: var(--ambar); }
+
+.timeline-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gris-suave);
+  margin-bottom: 4px;
+}
+
+/* ─── COVER SPECIFIC ─── */
+.cover-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+}
+
+.cover-slide .uni-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--salvia);
+  margin-bottom: 20px;
+  padding: 6px 16px;
+  border: 1.5px solid var(--salvia);
+  border-radius: 20px;
+}
+
+.cover-slide h1 { text-align: center; margin-bottom: 12px; font-size: clamp(32px, 5vw, 48px); }
+
+.cover-slide .subtitle {
+  font-size: 17px;
+  color: var(--gris-suave);
+  font-weight: 300;
+  max-width: 600px;
+  margin-bottom: 28px;
+}
+
+.cover-slide .meta-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--gris-suave);
+}
+
+.cover-slide .cascada-visual {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 20px;
+  max-width: 700px;
+}
+
+.cascada-step {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: var(--trans);
+}
+
+.cascada-step:nth-child(1) { background: rgba(184,92,58,0.12); color: var(--terracota); }
+.cascada-step:nth-child(2) { background: rgba(184,92,58,0.18); color: var(--terracota-dark); }
+.cascada-step:nth-child(3) { background: rgba(107,143,113,0.12); color: var(--salvia-dark); }
+.cascada-step:nth-child(4) { background: rgba(107,143,113,0.2); color: var(--salvia-dark); }
+.cascada-step:nth-child(5) { background: rgba(212,160,60,0.15); color: #8B6914; }
+.cascada-step:nth-child(6) { background: rgba(212,160,60,0.25); color: #8B6914; }
+
+.cascada-arrow {
+  display: flex; align-items: center;
+  color: var(--gris-suave);
+  font-size: 14px;
+}
+
+.highlight-box {
+  background: var(--blanco);
+  border: 2px solid var(--salvia);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.ref-apa {
+  font-size: 12px;
+  color: var(--gris-suave);
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  margin: 6px 0;
+  line-height: 1.5;
+  font-family: 'Inter Tight', sans-serif;
+}
+
+.tag-inline {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tag-jama { background: rgba(46,107,158,0.12); color: var(--azul-dato); }
+.tag-col { background: rgba(212,160,60,0.2); color: #8B6914; }
+.tag-latam { background: rgba(107,143,113,0.15); color: var(--salvia-dark); }
+.tag-nuevo { background: rgba(192,57,43,0.1); color: var(--rojo-alerta); }
+
+/* scroll dentro del slide */
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 10px; }
+
+/* ─── PRINT ─── */
+@media print {
+  .nav-bar, .progress-bar, .nav-controls { display: none !important; }
+  .slides-wrapper { position: static; }
+  .slide { position: static !important; opacity: 1 !important; transform: none !important; pointer-events: all !important; page-break-after: always; padding: 20px; }
+  body { overflow: auto; height: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="nav-bar">
+  <div>
+    <div class="nav-title">Sesión 8 · Epidemiología Experimental en CP</div>
+    <div class="nav-info">Maestría en Cuidados Paliativos · UAN · 29 mayo 2026</div>
+  </div>
+  <div class="nav-controls">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()" aria-label="Anterior">‹</button>
+    <span class="slide-counter" id="slideCounter">1 / 12</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()" aria-label="Siguiente">›</button>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- SLIDES -->
+<div class="slides-wrapper">
+
+<!-- ══════════════════ SLIDE 1: PORTADA ══════════════════ -->
+<div class="slide active" id="slide-1">
+  <div class="cover-slide">
+    <div class="uni-badge">Universidad Antonio Nariño · Facultad de Enfermería</div>
+    <h1>Epidemiología Experimental<br>en Cuidados Paliativos</h1>
+    <p class="subtitle">Estudios cuasi-experimentales y ensayos clínicos: cuando la evidencia busca responder <em>¿qué funciona?</em> para personas que necesitan cuidados paliativos.</p>
+    <p class="meta-info">Unidad 3, Tema 3 · Sesión 8 · 29 de mayo de 2026</p>
+    <div class="cascada-visual">
+      <span class="cascada-step">Determinantes</span>
+      <span class="cascada-arrow">→</span>
+      <span class="cascada-step">Carga</span>
+      <span class="cascada-arrow">→</span>
+      <span class="cascada-step">Necesidad</span>
+      <span class="cascada-arrow">→</span>
+      <span class="cascada-step">Cobertura</span>
+      <span class="cascada-arrow">→</span>
+      <span class="cascada-step">Brecha</span>
+      <span class="cascada-arrow">→</span>
+      <span class="cascada-step">Calidad del morir</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 2: LA TRILOGÍA S6→S7→S8 ══════════════════ -->
+<div class="slide" id="slide-2">
+  <span class="slide-number">Slide 02 · Contexto</span>
+  <h2>La trilogía: de observar a intervenir</h2>
+  <p>En las Sesiones 6, 7 y 8 hemos recorrido la escalera de los diseños epidemiológicos, cada peldaño buscando un tipo diferente de respuesta sobre la realidad de las personas que necesitan cuidados paliativos.</p>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-label">Sesión 6 · 24 abril · Descriptiva</div>
+      <div class="card" style="margin-top:4px;">
+        <div class="card-body"><strong>¿Qué ocurre?</strong> — Estudios ecológicos, transversales, series de caso. Describimos la distribución de la necesidad paliativa sin manipular variables. Aprendimos a leer con CASP.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Sesión 7 · 8 mayo · Analítica</div>
+      <div class="card" style="margin-top:4px;">
+        <div class="card-body"><strong>¿Por qué ocurre?</strong> — Casos y controles, cohortes. Buscamos asociaciones causales. Introdujimos el OR, el RR, y la trampa de la enfermedad común.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-label">Sesión 8 · 29 mayo · Experimental ← Hoy</div>
+      <div class="card" style="margin-top:4px; border: 2px solid var(--terracota);">
+        <div class="card-body"><strong>¿Qué funciona?</strong> — Ensayos clínicos y cuasi-experimentales. El investigador <em>interviene</em> deliberadamente. Máximo nivel de evidencia causal, máximo desafío ético en personas vulnerabilizadas al final de la vida.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pregunta-vertebral">
+    ¿Qué dice —y qué calla— el panorama epidemiológico sobre las personas que necesitan cuidados paliativos?
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 3: ANATOMÍA DEL ECA ══════════════════ -->
+<div class="slide" id="slide-3">
+  <span class="slide-number">Slide 03 · Conceptos clave</span>
+  <h2>Anatomía de un ensayo clínico aleatorizado</h2>
+  <p>Un ECA es un estudio en el que el investigador asigna deliberadamente una intervención a un grupo de participantes mediante un proceso aleatorio, comparando sus resultados con un grupo control.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Componentes esenciales</h3>
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>1. Aleatorización</span><span class="icon">+</span>
+          </div>
+          <div class="accordion-body">Asignación al azar para distribuir equitativamente factores conocidos y desconocidos entre los grupos. Puede ser simple, por bloques, estratificada o por cluster. La aleatorización es lo que distingue un ECA de un estudio cuasi-experimental.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>2. Enmascaramiento (ciego)</span><span class="icon">+</span>
+          </div>
+          <div class="accordion-body">Simple ciego: el participante no sabe qué recibe. Doble ciego: tampoco el investigador. Triple ciego: ni el analista. En CP, el doble ciego suele ser imposible (¿cómo "enmascarar" una visita domiciliaria de enfermería?).</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>3. Grupo control</span><span class="icon">+</span>
+          </div>
+          <div class="accordion-body">Puede ser placebo, cuidado habitual, lista de espera o intervención activa. En CP, el "cuidado habitual" ya incluye algún nivel de atención, lo que diluye las diferencias (sesgo de contaminación).</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>4. Outcomes (desenlaces)</span><span class="icon">+</span>
+          </div>
+          <div class="accordion-body">Primario: la variable principal que el estudio busca medir (ej. calidad de vida). Secundarios: otras variables de interés. En CP, los desenlaces centrados en el paciente (PROMs) son esenciales: FACT-G, ESAS-r, IPOS.</div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>5. Intención de tratar (ITT)</span><span class="icon">+</span>
+          </div>
+          <div class="accordion-body">Analizar a todos los participantes según el grupo al que fueron asignados, sin importar si completaron el tratamiento. Fundamental en CP donde la atrición es alta (los pacientes mueren o se deterioran).</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>¿Cuasi-experimental = ECA sin aleatorización?</h3>
+      <p style="font-size:14px;">Un estudio cuasi-experimental comparte la intención de medir el efecto de una intervención, pero <strong>carece de aleatorización</strong>. La asignación se hace por conveniencia, por criterio del investigador, o por "antes-después" en el mismo grupo.</p>
+      <div class="highlight-box" style="margin-top:12px;">
+        <p style="font-size:13px;margin:0;"><strong>¿Por qué importa en CP?</strong> Muchas intervenciones paliativas colombianas se evalúan con diseños cuasi-experimentales porque la aleatorización se percibe como éticamente insostenible cuando una persona está muriendo. MORECare (2013) argumenta que esto no es necesariamente correcto: la falta de evidencia experimental también es una forma de abandono investigativo de las personas vulnerabilizadas.</p>
+      </div>
+      <div class="highlight-box" style="margin-top:8px; border-color: var(--ambar);">
+        <p style="font-size:13px;margin:0;"><strong>Validez interna ↕ Validez externa</strong><br>
+        ECA clásico: alta validez interna, baja validez externa (población seleccionada).<br>
+        ECA pragmático: sacrifica algo de validez interna para ganar representatividad.<br>
+        Cuasi-experimental: baja validez interna (sin aleatorización), pero puede ser la única opción ética/factible.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 4: DISEÑOS ESPECIALES EN CP ══════════════════ -->
+<div class="slide" id="slide-4">
+  <span class="slide-number">Slide 04 · Diseños especiales</span>
+  <h2>Diseños experimentales adaptados a cuidados paliativos</h2>
+  <p>La investigación paliativa ha generado variantes del ECA clásico que responden a sus desafíos éticos y prácticos únicos: alta atrición, capacidad fluctuante del consentimiento, y la imposibilidad ética de negar cuidado a personas que sufren.</p>
+
+  <div class="three-col">
+    <div class="card">
+      <div class="card-label terracota">Fast-track (lista de espera)</div>
+      <div class="card-title">Todos reciben, pero en orden aleatorio</div>
+      <div class="card-body">
+        El grupo control recibe la intervención después de un período de espera. Resuelve el dilema ético de "negar" la intervención. <br><br>
+        <strong>Ejemplo:</strong> Higginson et al. — intervención para disnea en enfermedad avanzada: ambos brazos reciben el tratamiento, uno espera 6 semanas.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label salvia">Stepped-wedge cluster</div>
+      <div class="card-title">La intervención se implementa gradualmente</div>
+      <div class="card-body">
+        Todos los clusters comienzan como control y van "cruzando" a la intervención en momentos aleatorios. Ideal para implementación de programas. <br><br>
+        <strong>Ejemplo:</strong> Campbell & Yarandi (2024) — algoritmo de retiro de ventilador al final de la vida, 5 sitios.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label ambar">Zelen</div>
+      <div class="card-title">Aleatorización antes del consentimiento</div>
+      <div class="card-body">
+        Se aleatoriza primero; solo se pide consentimiento al grupo de intervención. Reduce el "efecto decepción" en controles. <br><br>
+        <strong>Relevancia en CP:</strong> Cuando informar sobre una intervención paliativa experimental puede generar angustia en pacientes que no la recibirán.
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:8px;">
+    <div class="card">
+      <div class="card-label azul">Cluster-randomized</div>
+      <div class="card-title">La unidad de aleatorización no es la persona</div>
+      <div class="card-body">Se aleatorizan centros, clínicas o unidades completas. Evita contaminación entre brazos cuando la intervención es a nivel de equipo o sistema. <strong>Ejemplo:</strong> Parikh et al. (2025) — algoritmo basado en historia clínica electrónica para identificar pacientes con necesidad paliativa en oncología.</div>
+    </div>
+    <div class="card">
+      <div class="card-label terracota">N-of-1</div>
+      <div class="card-title">Un solo paciente, múltiples períodos</div>
+      <div class="card-body">El paciente es su propio control: períodos alternos de intervención y control, aleatorizados. Útil para ajustar opioides o adyuvantes en síntomas refractarios. Infrautilizado en CP colombiano.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 5: CASO ADAPT ══════════════════ -->
+<div class="slide" id="slide-5">
+  <span class="slide-number">Slide 05 · Lectura crítica</span>
+  <h2>Caso ADAPT <span class="tag-inline tag-jama">JAMA 2024</span></h2>
+  <p>Nuestro caso principal de lectura crítica: un ECA pragmático sobre telecuidado paliativo en enfermedades no oncológicas.</p>
+
+  <div class="ref-apa">Bekelman, D. B., Feser, W., Morgan, B., et al. (2024). Nurse and social worker palliative telecare team and quality of life in patients with COPD, heart failure, or interstitial lung disease: The ADAPT randomized clinical trial. <em>JAMA, 331</em>(3), 212–223. doi:10.1001/jama.2023.24035</div>
+
+  <div class="two-col">
+    <div>
+      <table class="data-table">
+        <thead><tr><th>Elemento</th><th>Detalle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Diseño</strong></td><td>ECA individual, 2 brazos, simple ciego (evaluador). <em>No</em> es cluster.</td></tr>
+          <tr><td><strong>N</strong></td><td>306 (154 interv. / 152 control)</td></tr>
+          <tr><td><strong>Población</strong></td><td>Veteranos con EPOC, IC o EPI. Edad media 68,9 años; 90,2% hombres; 80,1% blancos.</td></tr>
+          <tr><td><strong>Intervención</strong></td><td>Telecuidado paliativo: enfermera + trabajadora social + equipo colaborativo semanal.</td></tr>
+          <tr><td><strong>Control</strong></td><td>Cuidado habitual (VA).</td></tr>
+          <tr><td><strong>Outcome 1°</strong></td><td>FACT-G a 6 meses (rango 0–108, MCID = 4).</td></tr>
+          <tr><td><strong>Resultado</strong></td><td>Δ 4,6 pts (IC95% 1,8–7,4; P = 0,001; SMD = 0,41).</td></tr>
+          <tr><td><strong>Atrición</strong></td><td>24% a 6 meses (simétrica entre brazos).</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h3>Sesgos pedagógicamente útiles</h3>
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-body">
+          <strong>1. Validez externa limitada:</strong> 90% hombres, blancos, veteranos del VA. ¿Qué nos dice esto sobre María Luisa (mujer rural de Tolima) o Don Aurelio (wayúu de La Guajira)?
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:8px;">
+        <div class="card-body">
+          <strong>2. Efecto Hawthorne parcial:</strong> El grupo de intervención recibía contacto telefónico semanal. El control no recibía nada equivalente. ¿El efecto es del contenido paliativo o del contacto humano?
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:8px; border: 2px solid var(--ambar);">
+        <div class="card-body">
+          <strong>3. Errata publicada:</strong> JAMA, 2025;333(15):1364 (26 marzo 2025). Corrige datos de etnicidad en Tabla 1 y visitas de salud mental. <em>¿Cambia las conclusiones?</em> No, pero enseña que la transparencia post-publicación es obligación ética.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 6: PACO + PALLIACTIVE ══════════════════ -->
+<div class="slide" id="slide-6">
+  <span class="slide-number">Slide 06 · Latinoamérica y Colombia</span>
+  <h2>Dos ECAs que nos tocan de cerca</h2>
+
+  <div class="two-col">
+    <div>
+      <div class="card" style="border-top: 4px solid var(--salvia);">
+        <div class="card-label salvia">ECA Latinoamericano</div>
+        <div class="card-title">PACO Trial <span class="tag-inline tag-latam">México · 2024</span></div>
+        <div class="ref-apa">Allende-Pérez, S., Turcott, J. G., … Cardona, A. F., & Arrieta, O. (2024). <em>The Oncologist, 29</em>(10), e1373–e1385.</div>
+        <div class="card-body" style="margin-top:8px;">
+          <strong>Co-autoría colombiana:</strong> Andrés F. Cardona (CTIC Bogotá, U. El Bosque).<br><br>
+          <strong>Diseño:</strong> ECA 1:1, n = 146, CPNM metastásico. Cuidado paliativo temprano vs. cuidado oncológico estándar.<br><br>
+          <strong>Hallazgo provocador:</strong> La sobrevida global mejoró (18,1 vs. 10,5 meses; P = 0,029), pero la calidad de vida promedio no cambió significativamente. <em>¿Qué es "éxito" en cuidados paliativos: vivir más o vivir mejor?</em>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="border-top: 4px solid var(--terracota);">
+        <div class="card-label terracota">ECA Colombiano 🇨🇴</div>
+        <div class="card-title">PalliActive Caregivers <span class="tag-inline tag-col">Colombia · 2025</span></div>
+        <div class="ref-apa">Arias-Rojas, M., Arredondo-Holguín, E., & Carreño-Moreno, S. (2025). <em>BMC Palliative Care, 24</em>(1), 235.</div>
+        <div class="card-body" style="margin-top:8px;">
+          <strong>100% colombiano:</strong> U. de Antioquia + U. Nacional de Colombia.<br><br>
+          <strong>Diseño:</strong> ECA 1:1, n = 115 cuidadores, Medellín, jun–dic 2022. Intervención educativa para cuidadores familiares de pacientes oncológicos en CP.<br><br>
+          <strong>Resultados:</strong> Mejora significativa en adopción del rol y apoyo social percibido a 2 y 4 semanas.<br><br>
+          <strong>Ojo editorial:</strong> El artículo lista "NCT12345678" (¡un placeholder!) como registro del ensayo. El número real es NCT03518970. <em>¿Qué nos enseña esto sobre verificación de citas?</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hallazgo-vacio">
+    <p style="margin:0;font-size:13px;">En el período 2020–2026, la búsqueda exhaustiva identificó <strong>un solo ECA original con PI colombiana</strong> en cuidados paliativos. Colombia produce investigación paliativa mayoritariamente observacional y cualitativa. Esta escasez no es un error de búsqueda: es evidencia de <strong>inequidad investigativa</strong> que debe nombrarse.</p>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 7: CONSORT 2025 + SPIRIT 2025 ══════════════════ -->
+<div class="slide" id="slide-7">
+  <span class="slide-number">Slide 07 · Cambio normativo del año</span>
+  <h2>CONSORT 2025 y SPIRIT 2025 <span class="tag-inline tag-nuevo">NUEVO</span></h2>
+  <p>En abril de 2025 se publicaron simultáneamente las nuevas versiones de las guías para reportar (CONSORT) y protocolar (SPIRIT) ensayos clínicos, reemplazando formalmente las versiones de 2010 y 2013 que se enseñaban hasta ahora.</p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-stat">30</div>
+      <div class="card-title">ítems CONSORT 2025</div>
+      <div class="card-body">Reporte de ECAs. Publicado 14 abril 2025 en BMJ, JAMA, Lancet, Nature Medicine y PLOS Medicine simultáneamente. Se agregaron 7 ítems nuevos, se revisaron 3, se eliminó 1, y se integraron extensiones de daños, outcomes e intervenciones no farmacológicas (TIDieR).</div>
+      <div class="ref-apa" style="margin-top:8px;">Hopewell, S., Chan, A.-W., … Boutron, I. (2025). <em>BMJ, 389</em>, e081123.</div>
+    </div>
+    <div class="card">
+      <div class="card-stat">34</div>
+      <div class="card-title">ítems SPIRIT 2025</div>
+      <div class="card-body">Protocolos de ECAs. Publicado 28–29 abril 2025. Se agregaron 2 ítems, se revisaron 5, se eliminaron 3, se fusionaron 2. Mismo proceso Delphi con 317 participantes y reunión de consenso de 30 expertos internacionales.</div>
+      <div class="ref-apa" style="margin-top:8px;">Chan, A.-W., Boutron, I., … Hróbjartsson, A. (2025). <em>JAMA</em>. doi:10.1001/jama.2025.4486</div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:16px;">¿Qué cambia para cuidados paliativos?</h3>
+  <div class="accordion">
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span>🔓 Nueva sección de open science</span><span class="icon">+</span>
+      </div>
+      <div class="accordion-body">Acceso a datos, código analítico y protocolo. Los ECAs paliativos, frecuentemente financiados con fondos públicos, deberán compartir datos individuales anonimizados. Implica que María Luisa y Don Aurelio no solo son "sujetos" del estudio sino beneficiarios del conocimiento producido.</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span>👥 Ítem nuevo: participación de pacientes y público (PPI)</span><span class="icon">+</span>
+      </div>
+      <div class="accordion-body">Reportar explícitamente cómo participaron pacientes/cuidadores en el diseño, conducción y diseminación del estudio. En CP, esto es particularmente relevante: ¿participaron personas al final de la vida en el diseño del ADAPT? ¿Participaron cuidadores wayúu en la definición de los outcomes del PalliActive?</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <span>⚠️ Evaluación explícita de daños</span><span class="icon">+</span>
+      </div>
+      <div class="accordion-body">CONSORT 2025 integra la extensión de daños (Harms) en el cuerpo principal. Los ECAs paliativos deben reportar no solo si la intervención funcionó, sino si causó daño: carga adicional al cuidador, efectos adversos de medicamentos, o incluso la angustia de participar en investigación cuando se está muriendo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 8: MORECare + ÉTICA ══════════════════ -->
+<div class="slide" id="slide-8">
+  <span class="slide-number">Slide 08 · Ética investigativa</span>
+  <h2>MORECare: la ética del ECA cuando la persona está muriendo</h2>
+
+  <div class="two-col">
+    <div>
+      <div class="card" style="border-top: 4px solid var(--salvia);">
+        <div class="card-label salvia">MORECare 2013</div>
+        <div class="card-title">Guía metodológica para investigación paliativa</div>
+        <div class="card-body">
+          Higginson et al. (2013) — la referencia internacional para diseñar y evaluar intervenciones complejas al final de la vida. Aborda: atrición no aleatoria (muerte como evento esperado), cegamiento imposible, contaminación del control, medición de outcomes en pacientes deteriorados, y el rol del cuidador como informante proxy.
+        </div>
+      </div>
+      <div class="card" style="border-top: 4px solid var(--ambar); margin-top:12px;">
+        <div class="card-label ambar">MORECare_Capacity 2020</div>
+        <div class="card-title">Consentimiento y capacidad fluctuante</div>
+        <div class="card-body">
+          Evans et al. (2020) presentan <strong>20 soluciones operativas</strong> para incluir personas con capacidad mental afectada en investigación de fin de vida: consentimiento anticipado, consentimiento diferido, decisión por proxy, ventanas de oportunidad temporal, y formación específica del equipo investigador.<br><br>
+          <em>¿Cómo consentiría María Luisa en sus últimos días? ¿Quién decide por Don Aurelio si su familia wayúu tiene procesos de decisión colectiva?</em>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3>Marco normativo colombiano</h3>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-label terracota">Vigente desde 1993</div>
+        <div class="card-title">Resolución 8430 de 1993</div>
+        <div class="card-body">Norma rectora de investigación en salud con seres humanos en Colombia. <strong>33 años sin actualización.</strong> No contempla consentimiento diferido, capacidad fluctuante, diseños cluster, biobancos, ni big data. El consenso académico desde 2019 (Mateus et al., <em>Biomédica</em>) señala su insuficiencia, pero no se ha expedido resolución sustitutiva.</div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-label salvia">Leyes de CP</div>
+        <div class="card-title">Ley 1733/2014 + Ley 2241/2022</div>
+        <div class="card-body">La Ley Consuelo Devis Saavedra regula los servicios de CP. La Ley 2241/2022 fortalece la educación y explícitamente promueve la <strong>investigación en cuidados paliativos</strong> (Art. 2°, Parágrafo 2°). Sustento legal de esta maestría y de sus ECAs.</div>
+      </div>
+      <div class="card" style="border: 2px solid var(--rojo-alerta);">
+        <div class="card-label" style="color: var(--rojo-alerta);">NUEVO · Abril 2026</div>
+        <div class="card-title">Resolución 0813/2026</div>
+        <div class="card-body">Expedida el 28 de abril de 2026 por MinSalud. Actualiza y unifica la regulación del derecho a morir dignamente. Los CP son una de las cuatro vías, no excluyente con eutanasia. Redefine el consentimiento informado en contexto de fin de vida.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 9: ATLAS 2025 ══════════════════ -->
+<div class="slide" id="slide-9">
+  <span class="slide-number">Slide 09 · Panorama regional</span>
+  <h2>Atlas de Cuidados Paliativos de las Américas 2025 <span class="tag-inline tag-nuevo">NUEVO</span></h2>
+  <p>Lanzado el 31 de octubre de 2025 en Manizales (SES Hospital Universitario de Caldas, II Cumbre Latinoamericana de CP). Primer atlas que evalúa los 35 países del continente usando indicadores OMS.</p>
+
+  <div class="three-col">
+    <div class="card" style="text-align:center;">
+      <div class="card-stat">2.984.970</div>
+      <div class="card-body">personas requieren cuidados paliativos cada año en las Américas.</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-stat" style="color:var(--salvia-dark);">10 / 35</div>
+      <div class="card-body">países (28,5%) incluyen CP como servicio garantizado por ley en atención primaria.</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="card-stat" style="color:var(--ambar);">0,33</div>
+      <div class="card-body">servicios especializados por 100.000 hab. (OMS recomienda 2 por 100.000).</div>
+    </div>
+  </div>
+
+  <div class="ref-apa" style="margin-top:12px;">Tripodoro, V. A., Suárez, D., Béjar, A. C., et al. (2025). <em>Atlas de cuidados paliativos de las Américas 2025</em>. Universidad de Navarra / ATLANTES / ALCP / IAHPC / WHPCA.</div>
+
+  <div class="persona-card maria-luisa" style="margin-top:16px;">
+    <div class="nombre">María Luisa</div>
+    <div class="detalle">Mujer rural de Tolima. Cáncer cervical avanzado. Murió en casa sin registro RIPS confirmado y sin acceso a opioides. En el Atlas 2025, Colombia tiene servicios — pero ¿cuántos llegan al Tolima rural? El Atlas habla de <strong>promedios nacionales</strong>, no de realidades territoriales. La cascada de necesidad paliativa no satisfecha empieza aquí.</div>
+  </div>
+  <div class="persona-card don-aurelio">
+    <div class="nombre">Don Aurelio</div>
+    <div class="detalle">Wayúu de La Guajira. EPOC avanzado, cero servicios paliativos. El Atlas confirma que la densidad de servicios en Colombia es inferior a la media regional. Pero para Don Aurelio, el problema no es solo densidad: es pertinencia cultural. Un ECA que no considere la cosmovisión wayúu sobre el morir tiene validez externa cero para su comunidad.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 10: QUIZ INTERACTIVO ══════════════════ -->
+<div class="slide" id="slide-10">
+  <span class="slide-number">Slide 10 · Verificación de comprensión</span>
+  <h2>Preguntas de verificación</h2>
+  <p>Antes de pasar a la actividad de producción, verifiquemos algunos conceptos clave. Selecciona la respuesta que consideres correcta.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Pregunta 1</h3>
+      <p style="font-size:14px;">El ADAPT trial (Bekelman 2024) es un ensayo:</p>
+      <div id="quiz1">
+        <button class="quiz-option" onclick="checkQuiz('quiz1', this, false)">a) Cluster-randomized, doble ciego</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz1', this, true)">b) Individual-randomized, simple ciego</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz1', this, false)">c) Cuasi-experimental, sin ciego</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz1', this, false)">d) Stepped-wedge cluster</button>
+      </div>
+      <div class="quiz-feedback correct-fb" id="quiz1-correct">Correcto. El ADAPT es un ECA de aleatorización individual (no cluster), simple ciego (evaluador cegado, participantes no). La confusión con "cluster" circula, pero el diseño confirmado en el texto del artículo es individual.</div>
+      <div class="quiz-feedback incorrect-fb" id="quiz1-incorrect">Revisa la ficha del ADAPT. El artículo especifica textualmente: "Single-blind, 2-group, multisite randomized clinical trial" — aleatorización a nivel de paciente individual.</div>
+    </div>
+    <div>
+      <h3>Pregunta 2</h3>
+      <p style="font-size:14px;">¿Qué diseño es más apropiado si un comité de ética considera inaceptable que un grupo NO reciba la intervención paliativa?</p>
+      <div id="quiz2">
+        <button class="quiz-option" onclick="checkQuiz('quiz2', this, false)">a) ECA paralelo con placebo</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz2', this, false)">b) Cluster-randomized</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz2', this, true)">c) Fast-track (lista de espera)</button>
+        <button class="quiz-option" onclick="checkQuiz('quiz2', this, false)">d) Estudio de cohorte</button>
+      </div>
+      <div class="quiz-feedback correct-fb" id="quiz2-correct">Correcto. En un fast-track o wait-list design, todos los participantes reciben la intervención; la aleatorización determina el orden, no si la reciben. Esto resuelve la objeción ética principal en poblaciones vulnerabilizadas.</div>
+      <div class="quiz-feedback incorrect-fb" id="quiz2-incorrect">Piensa en qué diseño permite que TODOS reciban la intervención, solo que en momentos diferentes. La respuesta es el fast-track (lista de espera): el grupo control recibe la intervención después de un período de espera.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <h3>Pregunta 3</h3>
+    <p style="font-size:14px;">MORECare_Capacity (Evans et al., 2020) propone soluciones para un problema específico de la investigación en CP. ¿Cuál?</p>
+    <div id="quiz3">
+      <button class="quiz-option" onclick="checkQuiz('quiz3', this, false)">a) El cálculo del tamaño de muestra</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz3', this, false)">b) La selección de instrumentos de medición</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz3', this, true)">c) El consentimiento informado en personas con capacidad mental fluctuante al final de la vida</button>
+      <button class="quiz-option" onclick="checkQuiz('quiz3', this, false)">d) La aleatorización en clusters pequeños</button>
+    </div>
+    <div class="quiz-feedback correct-fb" id="quiz3-correct">Exacto. MORECare_Capacity aborda las 20 soluciones operativas para reclutar e incluir en investigación a personas con capacidad afectada o fluctuante al final de la vida: consentimiento anticipado, diferido, por proxy, ventanas de oportunidad temporal, y formación del equipo.</div>
+    <div class="quiz-feedback incorrect-fb" id="quiz3-incorrect">MORECare_Capacity se centra específicamente en los procesos de consentimiento para personas con capacidad mental fluctuante o afectada al final de la vida. Propone 20 soluciones operativas.</div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 11: ACTIVIDAD — FICHA PICO+S ══════════════════ -->
+<div class="slide" id="slide-11">
+  <span class="slide-number">Slide 11 · Actividad en clase</span>
+  <h2>Producción en aula: Ficha PICO+S</h2>
+  <p>Cada grupo diseña un protocolo de ECA paliativo hipotético en una hoja A4. El entregable se produce y entrega <strong>en esta misma clase</strong>. Trabajen con los mismos tres grupos del Journal Club de la Sesión 6.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Los 10 campos de la ficha</h3>
+      <div class="ficha-campo"><span class="ficha-numero">1</span><span class="ficha-texto"><strong>Nombre del ensayo:</strong> Acrónimo + título descriptivo.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">2</span><span class="ficha-texto"><strong>Anclaje narrativo:</strong> María Luisa, Don Aurelio, o el caso de "Tu María Luisa" del grupo.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">3</span><span class="ficha-texto"><strong>Pregunta PICO:</strong> Población, Intervención, Comparador, Outcome.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">4</span><span class="ficha-texto"><strong>Diseño elegido + justificación</strong> (paralelo / cluster / stepped wedge / fast-track / cuasi-experimental). ≤30 palabras.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">5</span><span class="ficha-texto"><strong>Criterios de elegibilidad:</strong> 3 inclusión + 3 exclusión + nota sobre cómo NO excluir personas vulnerabilizadas.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">6</span><span class="ficha-texto"><strong>Outcome primario validado</strong> (IPOS, ESAS-r, FACT-G, QOLLTI-F, etc.) + tiempo de medición.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">7</span><span class="ficha-texto"><strong>Tamaño de muestra orientativo</strong> y justificación breve.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">8</span><span class="ficha-texto"><strong>Dos sesgos anticipados</strong> + estrategia de control para cada uno.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">9</span><span class="ficha-texto"><strong>Declaración ética:</strong> Res. 8430/93 + Ley 1733/14 + MORECare_Capacity 2020.</span></div>
+      <div class="ficha-campo"><span class="ficha-numero">10</span><span class="ficha-texto"><strong>Firma del grupo + entrega.</strong></span></div>
+    </div>
+    <div>
+      <h3>Estaciones paralelas (55 min)</h3>
+      <div class="card" style="border-left: 5px solid var(--terracota); margin-bottom:10px;">
+        <div class="card-label terracota">Estación A · Pregunta</div>
+        <div class="card-body">Construir la pregunta PICO a partir de la narrativa de María Luisa o Don Aurelio. Campos 1, 2 y 3 de la ficha. El grupo debe justificar por qué su intervención merece un ECA y no un estudio observacional.</div>
+      </div>
+      <div class="card" style="border-left: 5px solid var(--salvia); margin-bottom:10px;">
+        <div class="card-label salvia">Estación B · Diseño</div>
+        <div class="card-body">Elegir el diseño experimental y los criterios de elegibilidad. Campos 4, 5, 6 y 7. Usar la tabla de diseños del Slide 4 como referencia. Discutir explícitamente: ¿por qué este diseño y no otro?</div>
+      </div>
+      <div class="card" style="border-left: 5px solid var(--ambar);">
+        <div class="card-label ambar">Estación C · Crítica y ética</div>
+        <div class="card-body">Anticipar sesgos y formular la declaración ética. Campos 8 y 9. Consultar CONSORT 2025 y MORECare_Capacity. Pregunta guía: <em>¿Cómo obtendría consentimiento si su participante es como Don Aurelio, con EPOC severo y decisiones familiares colectivas?</em></div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:12px; border-color: var(--terracota);">
+        <p style="font-size:13px; margin:0;"><strong>Socialización (10 min):</strong> 3 min por grupo. Cada grupo presenta su ficha; los otros dos retroalimentan con una pregunta obligatoria.</p>
+      </div>
+
+      <!-- CTA: Acceso a la actividad digital -->
+      <a href="https://jboglop.github.io/Epidemiologia-en-CP/Experimentales/ficha_picos_sesion8.html" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;padding:16px 24px;background:linear-gradient(135deg,var(--terracota),var(--terracota-dark));color:var(--arena);border-radius:var(--radius);font-family:'Inter Tight',sans-serif;font-size:15px;font-weight:700;text-decoration:none;box-shadow:0 4px 16px rgba(184,92,58,0.35);transition:var(--trans);letter-spacing:0.02em;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 24px rgba(184,92,58,0.45)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(184,92,58,0.35)'">
+        <span style="font-size:22px;">📝</span>
+        <span>Abrir Ficha PICO+S Digital</span>
+        <span style="font-size:12px;opacity:0.7;font-weight:400;">↗ Abre en nueva pestaña</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 12: CIERRE ══════════════════ -->
+<div class="slide" id="slide-12">
+  <span class="slide-number">Slide 12 · Cierre</span>
+  <h2>Lo que la evidencia experimental dice — y lo que calla</h2>
+
+  <div class="pregunta-vertebral">
+    Hoy aprendimos que el ECA es el diseño con mayor poder causal en epidemiología. Pero también aprendimos que, para las personas que más necesitan cuidados paliativos en Colombia, ese poder causal casi no se ha ejercido: 1 ECA colombiano en 6 años. La cascada de necesidad paliativa no satisfecha incluye una cascada de investigación no realizada.
+  </div>
+
+  <div class="two-col" style="margin-top:16px;">
+    <div>
+      <h3>Tres ideas para llevarse</h3>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-body"><strong>1.</strong> Existen diseños experimentales éticos para cuidados paliativos (fast-track, stepped-wedge, Zelen). La barrera no es solo ética: es estructural, de financiación, de voluntad política.</div>
+      </div>
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-body"><strong>2.</strong> CONSORT 2025 y SPIRIT 2025 cambian las reglas del juego: open science, participación de pacientes, reporte de daños. El ECA del futuro es más transparente y más centrado en la persona.</div>
+      </div>
+      <div class="card">
+        <div class="card-body"><strong>3.</strong> "Personas vulnerabilizadas" no es un eufemismo: es un recordatorio de que la vulnerabilidad de María Luisa y Don Aurelio fue <em>producida</em> por un sistema que no invirtió en investigar lo que ellos necesitaban.</div>
+      </div>
+    </div>
+    <div>
+      <h3>Referencias esenciales</h3>
+      <div class="ref-apa">Bekelman, D. B., et al. (2024). The ADAPT RCT. <em>JAMA, 331</em>(3), 212–223.</div>
+      <div class="ref-apa">Arias-Rojas, M., et al. (2025). PalliActive Caregivers. <em>BMC Palliat Care, 24</em>(1), 235.</div>
+      <div class="ref-apa">Allende-Pérez, S., et al. (2024). PACO Trial. <em>The Oncologist, 29</em>(10), e1373–e1385.</div>
+      <div class="ref-apa">Hopewell, S., et al. (2025). CONSORT 2025. <em>BMJ, 389</em>, e081123.</div>
+      <div class="ref-apa">Chan, A.-W., et al. (2025). SPIRIT 2025. <em>JAMA</em>. doi:10.1001/jama.2025.4486</div>
+      <div class="ref-apa">Higginson, I. J., et al. (2013). MORECare. <em>BMC Medicine, 11</em>, 111.</div>
+      <div class="ref-apa">Evans, C. J., et al. (2020). MORECare_Capacity. <em>BMC Medicine, 18</em>(1), 221.</div>
+      <div class="ref-apa">Tripodoro, V. A., et al. (2025). Atlas CP Américas 2025. UNAV/ALCP/IAHPC.</div>
+
+      <div class="dato-verificar" style="margin-top:12px;">
+        Verificar contra fuente primaria: (1) paginación exacta SPIRIT 2025 en JAMA; (2) validación IPOS en español-Colombia; (3) estado del proyecto de actualización Res. 8430 a mayo 2026.
+      </div>
+    </div>
+  </div>
+
+  <p style="text-align:center; margin-top:20px; font-family:'Fraunces',serif; font-size:16px; color:var(--salvia-dark); font-style:italic;">
+    "Epidemiología con rostro humano": la evidencia solo sirve si las personas a quienes debería beneficiar pueden verla, sentirla y vivirla.
+  </p>
+</div>
+
+</div><!-- /slides-wrapper -->
+
+<script>
+let currentSlide = 1;
+const totalSlides = 12;
+
+function updateUI() {
+  document.querySelectorAll('.slide').forEach((s, i) => {
+    s.classList.remove('active', 'exit-left');
+    if (i + 1 === currentSlide) s.classList.add('active');
+  });
+  document.getElementById('slideCounter').textContent = currentSlide + ' / ' + totalSlides;
+  document.getElementById('progressFill').style.width = ((currentSlide / totalSlides) * 100) + '%';
+  document.getElementById('prevBtn').disabled = currentSlide === 1;
+  document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+}
+
+function nextSlide() {
+  if (currentSlide < totalSlides) { currentSlide++; updateUI(); }
+}
+
+function prevSlide() {
+  if (currentSlide > 1) { currentSlide--; updateUI(); }
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+});
+
+// Touch swipe
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 60) { diff > 0 ? nextSlide() : prevSlide(); }
+});
+
+// Accordion
+function toggleAccordion(header) {
+  const item = header.parentElement;
+  item.classList.toggle('open');
+}
+
+// Quiz
+function checkQuiz(quizId, btn, isCorrect) {
+  const container = document.getElementById(quizId);
+  const options = container.querySelectorAll('.quiz-option');
+  options.forEach(o => { o.classList.add('disabled'); });
+  
+  if (isCorrect) {
+    btn.classList.add('correct');
+    document.getElementById(quizId + '-correct').classList.add('show');
+  } else {
+    btn.classList.add('incorrect');
+    // highlight the correct one
+    options.forEach(o => {
+      if (o.getAttribute('onclick').includes('true')) o.classList.add('correct');
+    });
+    document.getElementById(quizId + '-incorrect').classList.add('show');
+  }
+}
+
+// Init
+updateUI();
+</script>
+</body>
+</html>

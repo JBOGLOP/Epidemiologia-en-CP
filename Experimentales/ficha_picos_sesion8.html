@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha PICO+S · Sesión 8 · Epidemiología Experimental en CP</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══ VARIABLES ═══ */
+:root {
+  --terracota: #B85C3A;
+  --terracota-dark: #8B3E22;
+  --terracota-light: rgba(184,92,58,0.08);
+  --arena: #F5EDE3;
+  --arena-light: #FAF7F2;
+  --salvia: #6B8F71;
+  --salvia-dark: #4A6B4F;
+  --salvia-light: rgba(107,143,113,0.08);
+  --ambar: #D4A03C;
+  --ambar-light: rgba(212,160,60,0.1);
+  --gris-texto: #2C2C2C;
+  --gris-suave: #6B6B6B;
+  --gris-borde: #D8D0C8;
+  --rojo-alerta: #C0392B;
+  --azul-dato: #2E6B9E;
+  --blanco: #FFFFFF;
+  --exito: #27AE60;
+  --sombra: 0 4px 20px rgba(0,0,0,0.06);
+  --sombra-lg: 0 8px 40px rgba(0,0,0,0.1);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --trans: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--arena-light);
+  color: var(--gris-texto);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ═══ HEADER ═══ */
+.app-header {
+  background: linear-gradient(135deg, var(--terracota) 0%, var(--terracota-dark) 100%);
+  color: var(--arena);
+  padding: 28px 32px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-header::after {
+  content: '';
+  position: absolute;
+  top: -40%; right: -10%;
+  width: 300px; height: 300px;
+  background: rgba(245,237,227,0.04);
+  border-radius: 50%;
+}
+
+.header-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+
+.header-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.header-sub {
+  font-size: 14px;
+  font-weight: 300;
+  opacity: 0.85;
+  max-width: 600px;
+}
+
+/* ═══ TABS ═══ */
+.tabs-bar {
+  display: flex;
+  background: var(--blanco);
+  border-bottom: 2px solid var(--gris-borde);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 14px 16px;
+  background: none;
+  border: none;
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris-suave);
+  cursor: pointer;
+  transition: var(--trans);
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tab-btn:hover { color: var(--terracota); }
+
+.tab-btn.active {
+  color: var(--terracota);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 10%; right: 10%;
+  height: 3px;
+  background: var(--terracota);
+  border-radius: 3px 3px 0 0;
+}
+
+.tab-content {
+  display: none;
+  padding: 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  animation: fadeIn 0.35s ease;
+}
+
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══ FORM SECTIONS ═══ */
+.form-section {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--sombra);
+  border-left: 5px solid var(--gris-borde);
+  transition: var(--trans);
+}
+
+.form-section:hover { box-shadow: var(--sombra-lg); }
+
+.form-section.station-a { border-left-color: var(--terracota); }
+.form-section.station-b { border-left-color: var(--salvia); }
+.form-section.station-c { border-left-color: var(--ambar); }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.section-number {
+  width: 36px; height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blanco);
+}
+
+.station-a .section-number { background: var(--terracota); }
+.station-b .section-number { background: var(--salvia); }
+.station-c .section-number { background: var(--ambar); color: var(--gris-texto); }
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gris-texto);
+}
+
+.section-hint {
+  font-size: 12px;
+  color: var(--gris-suave);
+  margin-top: -8px;
+  margin-bottom: 14px;
+  padding-left: 48px;
+  font-style: italic;
+}
+
+/* ═══ FORM ELEMENTS ═══ */
+.field-group {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gris-texto);
+  margin-bottom: 6px;
+}
+
+.field-label .required {
+  color: var(--rojo-alerta);
+  font-weight: 400;
+}
+
+.field-sublabel {
+  display: block;
+  font-size: 11px;
+  color: var(--gris-suave);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--gris-borde);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  color: var(--gris-texto);
+  background: var(--arena-light);
+  transition: var(--trans);
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--terracota);
+  background: var(--blanco);
+  box-shadow: 0 0 0 3px rgba(184,92,58,0.1);
+}
+
+textarea { min-height: 80px; resize: vertical; line-height: 1.6; }
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236B6B6B' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.field-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 640px) {
+  .field-row, .field-row-3 { grid-template-columns: 1fr; }
+  .tab-btn { font-size: 11px; padding: 12px 8px; }
+  .tab-content { padding: 16px; }
+}
+
+/* ═══ PERSONA CARDS (small) ═══ */
+.persona-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: default;
+  margin: 2px;
+}
+
+.persona-mini.ml { background: var(--terracota-light); color: var(--terracota); }
+.persona-mini.da { background: var(--salvia-light); color: var(--salvia-dark); }
+
+/* ═══ BUTTONS ═══ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--terracota), var(--terracota-dark));
+  color: var(--arena);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--trans);
+  box-shadow: 0 4px 12px rgba(184,92,58,0.3);
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(184,92,58,0.4); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--blanco);
+  color: var(--terracota);
+  border: 2px solid var(--terracota);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--trans);
+}
+
+.btn-secondary:hover { background: var(--terracota-light); }
+
+.btn-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ═══ TOAST / STATUS ═══ */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  padding: 14px 28px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blanco);
+  box-shadow: var(--sombra-lg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 200;
+  max-width: 90vw;
+  text-align: center;
+}
+
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { background: var(--exito); }
+.toast.error { background: var(--rojo-alerta); }
+.toast.info { background: var(--azul-dato); }
+
+/* ═══ PROGRESS STEPPER ═══ */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 0 8px;
+}
+
+.step-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gris-borde);
+  transition: var(--trans);
+}
+
+.step-dot.filled { background: var(--terracota); }
+.step-dot.active { background: var(--terracota); transform: scale(1.4); }
+
+/* ═══ FICHAS VIEWER ═══ */
+.ficha-card {
+  background: var(--blanco);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--sombra);
+  border-top: 4px solid var(--salvia);
+  transition: var(--trans);
+}
+
+.ficha-card:hover { box-shadow: var(--sombra-lg); }
+
+.ficha-card .fc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.ficha-card .fc-grupo {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--terracota);
+}
+
+.ficha-card .fc-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gris-suave);
+}
+
+.ficha-card .fc-field {
+  margin-bottom: 10px;
+}
+
+.ficha-card .fc-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--salvia-dark);
+  margin-bottom: 2px;
+}
+
+.ficha-card .fc-value {
+  font-size: 14px;
+  color: var(--gris-texto);
+}
+
+.fc-pico-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.fc-pico-item {
+  background: var(--arena-light);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+}
+
+.fc-pico-item .fc-label { color: var(--terracota); }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--gris-suave);
+}
+
+.empty-state .empty-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+.empty-state p { font-size: 15px; }
+
+/* ═══ LOADING SPINNER ═══ */
+.spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(245,237,227,0.3);
+  border-top-color: var(--arena);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ═══ INSTRUCTIONS PANEL ═══ */
+.instructions {
+  background: linear-gradient(135deg, var(--salvia-light), rgba(107,143,113,0.04));
+  border: 1.5px solid rgba(107,143,113,0.2);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.instructions h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  color: var(--salvia-dark);
+  margin-bottom: 8px;
+}
+
+.instructions p {
+  font-size: 13px;
+  color: var(--gris-texto);
+  margin-bottom: 6px;
+}
+
+.instructions .tag-station {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  margin-right: 4px;
+}
+
+.tag-a { background: var(--terracota-light); color: var(--terracota); }
+.tag-b { background: var(--salvia-light); color: var(--salvia-dark); }
+.tag-c { background: var(--ambar-light); color: #8B6914; }
+
+/* ═══ CHAR COUNT ═══ */
+.char-count {
+  text-align: right;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gris-suave);
+  margin-top: 4px;
+}
+
+.char-count.warn { color: var(--ambar); }
+.char-count.over { color: var(--rojo-alerta); }
+
+/* ═══ PRINT ═══ */
+@media print {
+  .tabs-bar, .btn-bar, .toast { display: none !important; }
+  .tab-content { display: block !important; }
+  .form-section { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="app-header">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div class="header-badge">Sesión 8 · Unidad 3, Tema 3 · Epidemiología Experimental</div>
+      <h1 class="header-title">Ficha PICO+S</h1>
+      <p class="header-sub">Diseña un protocolo de ECA paliativo hipotético con tu grupo. Los 10 campos se envían a la base de datos compartida del curso al finalizar.</p>
+    </div>
+    <a href="https://jboglop.github.io/Epidemiologia-en-CP/Experimentales/sesion8_epidemiologia_experimental.html" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(245,237,227,0.15);color:var(--arena);border:1.5px solid rgba(245,237,227,0.4);border-radius:8px;font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.3s ease;white-space:nowrap;backdrop-filter:blur(4px);" onmouseover="this.style.background='rgba(245,237,227,0.25)';this.style.borderColor='rgba(245,237,227,0.7)'" onmouseout="this.style.background='rgba(245,237,227,0.15)';this.style.borderColor='rgba(245,237,227,0.4)'">
+      <span style="font-size:16px;">📊</span> Volver a la clase
+    </a>
+  </div>
+</header>
+
+<!-- ═══ TABS ═══ -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="switchTab('formulario')">✏️ Formulario</button>
+  <button class="tab-btn" onclick="switchTab('fichas')">📋 Fichas enviadas</button>
+  <button class="tab-btn" onclick="switchTab('guia')">📖 Guía rápida</button>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 1: FORMULARIO                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-formulario">
+
+  <!-- Progress -->
+  <div class="stepper" id="stepper">
+    <div class="step-dot active" data-step="0"></div>
+    <div class="step-dot" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+    <div class="step-dot" data-step="4"></div>
+    <div class="step-dot" data-step="5"></div>
+    <div class="step-dot" data-step="6"></div>
+    <div class="step-dot" data-step="7"></div>
+    <div class="step-dot" data-step="8"></div>
+    <div class="step-dot" data-step="9"></div>
+  </div>
+
+  <form id="fichaForm" onsubmit="return false;">
+
+  <!-- ── IDENTIFICACIÓN ── -->
+  <div class="form-section station-a">
+    <div class="section-header">
+      <div class="section-number">ID</div>
+      <div class="section-title">Identificación del grupo</div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Grupo <span class="required">*</span></label>
+        <select id="grupo" required onchange="updateStepper()">
+          <option value="">Seleccionar grupo…</option>
+          <option value="Grupo 1">Grupo 1</option>
+          <option value="Grupo 2">Grupo 2</option>
+          <option value="Grupo 3">Grupo 3</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Integrantes <span class="required">*</span></label>
+        <input type="text" id="integrantes" placeholder="Nombres separados por coma" required oninput="updateStepper()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 1: NOMBRE DEL ENSAYO ── -->
+  <div class="form-section station-a">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Nombre del ensayo hipotético</div>
+    </div>
+    <div class="section-hint">Crea un acrónimo memorable + título descriptivo (ej. ESPERANZA — Evaluación de Soporte Paliativo Enfermería Rural…)</div>
+    <div class="field-group">
+      <label class="field-label">Acrónimo + Título <span class="required">*</span></label>
+      <input type="text" id="nombreEnsayo" placeholder="NOMBRE — Título descriptivo del ensayo" required oninput="updateStepper()">
+    </div>
+  </div>
+
+  <!-- ── CAMPO 2: ANCLAJE NARRATIVO ── -->
+  <div class="form-section station-a">
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">Anclaje narrativo</div>
+    </div>
+    <div class="section-hint">¿Para quién diseñan este ECA? Anclen en una persona real (anonimizada).</div>
+    <div class="field-group">
+      <label class="field-label">Personaje ancla <span class="required">*</span></label>
+      <select id="anclaje" required onchange="updateStepper()">
+        <option value="">Seleccionar…</option>
+        <option value="María Luisa (Tolima, cáncer cervical avanzado)">María Luisa — Tolima, cáncer cervical avanzado</option>
+        <option value="Don Aurelio (La Guajira, wayúu, EPOC avanzado)">Don Aurelio — La Guajira, wayúu, EPOC avanzado</option>
+        <option value="Tu María Luisa (caso propio del grupo)">Tu María Luisa — caso propio del grupo</option>
+      </select>
+    </div>
+    <div class="field-group" id="tuMariaLuisaField" style="display:none;">
+      <label class="field-label">Describe brevemente tu caso ancla</label>
+      <textarea id="tuMariaLuisa" placeholder="Nombre ficticio, territorio, diagnóstico, contexto social…" rows="2"></textarea>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 3: PREGUNTA PICO ── -->
+  <div class="form-section station-a">
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">Pregunta PICO</div>
+    </div>
+    <div class="section-hint">En <span class="persona-mini ml">María Luisa</span> o <span class="persona-mini da">Don Aurelio</span>, ¿qué intervención merece un ECA y por qué?</div>
+    <div class="field-group">
+      <label class="field-label">P — Población <span class="required">*</span></label>
+      <input type="text" id="poblacion" placeholder="Ej: Mujeres con cáncer cervical avanzado en zona rural de Tolima, >18 años" required oninput="updateStepper()">
+    </div>
+    <div class="field-group">
+      <label class="field-label">I — Intervención <span class="required">*</span></label>
+      <input type="text" id="intervencion" placeholder="Ej: Programa de telecuidado paliativo por enfermería comunitaria" required oninput="updateStepper()">
+    </div>
+    <div class="field-group">
+      <label class="field-label">C — Comparador <span class="required">*</span></label>
+      <input type="text" id="comparador" placeholder="Ej: Cuidado habitual sin componente paliativo estructurado" required oninput="updateStepper()">
+    </div>
+    <div class="field-group">
+      <label class="field-label">O — Outcome (desenlace) <span class="required">*</span></label>
+      <input type="text" id="outcome" placeholder="Ej: Calidad de vida medida con FACT-G a 3 meses" required oninput="updateStepper()">
+    </div>
+  </div>
+
+  <!-- ── CAMPO 4: DISEÑO ── -->
+  <div class="form-section station-b">
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">Diseño elegido</div>
+    </div>
+    <div class="section-hint">Justifica en ≤30 palabras: ¿por qué este diseño y no otro?</div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Tipo de diseño <span class="required">*</span></label>
+        <select id="diseno" required onchange="updateStepper()">
+          <option value="">Seleccionar…</option>
+          <option value="ECA paralelo individual">ECA paralelo individual</option>
+          <option value="ECA cluster-randomized">ECA cluster-randomized</option>
+          <option value="Stepped-wedge cluster">Stepped-wedge cluster</option>
+          <option value="Fast-track (lista de espera)">Fast-track (lista de espera)</option>
+          <option value="Diseño Zelen">Diseño Zelen</option>
+          <option value="N-of-1">N-of-1</option>
+          <option value="Cuasi-experimental pre-post">Cuasi-experimental pre-post</option>
+          <option value="Cuasi-experimental con grupo control no equivalente">Cuasi-experimental con grupo control no equivalente</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Justificación (≤30 palabras) <span class="required">*</span></label>
+        <textarea id="justificacionDiseno" placeholder="¿Por qué este diseño es el más apropiado para su pregunta y contexto?" maxlength="250" required oninput="countChars(this, 250); updateStepper()"></textarea>
+        <div class="char-count" id="justificacionDiseno-count">0/250</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 5: ELEGIBILIDAD ── -->
+  <div class="form-section station-b">
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div class="section-title">Criterios de elegibilidad</div>
+    </div>
+    <div class="section-hint">Recuerden: <strong>personas vulnerabilizadas</strong> (nunca "vulnerables"). La vulnerabilidad es producida estructuralmente.</div>
+    <div class="field-row-3">
+      <div class="field-group">
+        <label class="field-label">Inclusión 1 <span class="required">*</span></label>
+        <input type="text" id="inclusion1" placeholder="Criterio de inclusión" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Inclusión 2 <span class="required">*</span></label>
+        <input type="text" id="inclusion2" placeholder="Criterio de inclusión" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Inclusión 3 <span class="required">*</span></label>
+        <input type="text" id="inclusion3" placeholder="Criterio de inclusión" required oninput="updateStepper()">
+      </div>
+    </div>
+    <div class="field-row-3">
+      <div class="field-group">
+        <label class="field-label">Exclusión 1 <span class="required">*</span></label>
+        <input type="text" id="exclusion1" placeholder="Criterio de exclusión" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Exclusión 2 <span class="required">*</span></label>
+        <input type="text" id="exclusion2" placeholder="Criterio de exclusión" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Exclusión 3 <span class="required">*</span></label>
+        <input type="text" id="exclusion3" placeholder="Criterio de exclusión" required oninput="updateStepper()">
+      </div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">¿Cómo garantizan NO excluir personas vulnerabilizadas? <span class="required">*</span></label>
+      <span class="field-sublabel">Expliciten cómo evitan que sus criterios excluyan personas rurales, indígenas, analfabetas, con discapacidad, o en situación de pobreza.</span>
+      <textarea id="noExcluirVulnerabilizadas" placeholder="Ej: No excluimos por nivel educativo ni por idioma; se proveerá consentimiento en wayuunaiki y acompañamiento de traductor cultural…" required oninput="updateStepper()"></textarea>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 6: OUTCOME PRIMARIO ── -->
+  <div class="form-section station-b">
+    <div class="section-header">
+      <div class="section-number">6</div>
+      <div class="section-title">Outcome primario validado</div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Instrumento <span class="required">*</span></label>
+        <select id="outcomePrimario" required onchange="updateStepper()">
+          <option value="">Seleccionar instrumento…</option>
+          <option value="FACT-G (Functional Assessment of Cancer Therapy – General)">FACT-G</option>
+          <option value="ESAS-r (Edmonton Symptom Assessment System – Revised)">ESAS-r</option>
+          <option value="IPOS (Integrated Palliative care Outcome Scale)">IPOS</option>
+          <option value="POS-S (Palliative care Outcome Scale – Symptoms)">POS-S</option>
+          <option value="QOLLTI-F (Quality of Life in Life-Threatening Illness – Family)">QOLLTI-F</option>
+          <option value="EORTC QLQ-C30">EORTC QLQ-C30</option>
+          <option value="KCCQ-12 (Kansas City Cardiomyopathy Questionnaire)">KCCQ-12</option>
+          <option value="PHQ-8 / PHQ-9 (Patient Health Questionnaire)">PHQ-8 / PHQ-9</option>
+          <option value="Otro (especificar en tiempo de medición)">Otro</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Tiempo de medición <span class="required">*</span></label>
+        <input type="text" id="tiempoMedicion" placeholder="Ej: Basal, 4 semanas, 12 semanas" required oninput="updateStepper()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 7: TAMAÑO DE MUESTRA ── -->
+  <div class="form-section station-b">
+    <div class="section-header">
+      <div class="section-number">7</div>
+      <div class="section-title">Tamaño de muestra orientativo</div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">N estimado + justificación breve <span class="required">*</span></label>
+      <span class="field-sublabel">No necesitan cálculo formal; estimen basándose en estudios similares (ADAPT n=306, PACO n=146, PalliActive n=115).</span>
+      <input type="text" id="tamanoMuestra" placeholder="Ej: n = 120 (60 por brazo), basado en el tamaño del PalliActive Caregivers…" required oninput="updateStepper()">
+    </div>
+  </div>
+
+  <!-- ── CAMPO 8: SESGOS ── -->
+  <div class="form-section station-c">
+    <div class="section-header">
+      <div class="section-number">8</div>
+      <div class="section-title">Sesgos anticipados y control</div>
+    </div>
+    <div class="section-hint">Piensen en: selección, información, confusión, atrición, contaminación, Hawthorne, efecto de decepción.</div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Sesgo 1 <span class="required">*</span></label>
+        <input type="text" id="sesgo1" placeholder="Nombre del sesgo" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Estrategia de control 1 <span class="required">*</span></label>
+        <input type="text" id="controlSesgo1" placeholder="¿Cómo lo controlan?" required oninput="updateStepper()">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Sesgo 2 <span class="required">*</span></label>
+        <input type="text" id="sesgo2" placeholder="Nombre del sesgo" required oninput="updateStepper()">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Estrategia de control 2 <span class="required">*</span></label>
+        <input type="text" id="controlSesgo2" placeholder="¿Cómo lo controlan?" required oninput="updateStepper()">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 9: DECLARACIÓN ÉTICA ── -->
+  <div class="form-section station-c">
+    <div class="section-header">
+      <div class="section-number">9</div>
+      <div class="section-title">Declaración ética</div>
+    </div>
+    <div class="section-hint">Mencionen: Resolución 8430/1993, Ley 1733/2014, MORECare_Capacity 2020, y cómo abordan el consentimiento en su población.</div>
+    <div class="field-group">
+      <label class="field-label">Declaración <span class="required">*</span></label>
+      <textarea id="declaracionEtica" rows="4" placeholder="Ej: Este estudio se conducirá conforme a la Resolución 8430/93 (clasificación de riesgo mínimo). El consentimiento informado seguirá las recomendaciones de MORECare_Capacity (Evans et al., 2020) para participantes con capacidad fluctuante…" required oninput="updateStepper()"></textarea>
+    </div>
+  </div>
+
+  <!-- ── CAMPO 10: FIRMA ── -->
+  <div class="form-section station-c">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <div class="section-title">Firma del grupo</div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Firma (nombres completos) <span class="required">*</span></label>
+      <span class="field-sublabel">Todos los integrantes que participaron en la producción de esta ficha.</span>
+      <input type="text" id="firmaGrupo" placeholder="Nombre Apellido, Nombre Apellido, Nombre Apellido" required oninput="updateStepper()">
+    </div>
+  </div>
+
+  <!-- ── SUBMIT ── -->
+  <div class="btn-bar">
+    <button type="button" class="btn-secondary" onclick="clearForm()">🗑 Limpiar formulario</button>
+    <button type="button" class="btn-primary" id="submitBtn" onclick="submitFicha()">
+      <span id="submitText">📤 Enviar Ficha PICO+S</span>
+      <span id="submitSpinner" style="display:none;" class="spinner"></span>
+    </button>
+  </div>
+
+  </form>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 2: FICHAS ENVIADAS                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-fichas">
+  <div class="btn-bar" style="justify-content: flex-end;">
+    <button class="btn-secondary" onclick="loadFichas()">🔄 Actualizar fichas</button>
+  </div>
+  <div id="fichasContainer">
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <p>Presiona "Actualizar fichas" para cargar las fichas enviadas por los grupos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TAB 3: GUÍA RÁPIDA                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="tab-content" id="tab-guia">
+  <div class="instructions">
+    <h3>Instrucciones de la actividad</h3>
+    <p>Cada grupo completa <strong>una sola ficha PICO+S</strong> con los 10 campos. Trabajen en los mismos grupos del Journal Club de la Sesión 6. La ficha se envía directamente a la base de datos del curso.</p>
+    <p style="margin-top:8px;"><strong>Tiempo total: 55 minutos.</strong></p>
+    <p style="margin-top:8px;">
+      <span class="tag-station tag-a">Estación A · Pregunta</span> Campos 1, 2 y 3. Construyan la pregunta PICO a partir de la narrativa del personaje ancla.<br>
+      <span class="tag-station tag-b">Estación B · Diseño</span> Campos 4, 5, 6 y 7. Elijan el diseño, criterios de elegibilidad, outcome e instrumento.<br>
+      <span class="tag-station tag-c">Estación C · Crítica/Ética</span> Campos 8, 9 y 10. Anticipen sesgos y formulen la declaración ética.
+    </p>
+  </div>
+
+  <div class="form-section" style="border-left-color: var(--salvia);">
+    <div class="section-title" style="margin-bottom:12px;">ECAs de referencia para dimensionar su protocolo</div>
+    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+      <thead>
+        <tr style="background:var(--salvia); color:var(--arena);">
+          <th style="padding:10px 12px; text-align:left;">Ensayo</th>
+          <th style="padding:10px 12px; text-align:left;">N</th>
+          <th style="padding:10px 12px; text-align:left;">Diseño</th>
+          <th style="padding:10px 12px; text-align:left;">Outcome 1°</th>
+          <th style="padding:10px 12px; text-align:left;">Resultado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>ADAPT</strong> (Bekelman 2024)</td>
+          <td style="padding:10px 12px;">306</td>
+          <td style="padding:10px 12px;">Individual, simple ciego</td>
+          <td style="padding:10px 12px;">FACT-G a 6 meses</td>
+          <td style="padding:10px 12px;">Δ4,6 pts (P=0,001)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>PACO</strong> (Allende-Pérez 2024)</td>
+          <td style="padding:10px 12px;">146</td>
+          <td style="padding:10px 12px;">Paralelo 1:1</td>
+          <td style="padding:10px 12px;">Sobrevida global</td>
+          <td style="padding:10px 12px;">18,1 vs 10,5 m (P=0,029)</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;"><strong>PalliActive</strong> (Arias-Rojas 2025)</td>
+          <td style="padding:10px 12px;">115</td>
+          <td style="padding:10px 12px;">1:1 cuidadores</td>
+          <td style="padding:10px 12px;">ROLE + MOS + QOLLTI-F</td>
+          <td style="padding:10px 12px;">Sig. en adopción del rol</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-section" style="border-left-color: var(--terracota);">
+    <div class="section-title" style="margin-bottom:12px;">Diseños experimentales disponibles</div>
+    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+      <thead>
+        <tr style="background:var(--terracota); color:var(--arena);">
+          <th style="padding:10px 12px; text-align:left;">Diseño</th>
+          <th style="padding:10px 12px; text-align:left;">¿Cuándo usarlo en CP?</th>
+          <th style="padding:10px 12px; text-align:left;">Ventaja</th>
+          <th style="padding:10px 12px; text-align:left;">Limitación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>Paralelo individual</strong></td>
+          <td style="padding:10px 12px;">Intervención a nivel de paciente</td>
+          <td style="padding:10px 12px;">Máxima validez interna</td>
+          <td style="padding:10px 12px;">Riesgo de contaminación</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>Cluster</strong></td>
+          <td style="padding:10px 12px;">Intervención a nivel de equipo/centro</td>
+          <td style="padding:10px 12px;">Evita contaminación</td>
+          <td style="padding:10px 12px;">Necesita más participantes</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>Fast-track</strong></td>
+          <td style="padding:10px 12px;">Éticamente inaceptable negar la intervención</td>
+          <td style="padding:10px 12px;">Todos reciben la intervención</td>
+          <td style="padding:10px 12px;">Período de espera puede ser largo</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>Stepped-wedge</strong></td>
+          <td style="padding:10px 12px;">Implementación gradual de un programa</td>
+          <td style="padding:10px 12px;">Factible en sistemas de salud</td>
+          <td style="padding:10px 12px;">Análisis estadístico complejo</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:10px 12px;"><strong>Zelen</strong></td>
+          <td style="padding:10px 12px;">Alto riesgo de "efecto decepción"</td>
+          <td style="padding:10px 12px;">Reduce angustia en controles</td>
+          <td style="padding:10px 12px;">Controversia ética por consentimiento</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 12px;"><strong>N-of-1</strong></td>
+          <td style="padding:10px 12px;">Ajuste de tratamiento individual</td>
+          <td style="padding:10px 12px;">El paciente es su propio control</td>
+          <td style="padding:10px 12px;">No generalizable</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-section" style="border-left-color: var(--ambar);">
+    <div class="section-title" style="margin-bottom:8px;">Normativa para la declaración ética</div>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Resolución 8430 de 1993</strong> — Clasificación de riesgo (mínimo, mayor que mínimo). Arts. 5–16 sobre consentimiento informado.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Ley 1733 de 2014</strong> — Derechos del paciente en CP: voluntad anticipada, cuidado integral.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Ley 2241 de 2022</strong> — Fortalecimiento de la educación e investigación en CP.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>MORECare_Capacity 2020</strong> — 20 soluciones para consentimiento en personas con capacidad fluctuante al final de la vida.</p>
+    <p style="font-size:13px;"><strong>Resolución 0813 de 2026</strong> — Nueva regulación del derecho a morir dignamente (abril 2026).</p>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══ CONFIGURACIÓN ═══
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyT-RiF5pVwbffeMJ-C89ONs6fHYCbBc8TwBjKuMnbIh_cYEf3FV1m9-MmgAlxrqHNC6A/exec';
+
+// ═══ TABS ═══
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  // highlight the right button
+  const btns = document.querySelectorAll('.tab-btn');
+  if (tab === 'formulario') btns[0].classList.add('active');
+  if (tab === 'fichas') { btns[1].classList.add('active'); loadFichas(); }
+  if (tab === 'guia') btns[2].classList.add('active');
+}
+
+// ═══ ANCLAJE CONDICIONAL ═══
+document.getElementById('anclaje').addEventListener('change', function() {
+  const field = document.getElementById('tuMariaLuisaField');
+  field.style.display = this.value.includes('Tu María Luisa') ? 'block' : 'none';
+});
+
+// ═══ CHAR COUNT ═══
+function countChars(el, max) {
+  const count = el.value.length;
+  const display = document.getElementById(el.id + '-count');
+  if (display) {
+    display.textContent = count + '/' + max;
+    display.className = 'char-count' + (count > max * 0.9 ? (count > max ? ' over' : ' warn') : '');
+  }
+}
+
+// ═══ STEPPER ═══
+function updateStepper() {
+  const fields = [
+    ['grupo', 'integrantes'],         // step 0: ID
+    ['nombreEnsayo'],                  // step 1: field 1
+    ['anclaje'],                       // step 2: field 2
+    ['poblacion','intervencion','comparador','outcome'], // step 3: field 3
+    ['diseno','justificacionDiseno'],  // step 4: field 4
+    ['inclusion1','exclusion1','noExcluirVulnerabilizadas'], // step 5: field 5
+    ['outcomePrimario','tiempoMedicion'], // step 6: field 6
+    ['tamanoMuestra'],                 // step 7: field 7
+    ['sesgo1','controlSesgo1','sesgo2','controlSesgo2'], // step 8: field 8
+    ['declaracionEtica','firmaGrupo'], // step 9: fields 9+10
+  ];
+
+  const dots = document.querySelectorAll('.step-dot');
+  let lastFilled = -1;
+
+  fields.forEach((group, i) => {
+    const filled = group.every(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim() !== '';
+    });
+    dots[i].classList.toggle('filled', filled);
+    dots[i].classList.remove('active');
+    if (filled) lastFilled = i;
+  });
+
+  // Mark next unfilled as active
+  const nextActive = Math.min(lastFilled + 1, fields.length - 1);
+  dots[nextActive].classList.add('active');
+}
+
+// ═══ TOAST ═══
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => { t.classList.remove('show'); }, 4000);
+}
+
+// ═══ COLLECT FORM DATA ═══
+function collectData() {
+  const ids = [
+    'grupo','integrantes','nombreEnsayo','anclaje',
+    'poblacion','intervencion','comparador','outcome',
+    'diseno','justificacionDiseno',
+    'inclusion1','inclusion2','inclusion3',
+    'exclusion1','exclusion2','exclusion3',
+    'noExcluirVulnerabilizadas',
+    'outcomePrimario','tiempoMedicion','tamanoMuestra',
+    'sesgo1','controlSesgo1','sesgo2','controlSesgo2',
+    'declaracionEtica','firmaGrupo'
+  ];
+  const data = {};
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    data[id] = el ? el.value.trim() : '';
+  });
+  // Append "Tu María Luisa" text if selected
+  if (data.anclaje.includes('Tu María Luisa')) {
+    const extra = document.getElementById('tuMariaLuisa').value.trim();
+    if (extra) data.anclaje += ' — ' + extra;
+  }
+  return data;
+}
+
+// ═══ VALIDATE ═══
+function validate() {
+  const required = [
+    'grupo','integrantes','nombreEnsayo','anclaje',
+    'poblacion','intervencion','comparador','outcome',
+    'diseno','justificacionDiseno',
+    'inclusion1','inclusion2','inclusion3',
+    'exclusion1','exclusion2','exclusion3',
+    'noExcluirVulnerabilizadas',
+    'outcomePrimario','tiempoMedicion','tamanoMuestra',
+    'sesgo1','controlSesgo1','sesgo2','controlSesgo2',
+    'declaracionEtica','firmaGrupo'
+  ];
+  for (const id of required) {
+    const el = document.getElementById(id);
+    if (!el || !el.value.trim()) {
+      el.focus();
+      el.style.borderColor = 'var(--rojo-alerta)';
+      setTimeout(() => { el.style.borderColor = ''; }, 3000);
+      showToast('⚠️ Completa todos los campos obligatorios antes de enviar.', 'error');
+      return false;
+    }
+  }
+  return true;
+}
+
+// ═══ SUBMIT ═══
+async function submitFicha() {
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  const text = document.getElementById('submitText');
+  const spinner = document.getElementById('submitSpinner');
+
+  btn.disabled = true;
+  text.style.display = 'none';
+  spinner.style.display = 'inline-block';
+
+  const data = collectData();
+
+  try {
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script requires no-cors for cross-origin
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(data)
+    });
+
+    // With no-cors, we can't read the response, but if no error was thrown, it likely succeeded
+    showToast('✅ ¡Ficha PICO+S enviada exitosamente! Revisa en la pestaña "Fichas enviadas".', 'success');
+
+    // Visual feedback
+    document.querySelectorAll('.step-dot').forEach(d => {
+      d.classList.add('filled');
+      d.classList.remove('active');
+    });
+
+  } catch (err) {
+    console.error('Error al enviar:', err);
+    showToast('❌ Error al enviar. Verifica tu conexión e intenta de nuevo.', 'error');
+  } finally {
+    btn.disabled = false;
+    text.style.display = 'inline';
+    spinner.style.display = 'none';
+  }
+}
+
+// ═══ LOAD FICHAS ═══
+async function loadFichas() {
+  const container = document.getElementById('fichasContainer');
+  container.innerHTML = '<div class="empty-state"><div class="spinner" style="border-color:rgba(0,0,0,0.1);border-top-color:var(--terracota);width:32px;height:32px;"></div><p style="margin-top:12px;">Cargando fichas…</p></div>';
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?t=' + Date.now());
+    const json = await res.json();
+
+    if (!json.fichas || json.fichas.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><p>Aún no hay fichas enviadas. ¡Sean los primeros!</p></div>';
+      return;
+    }
+
+    let html = '<p style="font-size:13px;color:var(--gris-suave);margin-bottom:16px;">' + json.fichas.length + ' ficha(s) recibida(s)</p>';
+
+    json.fichas.forEach(f => {
+      const ts = f['Timestamp'] ? new Date(f['Timestamp']).toLocaleString('es-CO') : '—';
+      html += `
+      <div class="ficha-card">
+        <div class="fc-header">
+          <div class="fc-grupo">${esc(f['Grupo'] || 'Sin grupo')}</div>
+          <div class="fc-time">${ts}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">1. Nombre del ensayo</div>
+          <div class="fc-value">${esc(f['1. Nombre del ensayo'] || '—')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">2. Anclaje narrativo</div>
+          <div class="fc-value">${esc(f['2. Anclaje narrativo'] || '—')}</div>
+        </div>
+        <div class="fc-pico-grid">
+          <div class="fc-pico-item"><div class="fc-label">P — Población</div><div class="fc-value">${esc(f['3P. Población'] || '—')}</div></div>
+          <div class="fc-pico-item"><div class="fc-label">I — Intervención</div><div class="fc-value">${esc(f['3I. Intervención'] || '—')}</div></div>
+          <div class="fc-pico-item"><div class="fc-label">C — Comparador</div><div class="fc-value">${esc(f['3C. Comparador'] || '—')}</div></div>
+          <div class="fc-pico-item"><div class="fc-label">O — Outcome</div><div class="fc-value">${esc(f['3O. Outcome'] || '—')}</div></div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">4. Diseño elegido</div>
+          <div class="fc-value">${esc(f['4. Diseño elegido'] || '—')} — ${esc(f['4b. Justificación diseño'] || '')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">6. Outcome primario</div>
+          <div class="fc-value">${esc(f['6. Outcome primario validado'] || '—')} · Medición: ${esc(f['6b. Tiempo de medición'] || '—')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">7. Tamaño de muestra</div>
+          <div class="fc-value">${esc(f['7. Tamaño de muestra'] || '—')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">8. Sesgos</div>
+          <div class="fc-value">${esc(f['8a. Sesgo 1'] || '—')} → ${esc(f['8b. Control sesgo 1'] || '—')} · ${esc(f['8c. Sesgo 2'] || '—')} → ${esc(f['8d. Control sesgo 2'] || '—')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">9. Declaración ética</div>
+          <div class="fc-value">${esc(f['9. Declaración ética'] || '—')}</div>
+        </div>
+        <div class="fc-field">
+          <div class="fc-label">10. Firma</div>
+          <div class="fc-value">${esc(f['10. Firma del grupo'] || '—')}</div>
+        </div>
+      </div>`;
+    });
+
+    container.innerHTML = html;
+
+  } catch (err) {
+    console.error('Error al cargar fichas:', err);
+    container.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><p>No se pudieron cargar las fichas. Verifica tu conexión.</p></div>';
+  }
+}
+
+// ═══ ESCAPE HTML ═══
+function esc(s) {
+  if (!s) return '';
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+// ═══ CLEAR FORM ═══
+function clearForm() {
+  if (confirm('¿Limpiar todos los campos del formulario?')) {
+    document.getElementById('fichaForm').reset();
+    document.getElementById('tuMariaLuisaField').style.display = 'none';
+    updateStepper();
+    showToast('🗑 Formulario limpiado.', 'info');
+  }
+}
+
+// Init stepper
+updateStepper();
+</script>
+</body>
+</html>
