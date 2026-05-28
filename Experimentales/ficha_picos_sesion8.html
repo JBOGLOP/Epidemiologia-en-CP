@@ -667,17 +667,28 @@ select {
     <div class="field-row">
       <div class="field-group">
         <label class="field-label">Tipo de diseño <span class="required">*</span></label>
-        <select id="diseno" required onchange="updateStepper()">
+        <select id="diseno" required onchange="showDisenoInfo(this); updateStepper()">
           <option value="">Seleccionar…</option>
-          <option value="ECA paralelo individual">ECA paralelo individual</option>
-          <option value="ECA cluster-randomized">ECA cluster-randomized</option>
-          <option value="Stepped-wedge cluster">Stepped-wedge cluster</option>
-          <option value="Fast-track (lista de espera)">Fast-track (lista de espera)</option>
-          <option value="Diseño Zelen">Diseño Zelen</option>
-          <option value="N-of-1">N-of-1</option>
-          <option value="Cuasi-experimental pre-post">Cuasi-experimental pre-post</option>
-          <option value="Cuasi-experimental con grupo control no equivalente">Cuasi-experimental con grupo control no equivalente</option>
+          <optgroup label="── Nivel 1: Con aleatorización (ECA) ──">
+            <option value="ECA paralelo individual (Cap.15 tipo 1)">ECA paralelo individual — tipo 1 Cap. 15</option>
+            <option value="Cruzado / cross-over (Cap.15 tipo 2)">Cruzado (cross-over) — tipo 2 Cap. 15</option>
+            <option value="Fast-track / lista de espera (variante del cruzado)">Fast-track (lista de espera) — variante del tipo 2</option>
+            <option value="De equivalencia (Cap.15 tipo 3)">De equivalencia — tipo 3 Cap. 15</option>
+            <option value="De no inferioridad (Cap.15 tipo 4)">De no inferioridad — tipo 4 Cap. 15</option>
+            <option value="Factorial (Cap.15 tipo 5)">Factorial — tipo 5 Cap. 15</option>
+            <option value="ECA cluster-randomized (Cap.15 tipo 6)">Cluster-randomized — tipo 6 Cap. 15</option>
+            <option value="Stepped-wedge cluster (variante del tipo 6)">Stepped-wedge cluster — variante del tipo 6</option>
+            <option value="Con análisis secuencial (Cap.15 tipo 7)">Con análisis secuencial — tipo 7 Cap. 15</option>
+            <option value="De descontinuación (Cap.15 tipo 8)">De descontinuación — tipo 8 Cap. 15</option>
+            <option value="Diseño Zelen (variante pre-consentimiento)">Diseño Zelen — variante pre-consentimiento</option>
+            <option value="N-of-1 / individual (Cap.15 tipo 10)">N-of-1 (individual) — tipo 10 Cap. 15</option>
+          </optgroup>
+          <optgroup label="── Nivel 2: Sin aleatorización (cuasi-experimental) ──">
+            <option value="Cuasi-experimental pre-post (sin aleatorización)">Cuasi-experimental pre-post — sin aleatorización</option>
+            <option value="Cuasi-experimental con grupo control no equivalente (sin aleatorización)">Cuasi-exp. con grupo control no equivalente — sin aleatorización</option>
+          </optgroup>
         </select>
+        <div id="disenoInfo" style="display:none; margin-top:8px; padding:10px 14px; background:var(--arena); border-radius:var(--radius-sm); font-size:12px; color:var(--gris-suave); border-left:3px solid var(--terracota);"></div>
       </div>
       <div class="field-group">
         <label class="field-label">Justificación (≤30 palabras) <span class="required">*</span></label>
@@ -738,18 +749,20 @@ select {
     <div class="field-row">
       <div class="field-group">
         <label class="field-label">Instrumento <span class="required">*</span></label>
-        <select id="outcomePrimario" required onchange="updateStepper()">
+        <select id="outcomePrimario" required onchange="showInstrumentInfo(this); updateStepper()">
           <option value="">Seleccionar instrumento…</option>
-          <option value="FACT-G (Functional Assessment of Cancer Therapy – General)">FACT-G</option>
-          <option value="ESAS-r (Edmonton Symptom Assessment System – Revised)">ESAS-r</option>
-          <option value="IPOS (Integrated Palliative care Outcome Scale)">IPOS</option>
-          <option value="POS-S (Palliative care Outcome Scale – Symptoms)">POS-S</option>
-          <option value="QOLLTI-F (Quality of Life in Life-Threatening Illness – Family)">QOLLTI-F</option>
-          <option value="EORTC QLQ-C30">EORTC QLQ-C30</option>
-          <option value="KCCQ-12 (Kansas City Cardiomyopathy Questionnaire)">KCCQ-12</option>
-          <option value="PHQ-8 / PHQ-9 (Patient Health Questionnaire)">PHQ-8 / PHQ-9</option>
-          <option value="Otro (especificar en tiempo de medición)">Otro</option>
+          <option value="FACT-G (Functional Assessment of Chronic Illness Therapy – General) · Rango 0–108 · MCID = 4 pts">FACT-G — Calidad de vida general (cáncer y enf. crónica)</option>
+          <option value="ESAS-r (Edmonton Symptom Assessment System – Revised) · 10 síntomas · Escala 0–10 c/u">ESAS-r — Control de síntomas paliativos</option>
+          <option value="IPOS (Integrated Palliative care Outcome Scale) · 10 ítems · Validación ES ibérico">IPOS — Outcome integral paliativo</option>
+          <option value="POS-S (Palliative care Outcome Scale – Symptoms) · Derivado del IPOS">POS-S — Síntomas paliativos ampliado</option>
+          <option value="QOLLTI-F (Quality of Life in Life-Threatening Illness – Family) · Para cuidadores">QOLLTI-F — Calidad de vida del cuidador familiar</option>
+          <option value="EORTC QLQ-C30 · 30 ítems · Validación en español Colombia disponible">EORTC QLQ-C30 — Calidad de vida en cáncer (EORTC)</option>
+          <option value="KCCQ-12 (Kansas City Cardiomyopathy Questionnaire – 12) · Para insuficiencia cardíaca">KCCQ-12 — Calidad de vida en insuficiencia cardíaca</option>
+          <option value="PHQ-8 / PHQ-9 (Patient Health Questionnaire) · Depresión · MCID = 5 pts">PHQ-8/PHQ-9 — Depresión (outcome secundario frecuente)</option>
+          <option value="GAD-7 (Generalized Anxiety Disorder – 7) · Ansiedad">GAD-7 — Ansiedad (outcome secundario frecuente)</option>
+          <option value="Otro (especificar en tiempo de medición)">Otro — especificar abajo</option>
         </select>
+        <div id="instrumentInfo" style="display:none; margin-top:8px; padding:10px 14px; background:var(--arena); border-radius:var(--radius-sm); font-size:12px; color:var(--gris-suave); border-left:3px solid var(--salvia);"></div>
       </div>
       <div class="field-group">
         <label class="field-label">Tiempo de medición <span class="required">*</span></label>
@@ -777,7 +790,7 @@ select {
       <div class="section-number">8</div>
       <div class="section-title">Sesgos anticipados y control</div>
     </div>
-    <div class="section-hint">Piensen en: selección, información, confusión, atrición, contaminación, Hawthorne, efecto de decepción.</div>
+    <div class="section-hint">Piensen en: selección, información, confusión, atrición, contaminación, Hawthorne, efecto de decepción, <strong>regresión al promedio</strong> (Lozano León & Ruiz Peláez), cointervención. En análisis secuencial: riesgo de <strong>error tipo I</strong> por análisis repetidos no planificados.</div>
     <div class="field-row">
       <div class="field-group">
         <label class="field-label">Sesgo 1 <span class="required">*</span></label>
@@ -907,64 +920,129 @@ select {
   </div>
 
   <div class="form-section" style="border-left-color: var(--terracota);">
-    <div class="section-title" style="margin-bottom:12px;">Diseños experimentales disponibles</div>
-    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+    <div class="section-title" style="margin-bottom:4px;">Diseños experimentales — taxonomía unificada</div>
+    <p style="font-size:12px; color:var(--gris-suave); margin-bottom:12px;">Fuente: Lozano León & Ruiz Peláez, Cap. 15. Las variantes (fast-track, stepped-wedge, Zelen) no aparecen como tipos separados en el capítulo, pero son coherentes con su clasificación.</p>
+    <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
       <thead>
         <tr style="background:var(--terracota); color:var(--arena);">
-          <th style="padding:10px 12px; text-align:left;">Diseño</th>
-          <th style="padding:10px 12px; text-align:left;">¿Cuándo usarlo en CP?</th>
-          <th style="padding:10px 12px; text-align:left;">Ventaja</th>
-          <th style="padding:10px 12px; text-align:left;">Limitación</th>
+          <th style="padding:8px 10px; text-align:left;">Cap. 15</th>
+          <th style="padding:8px 10px; text-align:left;">Diseño</th>
+          <th style="padding:8px 10px; text-align:left;">¿Cuándo usarlo en CP?</th>
+          <th style="padding:8px 10px; text-align:left;">Limitación clave</th>
         </tr>
       </thead>
       <tbody>
-        <tr style="border-bottom:1px solid var(--gris-borde);">
-          <td style="padding:10px 12px;"><strong>Paralelo individual</strong></td>
-          <td style="padding:10px 12px;">Intervención a nivel de paciente</td>
-          <td style="padding:10px 12px;">Máxima validez interna</td>
-          <td style="padding:10px 12px;">Riesgo de contaminación</td>
+        <tr style="background:rgba(184,92,58,0.04);">
+          <td colspan="4" style="padding:6px 10px; font-size:11px; font-weight:600; color:var(--terracota); text-transform:uppercase; letter-spacing:0.06em;">Nivel 1 — Con aleatorización (ECA)</td>
         </tr>
         <tr style="border-bottom:1px solid var(--gris-borde);">
-          <td style="padding:10px 12px;"><strong>Cluster</strong></td>
-          <td style="padding:10px 12px;">Intervención a nivel de equipo/centro</td>
-          <td style="padding:10px 12px;">Evita contaminación</td>
-          <td style="padding:10px 12px;">Necesita más participantes</td>
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota); white-space:nowrap;">Tipo 1</td>
+          <td style="padding:8px 10px;"><strong>Paralelo individual (convencional)</strong></td>
+          <td style="padding:8px 10px;">Intervención a nivel de paciente. Máxima validez interna. ADAPT trial.</td>
+          <td style="padding:8px 10px;">Riesgo de contaminación entre brazos.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--gris-borde);">
-          <td style="padding:10px 12px;"><strong>Fast-track</strong></td>
-          <td style="padding:10px 12px;">Éticamente inaceptable negar la intervención</td>
-          <td style="padding:10px 12px;">Todos reciben la intervención</td>
-          <td style="padding:10px 12px;">Período de espera puede ser largo</td>
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 2</td>
+          <td style="padding:8px 10px;"><strong>Cruzado (cross-over)</strong></td>
+          <td style="padding:8px 10px;">Condiciones crónicas estables; el efecto es reversible.</td>
+          <td style="padding:8px 10px;">En CP: el paciente puede morir antes del segundo período.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--gris-borde);">
-          <td style="padding:10px 12px;"><strong>Stepped-wedge</strong></td>
-          <td style="padding:10px 12px;">Implementación gradual de un programa</td>
-          <td style="padding:10px 12px;">Factible en sistemas de salud</td>
-          <td style="padding:10px 12px;">Análisis estadístico complejo</td>
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--azul-dato);">variante 2</td>
+          <td style="padding:8px 10px;"><strong>Fast-track (lista de espera)</strong></td>
+          <td style="padding:8px 10px;">Éticamente inaceptable negar la intervención. Todos reciben, orden aleatorio.</td>
+          <td style="padding:8px 10px;">El período de espera puede ser largo para pacientes terminales.</td>
         </tr>
         <tr style="border-bottom:1px solid var(--gris-borde);">
-          <td style="padding:10px 12px;"><strong>Zelen</strong></td>
-          <td style="padding:10px 12px;">Alto riesgo de "efecto decepción"</td>
-          <td style="padding:10px 12px;">Reduce angustia en controles</td>
-          <td style="padding:10px 12px;">Controversia ética por consentimiento</td>
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 3</td>
+          <td style="padding:8px 10px;"><strong>De equivalencia</strong></td>
+          <td style="padding:8px 10px;">Nueva intervención similar a la convencional con ventaja adicional.</td>
+          <td style="padding:8px 10px;">No sirve si la intervención convencional no funciona.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 4</td>
+          <td style="padding:8px 10px;"><strong>De no inferioridad</strong></td>
+          <td style="padding:8px 10px;">Nueva opción no es peor que el estándar, con ventajas de acceso.</td>
+          <td style="padding:8px 10px;">Umbral subjetivo; riesgo de error tipo I aumentado.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 5</td>
+          <td style="padding:8px 10px;"><strong>Factorial</strong></td>
+          <td style="padding:8px 10px;">Evaluar 2+ intervenciones simultáneamente (ej: CP temprano + apoyo psicológico).</td>
+          <td style="padding:8px 10px;">Complejo; asume independencia entre intervenciones.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 6</td>
+          <td style="padding:8px 10px;"><strong>Cluster-randomized</strong></td>
+          <td style="padding:8px 10px;">Intervención a nivel de equipo/hospital/municipio. Evita contaminación.</td>
+          <td style="padding:8px 10px;">Requiere más participantes; análisis complejo.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--azul-dato);">variante 6</td>
+          <td style="padding:8px 10px;"><strong>Stepped-wedge cluster</strong></td>
+          <td style="padding:8px 10px;">Implementación gradual de un programa. Todos los clusters reciben la intervención.</td>
+          <td style="padding:8px 10px;">Análisis estadístico complejo; requiere múltiples períodos.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 7</td>
+          <td style="padding:8px 10px;"><strong>Con análisis secuencial</strong></td>
+          <td style="padding:8px 10px;">Cuando detener por daño o eficacia es obligación ética (equilibrio clínico).</td>
+          <td style="padding:8px 10px;">Error tipo I si no se planifican miradas intermedias (O'Brien-Fleming).</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 8</td>
+          <td style="padding:8px 10px;"><strong>De descontinuación</strong></td>
+          <td style="padding:8px 10px;">Continuar vs. retirar intervención en respondedores (ej: opioides en CP).</td>
+          <td style="padding:8px 10px;">Solo selecciona buenos respondedores; baja generalización.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--azul-dato);">variante</td>
+          <td style="padding:8px 10px;"><strong>Diseño Zelen</strong></td>
+          <td style="padding:8px 10px;">Alto riesgo de "efecto decepción". Aleatorización antes del consentimiento.</td>
+          <td style="padding:8px 10px;">Controversia ética: no todos los participantes dan consentimiento informado.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--terracota);">Tipo 10</td>
+          <td style="padding:8px 10px;"><strong>N-of-1 (individual)</strong></td>
+          <td style="padding:8px 10px;">Ajuste de opioides o adyuvantes en dolor complejo. Paciente es su propio control.</td>
+          <td style="padding:8px 10px;">No generalizable; solo en condiciones estables y reversibles.</td>
+        </tr>
+        <tr style="background:rgba(212,160,60,0.06);">
+          <td colspan="4" style="padding:6px 10px; font-size:11px; font-weight:600; color:#8B6914; text-transform:uppercase; letter-spacing:0.06em;">Nivel 2 — Sin aleatorización (cuasi-experimental / pseudoexperimento)</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gris-borde);">
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#8B6914;">cuasi-exp</td>
+          <td style="padding:8px 10px;"><strong>Pre-post (antes-después)</strong></td>
+          <td style="padding:8px 10px;">Cuando la aleatorización no es factible. Mide cambio en el mismo grupo antes y después.</td>
+          <td style="padding:8px 10px;">Sin grupo control; alta susceptibilidad a confusión y regresión al promedio.</td>
         </tr>
         <tr>
-          <td style="padding:10px 12px;"><strong>N-of-1</strong></td>
-          <td style="padding:10px 12px;">Ajuste de tratamiento individual</td>
-          <td style="padding:10px 12px;">El paciente es su propio control</td>
-          <td style="padding:10px 12px;">No generalizable</td>
+          <td style="padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#8B6914;">cuasi-exp</td>
+          <td style="padding:8px 10px;"><strong>Con grupo control no equivalente</strong></td>
+          <td style="padding:8px 10px;">Hay grupo comparación pero sin aleatorización. Más robusto que pre-post solo.</td>
+          <td style="padding:8px 10px;">Grupos pueden diferir sistemáticamente al inicio; sesgo de selección no controlado.</td>
         </tr>
       </tbody>
     </table>
+    <p style="font-size:11px; color:var(--gris-suave); margin-top:8px; font-style:italic;">Nota: El Cap. 15 no incluye tipo 9 (megaexperimentos) en el selector porque no es factible para la actividad de aula. Cap. 15 tipo 2 (cruzado) está separado de su variante fast-track para claridad conceptual.</p>
   </div>
 
   <div class="form-section" style="border-left-color: var(--ambar);">
-    <div class="section-title" style="margin-bottom:8px;">Normativa para la declaración ética</div>
-    <p style="font-size:13px; margin-bottom:6px;"><strong>Resolución 8430 de 1993</strong> — Clasificación de riesgo (mínimo, mayor que mínimo). Arts. 5–16 sobre consentimiento informado.</p>
+    <div class="section-title" style="margin-bottom:8px;">Normativa para la declaración ética (campo 9)</div>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Resolución 8430 de 1993</strong> — Clasificación de riesgo (mínimo, mayor que mínimo). Arts. 5–16 sobre consentimiento informado. Vigente sin actualización; no contempla consentimiento diferido ni capacidad fluctuante.</p>
     <p style="font-size:13px; margin-bottom:6px;"><strong>Ley 1733 de 2014</strong> — Derechos del paciente en CP: voluntad anticipada, cuidado integral.</p>
-    <p style="font-size:13px; margin-bottom:6px;"><strong>Ley 2241 de 2022</strong> — Fortalecimiento de la educación e investigación en CP.</p>
-    <p style="font-size:13px; margin-bottom:6px;"><strong>MORECare_Capacity 2020</strong> — 20 soluciones para consentimiento en personas con capacidad fluctuante al final de la vida.</p>
-    <p style="font-size:13px;"><strong>Resolución 0813 de 2026</strong> — Nueva regulación del derecho a morir dignamente (abril 2026).</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Ley 2241 de 2022</strong> — Fortalecimiento de la educación e investigación en CP. Sustento legal de esta Maestría.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Resolución 0813 de 2026</strong> — Nueva regulación del derecho a morir dignamente (28 abril 2026). Los CP son una de las cuatro vías.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>MORECare_Capacity 2020</strong> (Evans et al., BMC Medicine) — 20 soluciones operativas para consentimiento en personas con capacidad fluctuante al final de la vida: anticipado, diferido, por proxy, ventanas de oportunidad temporal.</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>CONSORT 2025</strong> (Hopewell et al., BMJ, 14 abril 2025) — 30 ítems para reporte de ECAs. Nuevo ítem obligatorio: participación de pacientes y público (PPI). Sección de open science.</p>
+    <p style="font-size:13px;"><strong>SPIRIT 2025</strong> (Chan et al., JAMA, 28–29 abril 2025) — 34 ítems para protocolos de ECAs. Reemplaza SPIRIT 2013.</p>
+  </div>
+
+  <div class="form-section" style="border-left-color: var(--azul-dato);">
+    <div class="section-title" style="margin-bottom:8px;">Recordatorio: validez interna ↕ validez externa</div>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Validez interna:</strong> los resultados reflejan correctamente la relación causal dentro de los participantes del estudio. Alta cuando hay aleatorización rigurosa, cegamiento y análisis por intención de tratar (ITT).</p>
+    <p style="font-size:13px; margin-bottom:6px;"><strong>Validez externa:</strong> los resultados son extrapolables a otras poblaciones, contextos y momentos. El ADAPT trial tiene validez interna alta pero validez externa limitada para Colombia: 90% hombres, blancos, veteranos VA.</p>
+    <p style="font-size:13px;"><strong>Pregunta clave para su ficha:</strong> ¿su diseño maximiza la validez interna a costa de excluir a personas vulnerabilizadas, o adopta criterios más amplios para ganar representatividad territorial?</p>
   </div>
 </div>
 
@@ -972,6 +1050,62 @@ select {
 <div class="toast" id="toast"></div>
 
 <script>
+// ═══ INSTRUMENT INFO ═══
+const instrumentDetails = {
+  'FACT-G': '27 ítems · 4 subescalas (físico, social/familiar, emocional, funcional) · Rango total: 0–108 · MCID = 4 pts · Diseñado para cáncer y enf. crónica · Versión validada en español disponible en FACIT.org · Usado en ADAPT trial.',
+  'ESAS-r': '10 ítems · Escala visual 0–10 por síntoma · Rápido (~2 min) · Validado en español (Carvajal et al., 2013, J Pain Symptom Manage) · Usado en PACO trial · Ideal para pacientes deteriorados.',
+  'IPOS': '10 ítems · Físicos + psicológicos + existenciales + familiares · Validación en español ibérico (King\'s College London) · ⚠ Validación colombiana específica: DATO POR VERIFICAR.',
+  'POS-S': 'Derivado del IPOS · Foco en síntomas físicos ampliados · Complementa al IPOS para estudios de control de síntomas.',
+  'QOLLTI-F': 'Para cuidadores familiares, no para pacientes · Usado en PalliActive Caregivers (Arias-Rojas 2025) · Evalúa calidad de vida del cuidador en enfermedad amenazante de vida.',
+  'EORTC QLQ-C30': '30 ítems · 5 escalas funcionales, 3 sintomáticas, 1 global · Ampliamente validado en español y en Colombia · Específico para pacientes con cáncer.',
+  'KCCQ-12': '12 ítems · Específico para insuficiencia cardíaca · Usado en ADAPT trial (outcome secundario) · Evalúa limitación física, síntomas, calidad de vida y estado social.',
+  'PHQ-8': '8 ítems · Depresión · MCID ≈ 5 pts · Usado como outcome secundario en ADAPT · Administrable en persona o por teléfono.',
+  'GAD-7': '7 ítems · Ansiedad · Puntuación 0–21 · Frecuentemente pareado con PHQ-8/9 en estudios de CP.',
+};
+
+function showInstrumentInfo(sel) {
+  const info = document.getElementById('instrumentInfo');
+  if (!sel.value) { info.style.display = 'none'; return; }
+  const key = Object.keys(instrumentDetails).find(k => sel.value.startsWith(k));
+  if (key) {
+    info.textContent = '📋 ' + instrumentDetails[key];
+    info.style.display = 'block';
+  } else {
+    info.style.display = 'none';
+  }
+}
+
+// ═══ DISEÑO INFO ═══
+const disenoDetails = {
+  'ECA paralelo individual': 'Cap. 15 tipo 1. Validez interna máxima. Aleatorización individual. Ejemplo: ADAPT trial (Bekelman 2024, JAMA, n=306). Riesgo de efecto Hawthorne si el control no recibe ningún contacto.',
+  'Cruzado / cross-over': 'Cap. 15 tipo 2. Cada participante recibe ambas intervenciones. Requiere período de lavado. En CP: solo si la condición es estable y reversible (ej: ajuste de analgésico). Impracticable en pacientes con deterioro rápido.',
+  'Fast-track': 'Variante del cruzado. Todos reciben la intervención; la aleatorización decide el orden. Resuelve la objeción ética de "negar" cuidado. Usado en estudios de disnea paliativa (Higginson et al.).',
+  'De equivalencia': 'Cap. 15 tipo 3. Demuestra que la nueva opción produce resultados similares al estándar. Útil para validar morfina oral vs. parenteral en zonas sin acceso a vías IV.',
+  'De no inferioridad': 'Cap. 15 tipo 4. La nueva intervención no es "peor" que el estándar por más de un margen predefinido. Riesgo: el umbral de no inferioridad es subjetivo y puede ocultar diferencias clínicamente importantes.',
+  'Factorial': 'Cap. 15 tipo 5. Evalúa 2+ intervenciones con los mismos participantes. Genera 4+ grupos. Requiere que las intervenciones sean independientes entre sí.',
+  'ECA cluster-randomized': 'Cap. 15 tipo 6. La unidad de aleatorización es un grupo (municipio, hospital, equipo). Evita contaminación. Ejemplo: PalliActive Caregivers (Arias-Rojas 2025) y PRIM-ER (Grudzen 2024).',
+  'Stepped-wedge cluster': 'Variante del tipo 6. Todos los clusters comienzan como control y cruzan a intervención en momentos aleatorizados. Ideal para implementar políticas de salud pública. Análisis estadístico complejo.',
+  'Con análisis secuencial': 'Cap. 15 tipo 7. El análisis se repite mientras llegan los datos. Detención por eficacia (la intervención claramente funciona) o futilidad/daño. Método O\'Brien-Fleming ajusta el umbral en cada mirada intermedia para controlar el error tipo I.',
+  'De descontinuación': 'Cap. 15 tipo 8. Pacientes que ya responden bien a la intervención se aleatorizan a continuar o recibir placebo. Útil para evaluar si los opioides pueden reducirse en pacientes estabilizados. Solo selecciona buenos respondedores.',
+  'Diseño Zelen': 'Variante pre-consentimiento. Se aleatoriza primero; solo el brazo de intervención da consentimiento informado. Reduce el "efecto de decepción" en controles. Controversia ética activa: parte de los participantes no sabe que está en un estudio.',
+  'N-of-1': 'Cap. 15 tipo 10. Un solo paciente, múltiples períodos alternos aleatorios. Permite determinar la terapia óptima para ese individuo. Solo en condiciones crónicas y estables. Prometedor e infrautilizado en CP colombiano.',
+  'Cuasi-experimental pre-post': '⚠ Sin aleatorización (pseudoexperimento según Lozano León & Ruiz Peláez). Mide cambio en el mismo grupo antes y después de la intervención. Alta susceptibilidad a confusión, regresión al promedio y efecto Hawthorne. Justificar explícitamente por qué no fue posible aleatorizar.',
+  'Cuasi-experimental con grupo control no equivalente': '⚠ Sin aleatorización (pseudoexperimento). Existe un grupo de comparación pero sin asignación aleatoria. Más robusto que el pre-post solo, pero los grupos pueden diferir sistemáticamente al inicio. Justificar explícitamente por qué no fue posible aleatorizar.',
+};
+
+function showDisenoInfo(sel) {
+  const info = document.getElementById('disenoInfo');
+  if (!sel.value) { info.style.display = 'none'; return; }
+  const key = Object.keys(disenoDetails).find(k => sel.value.startsWith(k));
+  if (key) {
+    info.textContent = '🧪 ' + disenoDetails[key];
+    info.style.borderLeftColor = sel.value.includes('Cuasi') ? 'var(--ambar)' : 'var(--terracota)';
+    info.style.display = 'block';
+  } else {
+    info.style.display = 'none';
+  }
+}
+
 // ═══ CONFIGURACIÓN ═══
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyT-RiF5pVwbffeMJ-C89ONs6fHYCbBc8TwBjKuMnbIh_cYEf3FV1m9-MmgAlxrqHNC6A/exec';
 
