@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Fichas PICO+S · Sesión 8</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,400&family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --tc:#B85C3A; --tc-dk:#8B3E22; --tc-lt:rgba(184,92,58,0.08);
+  --arena:#F5EDE3; --arena-lt:#FAF7F2;
+  --sv:#6B8F71; --sv-dk:#4A6B4F; --sv-lt:rgba(107,143,113,0.08);
+  --am:#D4A03C; --am-lt:rgba(212,160,60,0.12);
+  --txt:#2C2C2C; --txt2:#6B6B6B; --borde:#D8D0C8;
+  --rojo:#C0392B; --azul:#2E6B9E; --ok:#27AE60;
+  --bg:#FAF7F2; --w:#FFFFFF;
+  --sh:0 4px 20px rgba(0,0,0,0.06);
+  --sh2:0 8px 32px rgba(0,0,0,0.1);
+  --r:12px; --rs:8px;
+  --t:all 0.3s cubic-bezier(.25,.46,.45,.94);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter Tight',sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh}
+
+/* ═══ HEADER ═══ */
+.dash-header{
+  background:linear-gradient(135deg,var(--tc) 0%,var(--tc-dk) 100%);
+  color:var(--arena);padding:20px 28px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.dash-header-left{display:flex;flex-direction:column;gap:4px}
+.dash-badge{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:.2em;opacity:.7}
+.dash-title{font-family:'Fraunces',serif;font-size:clamp(20px,3vw,28px);font-weight:700}
+.dash-header-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+.hdr-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:var(--rs);
+  font-family:'Inter Tight',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:var(--t);text-decoration:none;border:1.5px solid rgba(245,237,227,.4);
+  background:rgba(245,237,227,.1);color:var(--arena);white-space:nowrap;
+}
+.hdr-btn:hover{background:rgba(245,237,227,.2);border-color:var(--arena)}
+
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.refresh-info{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(245,237,227,.6)}
+
+/* ═══ STATS BAR ═══ */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:12px;padding:20px 28px;
+}
+.stat-card{
+  background:var(--w);border-radius:var(--r);padding:18px 20px;
+  box-shadow:var(--sh);transition:var(--t);border-top:3px solid var(--borde);
+}
+.stat-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.stat-card.tc{border-top-color:var(--tc)}
+.stat-card.sv{border-top-color:var(--sv)}
+.stat-card.am{border-top-color:var(--am)}
+.stat-card.az{border-top-color:var(--azul)}
+
+.stat-value{font-family:'Fraunces',serif;font-size:32px;font-weight:700;color:var(--tc);line-height:1}
+.stat-card.sv .stat-value{color:var(--sv-dk)}
+.stat-card.am .stat-value{color:var(--am)}
+.stat-card.az .stat-value{color:var(--azul)}
+.stat-label{font-size:12px;color:var(--txt2);margin-top:4px;font-weight:500}
+
+/* ═══ MAIN CONTENT ═══ */
+.dash-body{padding:0 28px 40px;display:flex;flex-direction:column;gap:20px}
+
+/* ── Group Cards Grid ── */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+
+.group-card{
+  background:var(--w);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--sh);transition:var(--t);
+}
+.group-card:hover{box-shadow:var(--sh2)}
+.group-card.empty{opacity:.5}
+
+.gc-header{
+  padding:16px 20px;display:flex;justify-content:space-between;align-items:center;
+}
+.gc-header.g1{background:linear-gradient(135deg,var(--tc),var(--tc-dk))}
+.gc-header.g2{background:linear-gradient(135deg,var(--sv),var(--sv-dk))}
+.gc-header.g3{background:linear-gradient(135deg,var(--am),#B8860B)}
+
+.gc-grupo{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--arena)}
+.gc-status{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;
+  font-family:'JetBrains Mono',monospace;
+}
+.gc-status.enviado{background:rgba(39,174,96,.2);color:#1B7A3D}
+.gc-status.pendiente{background:rgba(212,160,60,.2);color:#8B6914}
+
+.gc-body{padding:20px}
+
+.gc-ensayo{
+  font-family:'Fraunces',serif;font-size:16px;font-weight:600;
+  color:var(--tc-dk);margin-bottom:4px;
+}
+
+.gc-anclaje{
+  font-size:12px;color:var(--txt2);margin-bottom:14px;
+  padding:4px 10px;background:var(--arena);border-radius:4px;display:inline-block;
+}
+
+/* PICO grid */
+.pico-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pico-item{background:var(--arena-lt);padding:10px 12px;border-radius:var(--rs);border-left:3px solid var(--tc)}
+.pico-item.i-col{border-left-color:var(--sv)}
+.pico-item.c-col{border-left-color:var(--am)}
+.pico-item.o-col{border-left-color:var(--azul)}
+.pico-letter{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.pico-item:nth-child(1) .pico-letter{color:var(--tc)}
+.pico-item:nth-child(2) .pico-letter{color:var(--sv-dk)}
+.pico-item:nth-child(3) .pico-letter{color:var(--am)}
+.pico-item:nth-child(4) .pico-letter{color:var(--azul)}
+.pico-val{font-size:13px;color:var(--txt)}
+
+/* Detail rows */
+.gc-row{margin-bottom:10px}
+.gc-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--sv-dk);margin-bottom:2px}
+.gc-val{font-size:13px;color:var(--txt)}
+.gc-val.mono{font-family:'JetBrains Mono',monospace;font-size:12px}
+
+.gc-sesgos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.gc-sesgo{background:var(--arena-lt);padding:8px 12px;border-radius:var(--rs)}
+.gc-sesgo-name{font-size:12px;font-weight:600;color:var(--txt)}
+.gc-sesgo-ctrl{font-size:11px;color:var(--txt2);margin-top:2px}
+
+.gc-etica{
+  background:rgba(212,160,60,.06);border-left:3px solid var(--am);
+  padding:10px 14px;border-radius:0 var(--rs) var(--rs) 0;
+  font-size:12px;color:var(--txt);line-height:1.6;margin-bottom:10px;
+}
+
+.gc-firma{font-size:11px;color:var(--txt2);font-style:italic;padding-top:8px;border-top:1px solid var(--borde)}
+.gc-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px}
+
+/* ── Comparison Table ── */
+.compare-section{background:var(--w);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
+.compare-header{
+  padding:16px 20px;background:var(--tc);color:var(--arena);
+  font-family:'Fraunces',serif;font-size:16px;font-weight:600;
+  display:flex;justify-content:space-between;align-items:center;
+}
+
+.compare-table{width:100%;border-collapse:collapse;font-size:13px}
+.compare-table thead{background:var(--arena)}
+.compare-table th{
+  padding:10px 14px;text-align:left;font-size:11px;
+  text-transform:uppercase;letter-spacing:.06em;font-weight:600;
+  color:var(--tc);border-bottom:2px solid var(--borde);position:sticky;top:0;background:var(--arena);
+}
+.compare-table td{padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.04);vertical-align:top}
+.compare-table tr:hover td{background:rgba(107,143,113,.03)}
+.compare-table .campo-col{font-weight:600;color:var(--sv-dk);white-space:nowrap;width:140px}
+
+/* ── Design Distribution ── */
+.dist-section{background:var(--w);border-radius:var(--r);box-shadow:var(--sh);padding:20px 24px}
+.dist-title{font-family:'Fraunces',serif;font-size:16px;font-weight:600;color:var(--txt);margin-bottom:14px}
+.dist-bars{display:flex;flex-direction:column;gap:8px}
+.dist-row{display:flex;align-items:center;gap:12px}
+.dist-label{font-size:12px;color:var(--txt);width:200px;min-width:200px;text-align:right}
+.dist-bar-bg{flex:1;height:28px;background:var(--arena);border-radius:14px;overflow:hidden;position:relative}
+.dist-bar-fill{height:100%;border-radius:14px;transition:width .6s ease;display:flex;align-items:center;padding:0 12px}
+.dist-bar-fill.tc{background:linear-gradient(90deg,var(--tc),var(--tc-dk))}
+.dist-bar-fill.sv{background:linear-gradient(90deg,var(--sv),var(--sv-dk))}
+.dist-bar-fill.am{background:linear-gradient(90deg,var(--am),#B8860B)}
+.dist-bar-fill.az{background:linear-gradient(90deg,var(--azul),#1A4F7A)}
+.dist-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--arena);font-weight:600}
+
+/* ── Empty / Loading ── */
+.empty-dash{text-align:center;padding:80px 20px;color:var(--txt2)}
+.empty-dash .empty-icon{font-size:56px;margin-bottom:16px;opacity:.3}
+.empty-dash p{font-size:16px;max-width:400px;margin:0 auto}
+
+.loading-bar{height:3px;background:var(--arena);overflow:hidden;position:relative}
+.loading-bar::after{
+  content:'';position:absolute;left:-40%;top:0;height:100%;width:40%;
+  background:var(--tc);animation:loadSlide 1.2s ease infinite;
+}
+@keyframes loadSlide{to{left:100%}}
+
+/* ── Toggle view ── */
+.view-toggle{
+  display:flex;background:var(--w);border-radius:var(--r);
+  box-shadow:var(--sh);overflow:hidden;align-self:flex-start;
+}
+.vt-btn{
+  padding:10px 20px;border:none;background:none;
+  font-family:'Inter Tight',sans-serif;font-size:13px;font-weight:600;
+  color:var(--txt2);cursor:pointer;transition:var(--t);
+}
+.vt-btn:hover{color:var(--tc)}
+.vt-btn.active{background:var(--tc);color:var(--arena)}
+
+.view-panel{display:none}
+.view-panel.active{display:block}
+
+/* ── Responsive ── */
+@media(max-width:700px){
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .groups-grid{grid-template-columns:1fr}
+  .pico-grid{grid-template-columns:1fr}
+  .gc-sesgos{grid-template-columns:1fr}
+  .dash-body{padding:0 16px 32px}
+  .stats-bar{padding:16px}
+  .dash-header{padding:16px}
+  .dist-label{width:120px;min-width:120px;font-size:11px}
+}
+
+@media print{
+  .dash-header,.view-toggle,.hdr-btn{display:none!important}
+  .view-panel{display:block!important}
+  .group-card{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="dash-header">
+  <div class="dash-header-left">
+    <div class="dash-badge">Dashboard en tiempo real · Sesión 8</div>
+    <div class="dash-title">Fichas PICO+S · Epidemiología Experimental</div>
+  </div>
+  <div class="dash-header-right">
+    <span class="refresh-info" id="lastUpdate">—</span>
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="live-dot" id="liveDot"></span>
+      <span style="font-size:11px;color:var(--arena);font-weight:600;font-family:'JetBrains Mono',monospace" id="liveLabel">AUTO 30s</span>
+    </div>
+    <button class="hdr-btn" onclick="fetchData()">🔄 Actualizar</button>
+    <a class="hdr-btn" href="https://jboglop.github.io/Epidemiologia-en-CP/Experimentales/sesion8_epidemiologia_experimental.html" target="_blank">📊 Clase</a>
+    <a class="hdr-btn" href="https://jboglop.github.io/Epidemiologia-en-CP/Experimentales/ficha_picos_sesion8.html" target="_blank">📝 Formulario</a>
+    <button class="hdr-btn" onclick="toggleAutoRefresh()" id="autoBtn">⏸ Pausar</button>
+  </div>
+</div>
+
+<div class="loading-bar" id="loadingBar" style="display:none"></div>
+
+<!-- ═══ STATS ═══ -->
+<div class="stats-bar" id="statsBar">
+  <div class="stat-card tc"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Fichas recibidas</div></div>
+  <div class="stat-card sv"><div class="stat-value" id="statGrupos">—</div><div class="stat-label">Grupos activos</div></div>
+  <div class="stat-card am"><div class="stat-value" id="statDisenos">—</div><div class="stat-label">Diseños distintos</div></div>
+  <div class="stat-card az"><div class="stat-value" id="statLast">—</div><div class="stat-label">Última ficha</div></div>
+</div>
+
+<!-- ═══ VIEW TOGGLE ═══ -->
+<div style="padding:0 28px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+  <div class="view-toggle">
+    <button class="vt-btn active" onclick="switchView('cards',this)">🃏 Tarjetas</button>
+    <button class="vt-btn" onclick="switchView('compare',this)">📊 Comparación</button>
+    <button class="vt-btn" onclick="switchView('designs',this)">🧪 Diseños</button>
+  </div>
+</div>
+
+<!-- ═══ VIEWS ═══ -->
+<div class="dash-body">
+
+  <!-- Cards View -->
+  <div class="view-panel active" id="view-cards">
+    <div class="groups-grid" id="cardsContainer">
+      <div class="empty-dash">
+        <div class="empty-icon">📋</div>
+        <p>Cargando fichas PICO+S…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison View -->
+  <div class="view-panel" id="view-compare">
+    <div class="compare-section">
+      <div class="compare-header">
+        <span>Comparación lado a lado</span>
+        <span style="font-size:12px;opacity:.7" id="compareCount">—</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="compare-table" id="compareTable">
+          <thead><tr><th>Campo</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Designs View -->
+  <div class="view-panel" id="view-designs">
+    <div class="dist-section">
+      <div class="dist-title">Distribución de diseños elegidos</div>
+      <div class="dist-bars" id="designBars">
+        <p style="font-size:13px;color:var(--txt2)">Sin datos aún.</p>
+      </div>
+    </div>
+    <div class="dist-section" style="margin-top:16px">
+      <div class="dist-title">Instrumentos de outcome primario</div>
+      <div class="dist-bars" id="outcomeBars">
+        <p style="font-size:13px;color:var(--txt2)">Sin datos aún.</p>
+      </div>
+    </div>
+    <div class="dist-section" style="margin-top:16px">
+      <div class="dist-title">Personajes ancla elegidos</div>
+      <div class="dist-bars" id="anchorBars">
+        <p style="font-size:13px;color:var(--txt2)">Sin datos aún.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const API = 'https://script.google.com/macros/s/AKfycbyT-RiF5pVwbffeMJ-C89ONs6fHYCbBc8TwBjKuMnbIh_cYEf3FV1m9-MmgAlxrqHNC6A/exec';
+let autoInterval = null;
+let autoOn = true;
+let fichasData = [];
+
+// ═══ FETCH DATA ═══
+async function fetchData() {
+  const lb = document.getElementById('loadingBar');
+  lb.style.display = 'block';
+  try {
+    const res = await fetch(API + '?t=' + Date.now());
+    const json = await res.json();
+    fichasData = json.fichas || [];
+    renderAll();
+    document.getElementById('lastUpdate').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-CO');
+  } catch(e) {
+    console.error(e);
+    document.getElementById('lastUpdate').textContent = '⚠ Error de conexión';
+  } finally {
+    lb.style.display = 'none';
+  }
+}
+
+// ═══ AUTO REFRESH ═══
+function startAuto() {
+  if (autoInterval) clearInterval(autoInterval);
+  autoInterval = setInterval(fetchData, 30000);
+  autoOn = true;
+  document.getElementById('autoBtn').textContent = '⏸ Pausar';
+  document.getElementById('liveDot').style.display = 'inline-block';
+  document.getElementById('liveLabel').textContent = 'AUTO 30s';
+}
+
+function toggleAutoRefresh() {
+  if (autoOn) {
+    clearInterval(autoInterval);
+    autoOn = false;
+    document.getElementById('autoBtn').textContent = '▶ Reanudar';
+    document.getElementById('liveDot').style.display = 'none';
+    document.getElementById('liveLabel').textContent = 'PAUSADO';
+  } else {
+    startAuto();
+  }
+}
+
+// ═══ VIEW TOGGLE ═══
+function switchView(view, btn) {
+  document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('view-' + view).classList.add('active');
+}
+
+// ═══ RENDER ALL ═══
+function renderAll() {
+  renderStats();
+  renderCards();
+  renderCompare();
+  renderDesigns();
+}
+
+// ═══ RENDER STATS ═══
+function renderStats() {
+  const f = fichasData;
+  document.getElementById('statTotal').textContent = f.length;
+  const grupos = new Set(f.map(x => x['Grupo']).filter(Boolean));
+  document.getElementById('statGrupos').textContent = grupos.size + ' / 3';
+  const disenos = new Set(f.map(x => x['4. Diseño elegido']).filter(Boolean));
+  document.getElementById('statDisenos').textContent = disenos.size;
+  if (f.length > 0) {
+    const last = f[f.length - 1];
+    const ts = last['Timestamp'];
+    if (ts) {
+      const d = new Date(ts);
+      document.getElementById('statLast').textContent = d.toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'});
+    } else {
+      document.getElementById('statLast').textContent = '—';
+    }
+  } else {
+    document.getElementById('statLast').textContent = '—';
+  }
+}
+
+// ═══ RENDER CARDS ═══
+function renderCards() {
+  const c = document.getElementById('cardsContainer');
+  if (fichasData.length === 0) {
+    c.innerHTML = `<div class="empty-dash" style="grid-column:1/-1"><div class="empty-icon">⏳</div><p>Esperando fichas de los grupos… El dashboard se actualiza automáticamente cada 30 segundos.</p></div>`;
+    return;
+  }
+
+  // Group by group name, take latest per group
+  const byGroup = {};
+  fichasData.forEach(f => {
+    const g = f['Grupo'] || 'Sin grupo';
+    if (!byGroup[g]) byGroup[g] = [];
+    byGroup[g].push(f);
+  });
+
+  const colors = {'Grupo 1':'g1','Grupo 2':'g2','Grupo 3':'g3'};
+  let html = '';
+
+  ['Grupo 1','Grupo 2','Grupo 3'].forEach(gName => {
+    const entries = byGroup[gName];
+    if (!entries || entries.length === 0) {
+      html += `<div class="group-card empty">
+        <div class="gc-header ${colors[gName]||'g1'}">
+          <span class="gc-grupo">${esc(gName)}</span>
+          <span class="gc-status pendiente">Pendiente</span>
+        </div>
+        <div class="gc-body" style="text-align:center;padding:40px 20px;color:var(--txt2)">
+          <p style="font-size:32px;margin-bottom:8px;opacity:.3">📝</p>
+          <p style="font-size:14px">Aún no ha enviado su ficha</p>
+        </div>
+      </div>`;
+      return;
+    }
+
+    const f = entries[entries.length - 1]; // latest
+    const ts = f['Timestamp'] ? new Date(f['Timestamp']).toLocaleString('es-CO') : '—';
+    const version = entries.length > 1 ? ` (v${entries.length})` : '';
+
+    html += `<div class="group-card">
+      <div class="gc-header ${colors[gName]||'g1'}">
+        <span class="gc-grupo">${esc(gName)}${version}</span>
+        <span class="gc-status enviado">✓ Enviado</span>
+      </div>
+      <div class="gc-body">
+        <div class="gc-ensayo">${esc(f['1. Nombre del ensayo']||'—')}</div>
+        <div class="gc-anclaje">${esc(f['2. Anclaje narrativo']||'—')}</div>
+
+        <div class="pico-grid">
+          <div class="pico-item"><div class="pico-letter">P · Población</div><div class="pico-val">${esc(f['3P. Población']||'—')}</div></div>
+          <div class="pico-item i-col"><div class="pico-letter">I · Intervención</div><div class="pico-val">${esc(f['3I. Intervención']||'—')}</div></div>
+          <div class="pico-item c-col"><div class="pico-letter">C · Comparador</div><div class="pico-val">${esc(f['3C. Comparador']||'—')}</div></div>
+          <div class="pico-item o-col"><div class="pico-letter">O · Outcome</div><div class="pico-val">${esc(f['3O. Outcome']||'—')}</div></div>
+        </div>
+
+        <div class="gc-row">
+          <div class="gc-lbl">Diseño</div>
+          <div class="gc-val"><strong>${esc(f['4. Diseño elegido']||'—')}</strong> — ${esc(f['4b. Justificación diseño']||'')}</div>
+        </div>
+
+        <div class="gc-row">
+          <div class="gc-lbl">Criterios de elegibilidad</div>
+          <div class="gc-val" style="font-size:12px">
+            <span style="color:var(--sv-dk)">✓</span> ${esc(f['5a. Inclusión 1']||'')} · ${esc(f['5b. Inclusión 2']||'')} · ${esc(f['5c. Inclusión 3']||'')}<br>
+            <span style="color:var(--rojo)">✗</span> ${esc(f['5d. Exclusión 1']||'')} · ${esc(f['5e. Exclusión 2']||'')} · ${esc(f['5f. Exclusión 3']||'')}
+          </div>
+        </div>
+
+        <div class="gc-row">
+          <div class="gc-lbl">No excluir personas vulnerabilizadas</div>
+          <div class="gc-val" style="font-size:12px;font-style:italic">${esc(f['5g. No excluir vulnerabilizadas']||'—')}</div>
+        </div>
+
+        <div class="gc-row">
+          <div class="gc-lbl">Outcome primario + tiempo</div>
+          <div class="gc-val">${esc(f['6. Outcome primario validado']||'—')} · <span class="mono">${esc(f['6b. Tiempo de medición']||'—')}</span></div>
+        </div>
+
+        <div class="gc-row">
+          <div class="gc-lbl">Tamaño de muestra</div>
+          <div class="gc-val mono">${esc(f['7. Tamaño de muestra']||'—')}</div>
+        </div>
+
+        <div class="gc-lbl" style="margin-bottom:6px">Sesgos anticipados</div>
+        <div class="gc-sesgos">
+          <div class="gc-sesgo">
+            <div class="gc-sesgo-name">${esc(f['8a. Sesgo 1']||'—')}</div>
+            <div class="gc-sesgo-ctrl">→ ${esc(f['8b. Control sesgo 1']||'—')}</div>
+          </div>
+          <div class="gc-sesgo">
+            <div class="gc-sesgo-name">${esc(f['8c. Sesgo 2']||'—')}</div>
+            <div class="gc-sesgo-ctrl">→ ${esc(f['8d. Control sesgo 2']||'—')}</div>
+          </div>
+        </div>
+
+        <div class="gc-etica">${esc(f['9. Declaración ética']||'—')}</div>
+
+        <div class="gc-firma">✍ ${esc(f['10. Firma del grupo']||'—')}</div>
+        <div class="gc-time">📅 ${ts}${entries.length>1?' · '+entries.length+' envío(s) total(es)':''}</div>
+      </div>
+    </div>`;
+  });
+
+  // Add any extra groups not in 1-3
+  Object.keys(byGroup).forEach(g => {
+    if (!['Grupo 1','Grupo 2','Grupo 3'].includes(g)) {
+      const f = byGroup[g][byGroup[g].length-1];
+      const ts = f['Timestamp'] ? new Date(f['Timestamp']).toLocaleString('es-CO') : '—';
+      html += `<div class="group-card">
+        <div class="gc-header g1"><span class="gc-grupo">${esc(g)}</span><span class="gc-status enviado">✓</span></div>
+        <div class="gc-body">
+          <div class="gc-ensayo">${esc(f['1. Nombre del ensayo']||'—')}</div>
+          <div class="gc-time">📅 ${ts}</div>
+        </div>
+      </div>`;
+    }
+  });
+
+  c.innerHTML = html;
+}
+
+// ═══ RENDER COMPARISON TABLE ═══
+function renderCompare() {
+  if (fichasData.length === 0) return;
+
+  const byGroup = {};
+  fichasData.forEach(f => {
+    const g = f['Grupo'] || 'Sin grupo';
+    byGroup[g] = f; // latest wins
+  });
+
+  const groups = Object.keys(byGroup).sort();
+  document.getElementById('compareCount').textContent = groups.length + ' grupo(s)';
+
+  const campos = [
+    ['Nombre del ensayo','1. Nombre del ensayo'],
+    ['Anclaje narrativo','2. Anclaje narrativo'],
+    ['P — Población','3P. Población'],
+    ['I — Intervención','3I. Intervención'],
+    ['C — Comparador','3C. Comparador'],
+    ['O — Outcome','3O. Outcome'],
+    ['Diseño','4. Diseño elegido'],
+    ['Justificación','4b. Justificación diseño'],
+    ['No excluir vulnerabilizadas','5g. No excluir vulnerabilizadas'],
+    ['Outcome primario','6. Outcome primario validado'],
+    ['Tiempo medición','6b. Tiempo de medición'],
+    ['N','7. Tamaño de muestra'],
+    ['Sesgo 1','8a. Sesgo 1'],
+    ['Control sesgo 1','8b. Control sesgo 1'],
+    ['Sesgo 2','8c. Sesgo 2'],
+    ['Control sesgo 2','8d. Control sesgo 2'],
+    ['Declaración ética','9. Declaración ética'],
+    ['Firma','10. Firma del grupo'],
+  ];
+
+  let thead = '<tr><th>Campo</th>' + groups.map(g=>`<th>${esc(g)}</th>`).join('') + '</tr>';
+  let tbody = campos.map(([label,key]) => {
+    return '<tr><td class="campo-col">'+esc(label)+'</td>' +
+      groups.map(g => '<td>' + esc(byGroup[g][key]||'—') + '</td>').join('') + '</tr>';
+  }).join('');
+
+  const tbl = document.getElementById('compareTable');
+  tbl.querySelector('thead').innerHTML = thead;
+  tbl.querySelector('tbody').innerHTML = tbody;
+}
+
+// ═══ RENDER DESIGN DISTRIBUTION ═══
+function renderDesigns() {
+  if (fichasData.length === 0) return;
+
+  renderBarChart('designBars', fichasData.map(f=>f['4. Diseño elegido']).filter(Boolean));
+  renderBarChart('outcomeBars', fichasData.map(f=>f['6. Outcome primario validado']).filter(Boolean));
+
+  // Anchors: simplify
+  const anchors = fichasData.map(f => {
+    const a = f['2. Anclaje narrativo'] || '';
+    if (a.includes('María Luisa')) return 'María Luisa';
+    if (a.includes('Don Aurelio')) return 'Don Aurelio';
+    if (a.includes('Tu María Luisa')) return 'Tu María Luisa';
+    return a || '—';
+  }).filter(Boolean);
+  renderBarChart('anchorBars', anchors);
+}
+
+function renderBarChart(containerId, values) {
+  const counts = {};
+  values.forEach(v => { counts[v] = (counts[v]||0) + 1; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const max = sorted.length > 0 ? sorted[0][1] : 1;
+  const colors = ['tc','sv','am','az','tc','sv'];
+
+  const container = document.getElementById(containerId);
+  if (sorted.length === 0) {
+    container.innerHTML = '<p style="font-size:13px;color:var(--txt2)">Sin datos aún.</p>';
+    return;
+  }
+
+  container.innerHTML = sorted.map(([label,count],i) => {
+    const pct = Math.max((count/max)*100, 8);
+    const col = colors[i % colors.length];
+    return `<div class="dist-row">
+      <div class="dist-label">${esc(label)}</div>
+      <div class="dist-bar-bg">
+        <div class="dist-bar-fill ${col}" style="width:${pct}%">
+          <span class="dist-count">${count}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ HELPERS ═══
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+// ═══ INIT ═══
+fetchData();
+startAuto();
+</script>
+</body>
+</html>
