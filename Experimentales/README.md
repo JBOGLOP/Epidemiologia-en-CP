@@ -20,11 +20,7 @@ Estudios cuasi-experimentales y ensayos clínicos. Estructura del diseño, valid
 
 ## Actividad
 
-Cada grupo diseña un protocolo de ECA paliativo hipotético (10 campos: nombre del ensayo, anclaje narrativo en María Luisa o Don Aurelio, pregunta PICO, diseño, criterios de elegibilidad, outcome primario, tamaño de muestra, sesgos, declaración ética, firma). Las fichas se registran en Google Sheets vía Apps Script y el dashboard muestra los envíos en tiempo real con actualización automática cada 30 segundos.
-
-## Base de datos
-
-Google Sheet: [Experimental](https://docs.google.com/spreadsheets/d/1DEMrsHWfr3TGw_-UNKXF4wJj4FX8HsTjdc2_xfl9NXc/edit) · Apps Script: versión 2, 28 mayo 2026.
+Cada grupo diseña un protocolo de ECA paliativo hipotético (10 campos: nombre del ensayo, anclaje narrativo en María Luisa o Don Aurelio, pregunta PICO, diseño, criterios de elegibilidad, outcome primario, tamaño de muestra, sesgos, declaración ética, firma). El dashboard muestra los envíos en tiempo real con actualización automática.
 
 ---
 
