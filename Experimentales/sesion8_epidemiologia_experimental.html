@@ -784,98 +784,163 @@ body {
   </div>
 </div>
 
-<!-- ══════════════════ SLIDE 4: 10 TIPOS DE EXPERIMENTOS ══════════════════ -->
+<!-- ══════════════════ SLIDE 4: TAXONOMÍA UNIFICADA ══════════════════ -->
 <div class="slide" id="slide-4">
-  <span class="slide-number">Slide 04 · Tipología · Lozano León & Ruiz Peláez, Cap. 15</span>
-  <h2>Diez tipos de experimentos clínicos</h2>
-  <p style="margin-bottom:14px;">Clasificación según Lozano León & Ruiz Peláez (Epidemiología, Sección 3), contrastada con los desafíos específicos de la investigación en cuidados paliativos.</p>
+  <span class="slide-number">Slide 04 · Taxonomía unificada · Lozano León & Ruiz Peláez, Cap. 15</span>
+  <h2>Diseños experimentales: taxonomía unificada</h2>
+  <p style="margin-bottom:10px;">10 tipos canónicos (Cap. 15) + 3 variantes adaptadas a CP + 2 cuasi-experimentales. El número de tipo es el de Lozano León & Ruiz Peláez. Las variantes <span style="background:rgba(46,107,158,0.1);color:var(--azul);padding:1px 6px;border-radius:4px;font-size:12px;font-weight:600;">↳</span> derivan del tipo señalado.</p>
 
-  <table class="data-table" style="font-size:12.5px;">
+  <table class="data-table" style="font-size:12px;">
     <thead>
       <tr>
-        <th style="width:5%">#</th>
-        <th style="width:18%">Tipo</th>
-        <th style="width:28%">Definición (Lozano León & Ruiz Peláez)</th>
-        <th style="width:25%">Ventaja / limitación principal</th>
+        <th style="width:6%">Tipo</th>
+        <th style="width:19%">Diseño</th>
+        <th style="width:27%">Definición clave</th>
+        <th style="width:24%">Ventaja ✅ / Limitación ⚠</th>
         <th style="width:24%">En cuidados paliativos</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700">1</td>
-        <td><strong>Aleatorizado convencional</strong></td>
-        <td>Dos grupos independientes (experimental y control) asignados por azar. Piedra angular del ECA.</td>
-        <td>✅ Máxima validez interna. ⚠ Requiere tamaño grande; difícil cegar intervenciones complejas.</td>
-        <td><strong>ADAPT trial</strong> (Bekelman 2024): telecuidado paliativo vs. cuidado habitual en EPOC/IC. n = 306.</td>
+
+      <!-- NIVEL 1 HEADER -->
+      <tr style="background:rgba(184,92,58,0.08);">
+        <td colspan="5" style="padding:5px 10px; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; color:var(--tc); text-transform:uppercase; letter-spacing:0.1em;">
+          Nivel 1 — Con aleatorización (ECA)
+        </td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700">2</td>
-        <td><strong>Cruzado <em>(cross-over)</em></strong></td>
-        <td>Cada participante recibe ambas intervenciones en períodos distintos, con periodo de lavado entre ellas. El sujeto es su propio control.</td>
-        <td>✅ Reduce variabilidad y tamaño de muestra. ⚠ Solo válido en condiciones crónicas y estables; el efecto de la intervención debe ser reversible.</td>
-        <td>Limitado en CP por deterioro irreversible. Aplicable en: ajuste de analgésicos, prueba de antisecretores en estertores. Imposible cuando el paciente muere antes del segundo período.</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700;text-align:center;">1</td>
+        <td><strong>Paralelo individual</strong><br><span style="font-size:11px;color:var(--gris-suave);">convencional</span></td>
+        <td>Dos grupos independientes asignados por azar. Piedra angular del ECA. Máxima validez interna.</td>
+        <td>✅ Control de confusión. ⚠ Riesgo de contaminación si la intervención es a nivel de equipo.</td>
+        <td><strong>ADAPT</strong> (Bekelman 2024, JAMA, n=306): telecuidado paliativo en EPOC/IC. Caso modelo de la sesión.</td>
       </tr>
+
+      <tr style="background:rgba(46,107,158,0.03);">
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-size:11px;text-align:center;">↳ v.2</td>
+        <td><strong>Cruzado</strong><br><span style="font-size:11px;color:var(--gris-suave);">cross-over</span></td>
+        <td>Cada participante recibe ambas intervenciones en períodos distintos. Período de lavado entre ellas. El sujeto es su propio control.</td>
+        <td>✅ Menos participantes necesarios. ⚠ Solo en condiciones estables y reversibles.</td>
+        <td>Limitado en CP: el paciente puede morir antes del segundo período. Posible en ajuste de analgésicos o antisecretores.</td>
+      </tr>
+
+      <tr style="background:rgba(46,107,158,0.06);">
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-size:11px;text-align:center;">↳ v.2b</td>
+        <td><strong>Fast-track</strong><br><span style="font-size:11px;color:var(--azul);">variante del cruzado</span></td>
+        <td>Todos reciben la intervención; la aleatorización decide el <em>orden</em>. El grupo control espera un período definido antes de recibirla.</td>
+        <td>✅ Resuelve la objeción ética de "negar" cuidado. ⚠ El período de espera puede ser demasiado largo en pacientes terminales.</td>
+        <td>Ideal cuando negar la intervención es éticamente inaceptable. Usado en estudios de disnea paliativa (Higginson et al.).</td>
+      </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--am);font-weight:700">3</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700;text-align:center;">3</td>
         <td><strong>De equivalencia</strong></td>
-        <td>Demuestra que una nueva intervención produce resultados <em>similares</em> a la convencional, con ventajas adicionales (menor costo, mayor disponibilidad).</td>
-        <td>✅ Útil cuando el tratamiento existente funciona pero es costoso o inaccesible. ⚠ No sirve si la intervención convencional no es efectiva.</td>
-        <td>Relevante en Colombia: ¿es la morfina oral equivalente a la parenteral para control de dolor en pacientes rurales sin acceso a vías IV? María Luisa en Tolima.</td>
+        <td>Demuestra que una nueva intervención produce resultados <em>similares</em> a la convencional, con ventaja adicional (menor costo, mayor disponibilidad).</td>
+        <td>✅ Útil para validar alternativas más accesibles. ⚠ No sirve si el tratamiento comparador tampoco funciona.</td>
+        <td>¿Es morfina oral equivalente a parenteral para dolor en pacientes rurales sin vías IV? <strong>María Luisa</strong>, Tolima.</td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-weight:700">4</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700;text-align:center;">4</td>
         <td><strong>De no inferioridad</strong></td>
-        <td>Propone que una diferencia en el resultado por debajo de un umbral predefinido sea "no significativa": la nueva intervención no es <em>inferior</em> al estándar.</td>
-        <td>✅ Permite evaluar alternativas más accesibles. ⚠ Riesgo de error tipo I aumentado; umbral de no inferioridad es subjetivo.</td>
-        <td>¿Es la atención paliativa domiciliaria por enfermería comunitaria no inferior a la hospitalaria para control de síntomas en EPOC avanzado? (Don Aurelio, La Guajira).</td>
+        <td>La nueva intervención no es <em>peor</em> que el estándar por más de un umbral predefinido. No busca superioridad, sino suficiencia.</td>
+        <td>✅ Permite evaluar alternativas más accesibles. ⚠ Umbral subjetivo; riesgo de error tipo I aumentado.</td>
+        <td>¿Es enfermería comunitaria no inferior a hospitalización para EPOC avanzado? <strong>Don Aurelio</strong>, La Guajira.</td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700">5</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--am);font-weight:700;text-align:center;">5</td>
         <td><strong>Factorial</strong></td>
-        <td>Evalúa dos o más intervenciones distintas simultáneamente usando la misma población. Genera 4+ grupos de tratamiento.</td>
-        <td>✅ Eficiente: evalúa múltiples preguntas en un solo estudio. ⚠ Complejo; asume independencia entre intervenciones.</td>
-        <td>Ej: evaluar simultáneamente el efecto de (a) consulta paliativa temprana y (b) acompañamiento psicológico en pacientes con cáncer avanzado — 4 grupos posibles.</td>
+        <td>Evalúa dos o más intervenciones simultáneamente en la misma población. Genera 4+ grupos (A solo, B solo, A+B, ninguno).</td>
+        <td>✅ Eficiente: evalúa múltiples preguntas a la vez. ⚠ Asume independencia entre intervenciones.</td>
+        <td>CP temprano + acompañamiento psicológico en cáncer avanzado: 4 grupos posibles en un solo estudio.</td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700">6</td>
-        <td><strong>Asignación por grupos <em>(cluster)</em></strong></td>
-        <td>La unidad de aleatorización es un grupo (guardería, hospital, municipio), no el individuo. Controla la <em>contaminación</em> entre brazos.</td>
-        <td>✅ Evita que el control "contamine" al experimental. ⚠ Requiere más participantes; análisis estadístico más complejo.</td>
-        <td>Implementar un programa de CP en municipios rurales colombianos: se aleatorizan municipios, no personas. Stepped-wedge es variante clave para escalar políticas. Ejemplo: PRIM-ER (Grudzen 2024), 33 urgencias.</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700;text-align:center;">6</td>
+        <td><strong>Cluster-randomized</strong><br><span style="font-size:11px;color:var(--gris-suave);">asignación por grupos</span></td>
+        <td>La unidad de aleatorización es un grupo (municipio, hospital, equipo), no el individuo. Evita contaminación entre brazos.</td>
+        <td>✅ Evita que el control reciba la intervención. ⚠ Requiere más participantes; análisis complejo.</td>
+        <td>Implementar CP en municipios rurales: se aleatorizan municipios, no personas. Ejemplo: PRIM-ER (Grudzen 2024), 33 urgencias.</td>
       </tr>
+
+      <tr style="background:rgba(46,107,158,0.06);">
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-size:11px;text-align:center;">↳ v.6b</td>
+        <td><strong>Stepped-wedge</strong><br><span style="font-size:11px;color:var(--azul);">variante del cluster</span></td>
+        <td>Todos los clusters comienzan como control y cruzan a la intervención en momentos aleatorizados escalonadamente.</td>
+        <td>✅ Todos los grupos reciben la intervención; viable para implementación de políticas. ⚠ Análisis longitudinal complejo.</td>
+        <td>Ideal para escalar programas de CP en sistemas de salud. Campbell & Yarandi (2024): algoritmo de retiro de ventilador, 5 sitios.</td>
+      </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--am);font-weight:700">7</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--am);font-weight:700;text-align:center;">7</td>
         <td><strong>Con análisis secuencial</strong></td>
-        <td>El análisis estadístico se va realizando a medida que llegan los datos; el estudio se detiene cuando se alcanza significación o se comprueba inutilidad.</td>
-        <td>✅ Puede detectar el efecto con el mínimo de sujetos posible. ⚠ Complejidad estadística; riesgo de error tipo I si no se planifica bien.</td>
-        <td>Ético en CP: se puede detener el estudio si una intervención claramente daña (ej. sedación paliativa produce más distress que beneficio). Respeta el principio de equilibrio clínico.</td>
+        <td>La prueba estadística se repite mientras llegan datos. El estudio se detiene por <em>eficacia</em> (funciona claramente) o por <em>futilidad/daño</em> (no funciona o perjudica). Método O'Brien-Fleming controla el error tipo I.</td>
+        <td>✅ Detecta el efecto con el mínimo de participantes. ⚠ Error tipo I si no se planifican las miradas intermedias desde el inicio.</td>
+        <td>Respeta el principio de equilibrio clínico: si una intervención paliativa daña (ej. sedación causa más distress), es obligación ética detener el estudio. Caso CAST (Lozano León & Ruiz Peláez).</td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-weight:700">8</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700;text-align:center;">8</td>
         <td><strong>De descontinuación</strong></td>
-        <td>Parte de sujetos que ya reciben la intervención con respuesta aparentemente favorable; los aleatoriza a continuar o recibir placebo.</td>
-        <td>✅ Útil para evaluar terapias de larga duración con efecto pequeño. ⚠ Selecciona buenos respondedores; baja generalización.</td>
-        <td>¿Deben continuarse los opioides en dosis alta en pacientes que parecen estabilizados? Aleatorizarlos a continuar vs. reducción gradual. Éticamente delicado en CP terminal.</td>
+        <td>Pacientes que ya respondieron bien a la intervención se aleatorizan a continuar o recibir placebo. Evalúa si la respuesta era del tratamiento o espontánea.</td>
+        <td>✅ Útil para evaluar terapias de larga duración. ⚠ Solo selecciona buenos respondedores; baja generalización.</td>
+        <td>¿Pueden reducirse los opioides en pacientes estabilizados? Aleatorizarlos a continuar vs. reducción gradual. Éticamente delicado en CP terminal.</td>
       </tr>
+
+      <tr style="background:rgba(46,107,158,0.06);">
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--azul);font-size:11px;text-align:center;">↳ v.Z</td>
+        <td><strong>Diseño Zelen</strong><br><span style="font-size:11px;color:var(--azul);">variante pre-consentimiento</span></td>
+        <td>Se aleatoriza <em>antes</em> del consentimiento. Solo el brazo de intervención da consentimiento informado. Reduce el "efecto de decepción" en controles.</td>
+        <td>✅ Reduce angustia en quienes no recibirán la intervención. ⚠ Controversia ética activa: parte de los participantes no sabe que está en un estudio.</td>
+        <td>Cuando saber que no se recibirá una intervención paliativa puede generar angustia adicional al final de la vida. Uso muy restringido.</td>
+      </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700">9</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--tc);font-weight:700;text-align:center;">9</td>
         <td><strong>Megaexperimentos clínicos</strong></td>
-        <td>ECAs con decenas de miles de participantes, criterios amplios, intervenciones simples, desenlaces fáciles de medir. Buscan efectos de tamaño pequeño pero clínicamente relevantes.</td>
-        <td>✅ Alta validez externa; puede detectar beneficios modestos. ⚠ Caro; requiere infraestructura multinacional.</td>
-        <td>En CP aún inexistentes en Latinoamérica. El Atlas 2025 documenta que Colombia tiene 0,33 servicios/100.000 hab — la infraestructura para un megaexperimento paliativo no existe. <strong>Esto es un hallazgo, no una excusa.</strong></td>
+        <td>ECAs con decenas de miles de participantes, criterios muy amplios, intervenciones simples y desenlaces fáciles de medir. Buscan efectos pequeños pero relevantes.</td>
+        <td>✅ Alta validez externa; detecta beneficios modestos. ⚠ Caro; requiere infraestructura multinacional.</td>
+        <td>Inexistentes en CP latinoamericano. Atlas 2025: Colombia tiene 0,33 servicios/100.000 hab. La infraestructura no existe. <strong>Esto es un hallazgo estructural, no una excusa.</strong></td>
       </tr>
+
       <tr>
-        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700">10</td>
+        <td style="font-family:'JetBrains Mono',monospace;color:var(--sv-dk);font-weight:700;text-align:center;">10</td>
         <td><strong>Individual (N = 1)</strong></td>
-        <td>Un solo sujeto recibe las intervenciones en períodos alternos aleatorizados. Permite determinar la terapia óptima para ese individuo.</td>
-        <td>✅ Personaliza el tratamiento; útil cuando la respuesta varía mucho entre personas. ⚠ No generalizable; solo en condiciones estables y reversibles.</td>
-        <td>Ajuste de opioides o coadyuvantes (gabapentina, amitriptilina) en dolor crónico complejo: cada paciente recibe A-B-A-B en períodos de 2 semanas. Prometedor e infrautilizado en CP colombiano.</td>
+        <td>Un solo sujeto recibe las intervenciones en períodos alternos aleatorizados. Determina la terapia óptima para ese individuo específico.</td>
+        <td>✅ Personaliza el tratamiento. ⚠ No generalizable; solo en condiciones estables y reversibles.</td>
+        <td>Ajuste de opioides o coadyuvantes (gabapentina, amitriptilina) en dolor crónico: cada paciente recibe A-B-A-B en períodos de 2 semanas. Prometedor e infrautilizado en CP colombiano.</td>
       </tr>
+
+      <!-- NIVEL 2 HEADER -->
+      <tr style="background:rgba(212,160,60,0.1);">
+        <td colspan="5" style="padding:5px 10px; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; color:#8B6914; text-transform:uppercase; letter-spacing:0.1em;">
+          Nivel 2 — Sin aleatorización (cuasi-experimental / pseudoexperimento)
+        </td>
+      </tr>
+
+      <tr>
+        <td style="font-family:'JetBrains Mono',monospace;color:#8B6914;font-size:11px;text-align:center;">QE-1</td>
+        <td><strong>Pre-post</strong><br><span style="font-size:11px;color:var(--gris-suave);">antes-después</span></td>
+        <td>Mide cambio en el mismo grupo antes y después de la intervención. Sin grupo control. Sin aleatorización.</td>
+        <td>⚠ Alta susceptibilidad a confusión, regresión al promedio y efecto Hawthorne. ⚠ Justificar explícitamente por qué no fue posible aleatorizar.</td>
+        <td>Frecuente en CP colombiano por restricciones éticas percibidas. Útil como piloto, insuficiente como evidencia definitiva de eficacia.</td>
+      </tr>
+
+      <tr>
+        <td style="font-family:'JetBrains Mono',monospace;color:#8B6914;font-size:11px;text-align:center;">QE-2</td>
+        <td><strong>Grupo control no equivalente</strong></td>
+        <td>Existe un grupo de comparación pero sin asignación aleatoria. Más robusto que el pre-post solo.</td>
+        <td>⚠ Los grupos pueden diferir sistemáticamente al inicio (sesgo de selección no controlado). ⚠ Justificar explícitamente.</td>
+        <td>Cuando la aleatorización es logísticamente imposible (ej. comparar dos municipios con y sin programa de CP), pero hay que ser explícito sobre las limitaciones.</td>
+      </tr>
+
     </tbody>
   </table>
 
-  <div class="dato-verificar" style="margin-top:12px;">
-    Fuente: Lozano León, J. M. & Ruiz Peláez, J. G. Capítulo 15 "El experimento clínico". En: Ruiz Morales, Á. & Gómez Restrepo, C. (Eds.). <em>Epidemiología Clínica. Investigación clínica aplicada</em>. Sección 3, pp. 198–222. Verificar edición y año contra ejemplar físico del curso.
+  <div class="dato-verificar" style="margin-top:10px;">
+    Fuente canónica tipos 1–10: Lozano León, J. M. & Ruiz Peláez, J. G. Capítulo 15 "El experimento clínico". En: Ruiz Morales, Á. & Gómez Restrepo, C. (Eds.). <em>Epidemiología Clínica. Investigación clínica aplicada</em>. Sección 3, pp. 198–222. Verificar edición y año contra ejemplar físico. Las variantes (fast-track, stepped-wedge, Zelen) son coherentes con el Cap. 15 pero no aparecen como tipos numerados en él.
   </div>
 </div>
 
